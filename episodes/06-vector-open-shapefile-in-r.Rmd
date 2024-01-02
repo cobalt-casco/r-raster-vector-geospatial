@@ -6,7 +6,8 @@ source: Rmd
 ---
 
 ```{r setup, echo=FALSE}
-source("setup.R")
+#source("setup.R")
+knitr::opts_chunk$set(message = FALSE)
 ```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
@@ -23,7 +24,9 @@ source("setup.R")
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r load-libraries, echo=FALSE, results="hide", warning=FALSE, message=FALSE}
+First, some libraries you might not have loaded at the moment. 
+
+```{r load-libraries, echo=TRUE, results="hide", warning=FALSE, message=FALSE}
 library(terra)
 library(ggplot2)
 library(dplyr)
@@ -43,10 +46,7 @@ episode.
 
 Starting with this episode, we will be moving from working with raster data to
 working with vector data. In this episode, we will open and plot point, line
-and polygon vector data loaded from ESRI's `shapefile` format into R. These data refer to
-the
-[NEON Harvard Forest field site](https://www.neonscience.org/field-sites/field-sites-map/HARV),
-which we have been working with in previous episodes. In later episodes, we
+and polygon vector data loaded from ESRI's `shapefile` format into R. These data refer to data from the [Maine GeoLibrary Data Catalogue](https://www.maine.gov/geolib/catalog.html) on seagrass beds, public roads, and boat launches. In later episodes, we
 will learn how to work with raster and vector data together and combine them
 into a single plot.
 
@@ -64,9 +64,8 @@ library(sf)
 The vector layers that we will import from ESRI's `shapefile` format are:
 
 - A polygon vector layer representing our field site boundary,
-- A line vector layer representing roads, and
-- A point vector layer representing the location of the [Fisher flux tower](https://www.neonscience.org/data-collection/flux-tower-measurements)
-  located at the [NEON Harvard Forest field site](https://www.neonscience.org/field-sites/field-sites-map/HARV).
+- A line vector layer representing the public roads of Maine, and
+- A point vector layer representing the location of the boat launches around Maine.
 
 The first vector layer that we will open contains the boundary of our study area
 (or our Area Of Interest or AOI, hence the name `aoiBoundary`). To import
@@ -76,14 +75,14 @@ requires the file path to the ESRI `shapefile`.
 Let's import our AOI:
 
 ```{r Import-Shapefile}
-aoi_boundary_HARV <- st_read(
-  "data/NEON-DS-Site-Layout-Files/HARV/HarClip_UTMZ18.shp")
+aoi_boundary_casco <- st_read(
+  "data/maine_gov_maps/casco_aoi/casco_bay_aoi.shp")
 ```
 
 ## Vector Layer Metadata \& Attributes
 
-When we import the `HarClip_UTMZ18` vector layer from an ESRI `shapefile` into R (as our
-`aoi_boundary_HARV` object), the `st_read()` function automatically stores
+When we import the `casco_bay_aoi.shp` vector layer from an ESRI `shapefile` into R (as our
+`aoi_boundary_casco` object), the `st_read()` function automatically stores
 information about the data. We are particularly interested in the geospatial
 metadata, describing the format, CRS, extent, and other components of the
 vector data, and the attributes which describe properties associated with each
@@ -115,23 +114,21 @@ We can view metadata of a vector layer using the `st_geometry_type()`, `st_crs()
 vector layer:
 
 ```{r}
-st_geometry_type(aoi_boundary_HARV)
+st_geometry_type(aoi_boundary_casco)
 ```
 
-Our `aoi_boundary_HARV` is a polygon spatial object. The 18 levels shown below our
+Our `aoi_boundary_casco` is a polygon spatial object. The 18 levels shown below our
 output list the possible categories of the geometry type. Now let's check what
 CRS this file data is in:
 
 ```{r}
-st_crs(aoi_boundary_HARV)
+st_crs(aoi_boundary_casco)
 ```
 
-Our data in the CRS **UTM zone 18N**. The CRS is critical to interpreting the
-spatial object's extent values as it specifies units. To find the extent of our AOI, we
-can use the `st_bbox()` function:
+Our data in the CRS **WGS 84** (it is EPSG code 4326). The CRS is critical to interpreting the spatial object's extent values as it specifies units. To find the extent of our AOI, we can use the `st_bbox()` function:
 
 ```{r}
-st_bbox(aoi_boundary_HARV)
+st_bbox(aoi_boundary_casco)
 ```
 
 The spatial extent of a vector layer or R spatial object represents the geographic
@@ -145,13 +142,13 @@ Lastly, we can view all of the metadata and attributes for this R spatial
 object by printing it to the screen:
 
 ```{r}
-aoi_boundary_HARV
+aoi_boundary_casco
 ```
 
 ## Spatial Data Attributes
 
 We introduced the idea of spatial data attributes in
-[an earlier lesson](https://datacarpentry.org/organization-geospatial/02-intro-vector-data).
+[an earlier lesson](https://cobalt-casco.github.io/organization-geospatial/02-intro-vector-data).
 Now we will explore how to use spatial data attributes stored in our data to
 plot different features.
 
@@ -167,8 +164,9 @@ for our plot. When plotting `sf` objects with `ggplot2`, you need to use the
 
 ```{r plot-shapefile}
 ggplot() +
-  geom_sf(data = aoi_boundary_HARV, size = 3, color = "black", fill = "cyan1") +
-  ggtitle("AOI Boundary Plot") +
+  geom_sf(data = aoi_boundary_casco, linewidth = 3, 
+          color = "black", fill = "lightblue") +
+  ggtitle("Casco Bay AOI Boundary Plot") +
   coord_sf()
 ```
 
@@ -176,9 +174,9 @@ ggplot() +
 
 ## Challenge: Import Line and Point Vector Layers
 
-Using the steps above, import the HARV\_roads and HARVtower\_UTM18N vector layers into
-R. Call the HARV\_roads object `lines_HARV` and the HARVtower\_UTM18N
-`point_HARV`.
+Using the steps above, import the MaineDOT_Public_Roads and Maine_Boat_Launches_GeoLibrary vector layers into
+R. Call the MaineDOT_Public_Roads object `lines_maine` and the Maine_Boat_Launches_GeoLibrary
+`points_maine`.
 
 Answer the following questions:
 
@@ -197,29 +195,29 @@ Answer the following questions:
 First we import the data:
 
 ```{r import-point-line, echo=TRUE}
-lines_HARV <- st_read("data/NEON-DS-Site-Layout-Files/HARV/HARV_roads.shp")
-point_HARV <- st_read("data/NEON-DS-Site-Layout-Files/HARV/HARVtower_UTM18N.shp")
+lines_maine <- st_read("data/maine_gov_maps/MaineDOT_Public_Roads/MaineDOT_Public_Roads.shp")
+points_maine <- st_read("data/maine_gov_maps/Maine_Boat_Launches_GeoLibrary/Maine_Boat_Launches_GeoLibrary.shp")
 ```
 
 Then we check its class:
 
 ```{r}
-class(lines_HARV)
-class(point_HARV)
+class(lines_maine)
+class(points_maine)
 ```
 
 We also check the CRS and extent of each object:
 
 ```{r}
-st_crs(lines_HARV)
-st_bbox(lines_HARV)
-st_crs(point_HARV)
-st_bbox(point_HARV)
+st_crs(lines_maine)
+st_bbox(lines_maine)
+st_crs(points_maine)
+st_bbox(points_maine)
 ```
 
 To see the number of objects in each file, we can look at the output from when
-we read these objects into R. `lines_HARV` contains 13 features (all lines) and
-`point_HARV` contains only one point.
+we read these objects into R. `lines_maine` contains 100669 features (all lines) and
+`points_maine` contains 578 points.
 
 
 
