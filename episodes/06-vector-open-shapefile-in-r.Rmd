@@ -175,8 +175,8 @@ ggplot() +
 ## Challenge: Import Line and Point Vector Layers
 
 Using the steps above, import the MaineDOT_Public_Roads and Maine_Boat_Launches_GeoLibrary vector layers into
-R. Call the MaineDOT_Public_Roads object `lines_maine` and the Maine_Boat_Launches_GeoLibrary
-`points_maine`.
+R. Call the MaineDOT_Public_Roads object `roads_maine` and the Maine_Boat_Launches_GeoLibrary
+`boatlaunches_maine`.
 
 Answer the following questions:
 
@@ -195,29 +195,29 @@ Answer the following questions:
 First we import the data:
 
 ```{r import-point-line, echo=TRUE}
-lines_maine <- st_read("data/maine_gov_maps/MaineDOT_Public_Roads/MaineDOT_Public_Roads.shp")
-points_maine <- st_read("data/maine_gov_maps/Maine_Boat_Launches_GeoLibrary/Maine_Boat_Launches_GeoLibrary.shp")
+roads_maine <- st_read("data/maine_gov_maps/MaineDOT_Public_Roads/MaineDOT_Public_Roads.shp")
+boatlaunches_maine <- st_read("data/maine_gov_maps/Maine_Boat_Launches_GeoLibrary/Maine_Boat_Launches_GeoLibrary.shp")
 ```
 
 Then we check its class:
 
 ```{r}
-class(lines_maine)
-class(points_maine)
+class(roads_maine)
+class(boatlaunches_maine)
 ```
 
 We also check the CRS and extent of each object:
 
 ```{r}
-st_crs(lines_maine)
-st_bbox(lines_maine)
-st_crs(points_maine)
-st_bbox(points_maine)
+st_crs(roads_maine)
+st_bbox(roads_maine)
+st_crs(boatlaunches_maine)
+st_bbox(boatlaunches_maine)
 ```
 
 To see the number of objects in each file, we can look at the output from when
-we read these objects into R. `lines_maine` contains 100669 features (all lines) and
-`points_maine` contains 578 points.
+we read these objects into R. `roads_maine` contains 100669 features (all lines) and
+`boatlaunches_maine` contains 578 points.
 
 
 
