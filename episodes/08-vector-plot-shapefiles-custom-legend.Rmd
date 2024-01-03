@@ -6,7 +6,8 @@ source: Rmd
 ---
 
 ```{r setup, echo=FALSE}
-source("setup.R")
+#source("setup.R")
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
@@ -19,27 +20,11 @@ source("setup.R")
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How can I create map compositions with custom legends using ggplot?
-- How can I plot raster and vector data together?
+- How can I make different vecotr layers line up?
+- How can I plot multiple forms of vector data together?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r load-libraries, echo=FALSE, results="hide", message=FALSE}
-library(terra)
-library(ggplot2)
-library(dplyr)
-library(sf)
-```
-
-```{r load-data, echo=FALSE, results="hide", warning=FALSE}
-# learners will have this data loaded from an earlier episode
-aoi_boundary_HARV <- st_read("data/NEON-DS-Site-Layout-Files/HARV/HarClip_UTMZ18.shp")
-lines_HARV <- st_read("data/NEON-DS-Site-Layout-Files/HARV/HARV_roads.shp")
-point_HARV <- st_read("data/NEON-DS-Site-Layout-Files/HARV/HARVtower_UTM18N.shp")
-CHM_HARV <- rast("data/NEON-DS-Airborne-Remote-Sensing/HARV/CHM/HARV_chmCrop.tif")
-CHM_HARV_df <- as.data.frame(CHM_HARV, xy = TRUE)
-road_colors <- c("blue", "green", "navy", "purple")
-```
 
 ::::::::::::::::::::::::::::::::::::::::::  prereq
 
@@ -60,12 +45,77 @@ same plot.
 
 ## Load the Data
 
-To work with vector data in R, we can use the `sf` library. The `terra`
-package also allows us to explore metadata using similar commands for both
-raster and vector files. Make sure that you have these packages loaded.
+To work with vector data in R, we can use the `sf` library. We will also be using `ggplot2` and some `dplyr`. Let's start by loading them.
 
-We will continue to work with the three ESRI `shapefile` that we loaded in the
-[Open and Plot Vector Layers in R](06-vector-open-shapefile-in-r/) episode.
+```{r load-libraries, echo=TRUE, results="hide", message=FALSE}
+library(ggplot2)
+library(dplyr)
+library(sf)
+```
+
+We are going to plot the 2022 Casco Bay Seagrass Beds, but, include some coastline for context. We will also add layers of information along the way. To start with, let's load up the seagrass beds, the AOI for Casco, and a shapefile of counties in Maine.
+
+```{r load-data, echo=TRUE, results="hide", warning=FALSE}
+aoi_boundary_casco <- st_read(
+  "data/maine_gov_maps/casco_aoi/casco_bay_aoi.shp")
+
+seagrass_casco_2022 <- st_read(
+  "data/maine_gov_seagrass/MaineDEP_Casco_Bay_Seagrass_2022/MaineDEP_Casco_Bay_Seagrass_2022.shp")
+
+maine_borders <- st_read(
+  "data/maine_gov_maps/Maine_State_Boundary_Polygon_Feature/Maine_State_Boundary_Polygon_Feature.shp")
+```
+
+## Making Sure Layers Match in Extent
+
+One of the beautiful things about `ggplot2` is that we're going to be able to just add layers together to make a nice plot. Our goal here is to plot seagrass beds with a coastline bordering them, so we can see how they line up around islands. However, we have a small problem. Let's compare the extent of our objects using `st_bbox()`.
+
+```{r show-ext}
+st_bbox(aoi_boundary_casco)
+st_bbox(seagrass_casco_2022)
+st_bbox(maine_borders)
+```
+
+While the first two are close - indeed, the AOI was made from the seagrass polygons extent - the state of Maine is huge relative to Casco Bay. We need to **crop** that shapefile down to just the area we want to plot. Fortunately, `sf` features a function called `st_crop()` which will crop a large vector file down to the size of the extent of a smaller vector file. So if we just want the Casco Coastline, we can crop `maine_borders` down to the size of the `aoi_boundary_casco` vector file.
+
+```{r crop_bad, error=TRUE}
+casco_coastline <- st_crop(maine_borders, aoi_boundary_casco)
+```
+
+This does not always go well with data sets from the wild. Without getting too deep into it, vector files (particularly polygons) can have a variety of issues in them which make them invalid. To fix this, we need to make them valid before cropping with `st_make_valid()`.  Odd, but, this is incredibly common.
+
+```{r crop, warning = FALSE}
+casco_coastline <- st_crop(maine_borders |> st_make_valid(), 
+                           aoi_boundary_casco)
+
+ggplot() +
+  geom_sf(data = casco_coastline) +
+  coord_sf() +
+  theme_void()
+```
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+## Casco Bay Region Roads
+
+Load up the roads of Maine and crop them to the Casco Bay region.
+
+:::::::::::::::  solution
+
+```{r load_crop_roads, warning = FALSE}
+roads_maine <- st_read("data/maine_gov_maps/MaineDOT_Public_Roads/MaineDOT_Public_Roads.shp")
+
+roads_casco <- st_crop(roads_maine, aoi_boundary_casco)
+
+ggplot() +
+  geom_sf(data = roads_casco)
+```
+
+:::::::::::::::::::::::::::::::::::::::  
+:::::::::::::::::::::::::::::::::::::::  
+
+
+Lovely! Now let's start bringing seagrass in.
 
 ## Plotting Multiple Vector Layers
 
@@ -75,197 +125,218 @@ including adding a custom legend. However, what if we want to create a more
 complex plot with many vector layers and unique symbols that need to be
 represented clearly in a legend?
 
-Now, let's create a plot that combines our tower location (`point_HARV`), site
-boundary (`aoi_boundary_HARV`) and roads (`lines_HARV`) spatial objects. We
-will need to build a custom legend as well.
+Now, let's create a plot that combines our seagrass beds 
+(`seagrass_casco_2022`), the coastline (`casco_coastline`) and roads 
+(`roads_maine`) spatial objects. We will need to build a custom legend as well.
 
-To begin, we will create a plot with the site boundary as the first layer. Then
-layer the tower location and road data on top using `+`.
+To begin, we will create a plot with the coastline as the base layer with a tan 
+fill and a black outline. We will 
+add on top roads, but with alpha = 0.1 so they are faint. 
+Last, we will layer seagrass beds on top with color and fill as percent cover 
+and a linewidth of 1.3. We will save it as an object so we can make small 
+changes from here on out.
 
 ```{r plot-many-shapefiles}
-ggplot() +
-  geom_sf(data = aoi_boundary_HARV, fill = "grey", color = "grey") +
-  geom_sf(data = lines_HARV, aes(color = TYPE), size = 1) +
-  geom_sf(data = point_HARV) +
-  ggtitle("NEON Harvard Forest Field Site") +
-  coord_sf()
+seagrass_map <- ggplot() +
+  geom_sf(data = casco_coastline, fill = "tan", color = "black") +
+  geom_sf(data = roads_casco, alpha = 0.1) +
+  geom_sf(data = seagrass_casco_2022, 
+          mapping = aes(color = Cover_Pct,
+                        fill = Cover_Pct),
+          linewidth = 1.3) +
+  scale_color_brewer(palette = "Greens") +
+  scale_fill_brewer(palette = "Greens") 
+
+seagrass_map
 ```
 
-Next, let's build a custom legend using the symbology (the colors and symbols)
-that we used to create the plot above. For example, it might be good if the
-lines were symbolized as lines. In the previous episode, you may have noticed
-that the default legend behavior for `geom_sf` is to draw a 'patch' for each
-legend entry. If you want the legend to draw lines or points, you need to add
-an instruction to the `geom_sf` call - in this case, `show.legend = 'line'`.
+This looks OK, but, let's dial things up a bit. Let's
+
+1. Eliminate the gap around the plot with an argument `expand = FALSE` to `coord_sf()`.
+2. Give it a cleaner theme with `theme_classic()`
+3. Give the map a name and the fill/color legend a name.
+4. Use `theme()` to make it more ocean-y with a 
+
+We can start by making the plot cleaner and eliminating the gap (1 & 2)
 
 ```{r plot-custom-shape}
-ggplot() +
-  geom_sf(data = aoi_boundary_HARV, fill = "grey", color = "grey") +
-  geom_sf(data = lines_HARV, aes(color = TYPE),
-          show.legend = "line", size = 1) +
-  geom_sf(data = point_HARV, aes(fill = Sub_Type), color = "black") +
-  scale_color_manual(values = road_colors) +
-  scale_fill_manual(values = "black") +
-  ggtitle("NEON Harvard Forest Field Site") +
-  coord_sf()
+seagrass_map <- seagrass_map +
+  coord_sf(expand = FALSE) +
+  theme_classic()
+
+seagrass_map
 ```
 
-Now lets adjust the legend titles by passing a `name` to the respective `color`
-and `fill` palettes.
+Now lets adjust the legend titles by using `labs()`.
 
 ```{r create-custom-legend}
-ggplot() +
-  geom_sf(data = aoi_boundary_HARV, fill = "grey", color = "grey") +
-  geom_sf(data = point_HARV, aes(fill = Sub_Type)) +
-  geom_sf(data = lines_HARV, aes(color = TYPE), show.legend = "line",
-          size = 1) +
-  scale_color_manual(values = road_colors, name = "Line Type") +
-  scale_fill_manual(values = "black", name = "Tower Location") +
-  ggtitle("NEON Harvard Forest Field Site") +
-  coord_sf()
+seagrass_map <- seagrass_map + 
+  labs(color = "% Cover", fill = "% Cover", 
+       title = "Seagrass in Casco Bay in 2022")
+
+seagrass_map
 ```
 
-Finally, it might be better if the points were symbolized as a symbol. We can
-customize this using `shape` parameters in our call to `geom_sf`: 16 is a point
-symbol, 15 is a box.
-
-:::::::::::::::::::::::::::::::::::::::::  callout
-
-## Data Tip
-
-To view a short list of `shape` symbols,
-type `?pch` into the R console.
+Last, we can use `theme()` to add a light blue background and rotate the
+X axis. We will save this as an object, so we don't need to type more as we make further modifications.
 
 
-::::::::::::::::::::::::::::::::::::::::::::::::::
+```{r better_theme}
+seagrass_map <- seagrass_map  +
+  theme(panel.background = element_rect(fill = "lightblue"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
 
-```{r custom-symbols}
-ggplot() +
-  geom_sf(data = aoi_boundary_HARV, fill = "grey", color = "grey") +
-  geom_sf(data = point_HARV, aes(fill = Sub_Type), shape = 15) +
-  geom_sf(data = lines_HARV, aes(color = TYPE),
-          show.legend = "line", size = 1) +
-  scale_color_manual(values = road_colors, name = "Line Type") +
-  scale_fill_manual(values = "black", name = "Tower Location") +
-  ggtitle("NEON Harvard Forest Field Site") +
-  coord_sf()
+seagrass_map
 ```
+
+## Zooming In
+
+This map looks great, but, there's a lot of data here. While it can provide a great big-picture overview, it's hard to see more small-scale features. There are two solutions to this. The first is plotting the map zoomed in to an area of interest. You can get your AOI either by eyeballing the corner coordinates (x and y 
+min and max) from the plot itself, or use something like 
+[https://maps.google.com](https://maps.google.com) and right click to get point
+coordinates.
+
+Using the later method, here, for example, is the area around Mackworth Island.
+
+```{r coord_sf_zoom}
+seagrass_map +
+  coord_sf(xlim = c(-70.24768051612979, -70.19432151530208),
+           ylim = c(43.66353031177649, 43.714022044471584),
+           expand = FALSE)
+```
+
+The second answer is an interactive map with leaflet. This is slightly more challenging to implement, but very similar to what we did with rasters before. We will start by making a color palette for the map. We can use `colorFactor()` as we have discrete classes here.
+
+```{r leaflet}
+library(leaflet)
+
+seagrass_pal <- colorFactor(palette = "Greens",
+                         domain = seagrass_casco_2022$Cover_Pct)
+```
+
+From here, we can build a leaflet map. Let's use `addProviderTiles("Stadia.AlidadeSmooth")` for a very neutral background. We add
+`sf` polygons using `addPolygons()`. For this, we need to think about the what
+is creating polygon borders and the fill. We will set `stroke = FALSE` so we don't have to worry about the border (too many more argument) and instead use our 
+palette - which is now a function to be evaluated with `~` and set a 
+`fillOpacity` to 1, for fully opaque.
+
+```{r leaflet_map}
+leaflet() |>
+ addProviderTiles("Stadia.AlidadeSmooth") |>  
+  addPolygons(data = seagrass_casco_2022, 
+              fillColor = ~seagrass_pal(Cover_Pct),
+              fillOpacity = 1,
+              stroke = FALSE)
+```
+
+Note, you can recreate what you did with the `ggplot2` above just using 
+the `sf objects`. We'll need to invoke one trick from the `leaflet.extras` 
+package to get that blue background.
+
+```{r leaflet_custom}
+library(leaflet.extras)
+
+leaflet() |>
+  addPolygons(data = casco_coastline, 
+              fillColor = "tan",
+              fillOpacity = 1,
+              stroke = FALSE) |>
+  addPolylines(data = roads_casco,
+               color = "black",
+               opacity = 0.1,
+               weight = 1) |>
+  addPolygons(data = seagrass_casco_2022, 
+              fillColor = ~seagrass_pal(Cover_Pct),
+              fillOpacity = 1,
+              stroke = FALSE) |>
+  addPolygons(data = aoi_boundary_casco,
+              color = "black",
+              fillOpacity = 0) |>
+  setMapWidgetStyle(list(background= "lightblue")) |>
+  addLegend(pal = seagrass_pal, 
+            values = seagrass_casco_2022$Cover_Pct,
+            title = "% Cover Seagrass")
+```
+
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Challenge: Plot Polygon by Attribute
+## Challenge: Let's Part Like it's 1997... er, 1993-1994
 
-1. Using the `NEON-DS-Site-Layout-Files/HARV/PlotLocations_HARV.shp` ESRI `shapefile`,
-  create a map of study plot locations, with each point colored by the soil
-  type (`soilTypeOr`). How many different soil types are there at this
-  particular field site? Overlay this layer on top of the `lines_HARV` layer
-  (the roads). Create a custom legend that applies line symbols to lines and
-  point symbols to the points.
+1. The earliest seagrass datat available from Maine's Geolibrary is their [1997 State-Wide Data](https://maine.hub.arcgis.com/datasets/maine::mainedmr-eelgrass-1997/about) aggregated from photography from 1992 - 1997. Load up the ESRI `shapefile` from `data/maine_gov_seagrass/MaineDMR_-_Eelgrass-1997-shp` and do a quick visualization showing where was surveyed when.
 
-2. Modify the plot above. Tell R to plot each point, using a different symbol
-   of `shape` value.
+2. Crop it down to Casco Bay and make a plot showing the area around Mackworth Island. Make sure your title reflects what years are being represented. While there is a cover classification (from 0-5) based on percent cover, the metadata doesn't have the lineup. Still, qualitatively, how does this compare to 2022? Use whatever technique you'd like to visualize this small area. Note, `COVER` is continuous, so to make it into distinct classes you will need `as.character(COVER)` in your code.
 
 :::::::::::::::  solution
 
 ## Answers
 
-First we need to read in the data and see how many unique soils are represented
-in the `soilTypeOr` attribute.
+
+1. First we need to load in the data. Let' see how many years are here.
 
 ```{r}
-plot_locations <-
-  st_read("data/NEON-DS-Site-Layout-Files/HARV/PlotLocations_HARV.shp")
+seagrass_1997 <- st_read("data/maine_gov_seagrass/MaineDMR_-_Eelgrass-1997-shp/MaineDMR_-_Eelgrass.shp")
 
-plot_locations$soilTypeOr <- as.factor(plot_locations$soilTypeOr)
-levels(plot_locations$soilTypeOr)
+# what are the names
+names(seagrass_1997)
+
+# what are the unique years
+unique(seagrass_1997$Year97)
 ```
 
-Next we can create a new color palette with one color for each soil type.
+Then, we can visualize. 
 
 ```{r}
-blue_orange <- c("cornflowerblue", "darkorange")
-```
-
-Finally, we will create our plot.
-
-```{r harv-plot-locations-bg}
 ggplot() +
-  geom_sf(data = lines_HARV, aes(color = TYPE), show.legend = "line") +
-  geom_sf(data = plot_locations, aes(fill = soilTypeOr),
-          shape = 21, show.legend = 'point') +
-  scale_color_manual(name = "Line Type", values = road_colors,
-     guide = guide_legend(override.aes = list(linetype = "solid",
-                                              shape = NA))) +
-  scale_fill_manual(name = "Soil Type", values = blue_orange,
-     guide = guide_legend(override.aes = list(linetype = "blank", shape = 21,
-                                              colour = NA))) +
-  ggtitle("NEON Harvard Forest Field Site") +
-  coord_sf()
+  geom_sf(data = seagrass_1997,
+          aes(color = Year97, fill = Year97)) +
+  scale_color_viridis_c() +
+  scale_fill_viridis_c() 
 ```
 
-If we want each soil to be shown with a different symbol, we can give multiple
-values to the `scale_shape_manual()` argument.
+2. For the second piece, first, we need to crop to Casco Bay and check what years this data consists of.
+```{r}
+seagrass_casco_1997 <- st_crop(seagrass_1997 |> st_make_valid(),
+                              aoi_boundary_casco)
 
-```{r harv-plot-locations-pch}
+unique(seagrass_casco_1997$Year97)
+```
+
+With the cropped polygons, we can make a map akin to what we did above for 2022. We can even re-use our code, but with a few small modifications for a different data set and a different cover type.
+
+```{r}
 ggplot() +
-  geom_sf(data = lines_HARV, aes(color = TYPE), show.legend = "line", size = 1) +
-  geom_sf(data = plot_locations, aes(fill = soilTypeOr, shape = soilTypeOr),
-          show.legend = 'point', size = 3) +
-  scale_shape_manual(name = "Soil Type", values = c(21, 22)) +
-  scale_color_manual(name = "Line Type", values = road_colors,
-     guide = guide_legend(override.aes = list(linetype = "solid", shape = NA))) +
-  scale_fill_manual(name = "Soil Type", values = blue_orange,
-     guide = guide_legend(override.aes = list(linetype = "blank", shape = c(21, 22),
-     color = blue_orange))) +
-  ggtitle("NEON Harvard Forest Field Site") +
-  coord_sf()
+  geom_sf(data = casco_coastline, fill = "tan", color = "black") +
+  geom_sf(data = roads_casco, alpha = 0.1) +
+  geom_sf(data = seagrass_casco_1997, 
+          mapping = aes(color = as.character(COVER),
+                        fill = as.character(COVER)),
+          linewidth = 1.3) +
+  scale_color_brewer(palette = "Greens") +
+  scale_fill_brewer(palette = "Greens") + 
+  theme_classic() +
+  labs(color = "Cover Class", fill = "Cover Class", 
+       title = "Seagrass in Casco Bay in 1993 and 1994") +
+  coord_sf(xlim = c(-70.24768051612979, -70.19432151530208),
+           ylim = c(43.66353031177649, 43.714022044471584),
+           expand = FALSE) +
+  theme(panel.background = element_rect(fill = "lightblue"),
+        axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+While we cannot know how the beds compare exactly, given that we do not know how the Cover Class maps to % Cover, it appears that many of the beds in 1993 and 1994 are at the highest class of cover, while in 2022 they are at the high-middle.
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::  challenge
-
-## Challenge: Plot Raster \& Vector Data Together
-
-You can plot vector data layered on top of raster data using the `+` to add a
-layer in `ggplot`. Create a plot that uses the NEON AOI Canopy Height Model
-`data/NEON-DS-Airborne-Remote-Sensing/HARV/CHM/HARV_chmCrop.tif` as a base
-layer. On top of the CHM, please add:
-
-- The study site AOI.
-- Roads.
-- The tower location.
-
-Be sure to give your plot a meaningful title.
-
-:::::::::::::::  solution
-
-## Answers
-
-```{r challenge-vector-raster-overlay, echo=TRUE}
-ggplot() +
-  geom_raster(data = CHM_HARV_df, aes(x = x, y = y, fill = HARV_chmCrop)) +
-  geom_sf(data = lines_HARV, color = "black") +
-  geom_sf(data = aoi_boundary_HARV, color = "grey20", size = 1) +
-  geom_sf(data = point_HARV, pch = 8) +
-  ggtitle("NEON Harvard Forest Field Site w/ Canopy Height Model") +
-  coord_sf()
-```
-
-:::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
 
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
 - Use the `+` operator to add multiple layers to a ggplot.
-- Multi-layered plots can combine raster and vector datasets.
-- Use the `show.legend` argument to set legend symbol types.
-- Use the `scale_fill_manual()` function to set legend colors.
+- Use `st_crop()` to put spatially subset a vector data set.
+- Multi-layered plots can combine multiple vector data sets.
+- Use `leaflet` or zooming in `ggplot2` to see small spatial features.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 

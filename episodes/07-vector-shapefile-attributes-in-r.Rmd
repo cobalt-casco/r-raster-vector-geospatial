@@ -60,8 +60,7 @@ seagrass beds around Casco Bay from 2022.
 ```{r load-data, echo=TRUE, results="hide"}
 # seagrass in 2022
 seagrass_casco_2022 <- st_read(
-  "data/maine_gov_seagrass/MaineDEP_Casco_Bay_Seagrass_2022/MaineDEP_Casco_Bay_Seagrass_2022.shp"
-)
+  "data/maine_gov_seagrass/MaineDEP_Casco_Bay_Seagrass_2022/MaineDEP_Casco_Bay_Seagrass_2022.shp")
 ```
 
 ## Query Vector Feature Metadata
@@ -134,7 +133,6 @@ spatial objects.
 roads_maine <- st_read("data/maine_gov_maps/MaineDOT_Public_Roads/MaineDOT_Public_Roads.shp")
 
 ncol(roads_maine)
-ncol(aoi_boundary_casco)
 ```
 
 2) Ownership information is in a column named `Ownership`:
