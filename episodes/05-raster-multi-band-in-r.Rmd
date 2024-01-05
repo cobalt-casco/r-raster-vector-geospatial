@@ -364,6 +364,8 @@ library(leaflet)
 library(leafem)
 
 # resample and then convert to a raster::stack object
+# note, if this raster was small, we wouldn't have to 
+# spatSample()
 landsat_colors_raster <- landsat_colors_1230 |>
   spatSample(size = 5e5, as.raster = TRUE, method = "regular")|> 
   raster::stack()
