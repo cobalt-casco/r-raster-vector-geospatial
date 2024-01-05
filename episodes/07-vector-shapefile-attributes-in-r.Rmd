@@ -6,8 +6,8 @@ source: Rmd
 ---
 
 ```{r setup, echo=FALSE}
-#source("setup.R")
-knitr::opts_chunk$set(message = FALSE)
+source("setup.R")
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 ::::::::::::::::::::::::::::::::::::::: objectives

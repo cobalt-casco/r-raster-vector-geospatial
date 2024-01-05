@@ -7,6 +7,7 @@ source: Rmd
 
 ```{r setup, echo=FALSE}
 source("setup.R")
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
@@ -24,7 +25,6 @@ source("setup.R")
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ```{r load-libraries, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
-library(terra)
 library(ggplot2)
 library(dplyr)
 library(sf)
