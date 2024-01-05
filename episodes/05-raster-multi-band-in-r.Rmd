@@ -350,25 +350,28 @@ plotRGB(landsat_colors_1230,
 ## Data Tip
 
 You can create interactive RGB overlays as well. But it takes some extra doing,
-as you have to stretch and often downsample large images, as `geom_spatraster()`
-does natively. You also have to specify an RGB color mappig for the raster 
-itself with the `RGB()` function.
+as you have to downsample large images, as `geom_spatraster()`
+does natively. You can do this with `spatSample()`. `leaflet` currently does odd
+things to RGB rasters, so, you should use the `leafem` library. Which does not 
+yet handle `SpatRaster` objects from `terra`. Fortunately, it's a small thing to 
+convert it to an old school `raster` stack with `raster::stack()` (we're not 
+loading the whole library to prevent conflicts in function names). Note, for big
+rasters, you can up `maxbytes` in the `addRasterRGB` from it's default of 
+`4*1024*1024`, but, this can cause plotting to take a very very very long time.
 
 ```{r rgb-raster-leaflet, eval = FALSE}
-
 library(leaflet)
+library(leafem)
 
-# stretch and then resample like geom_spatraster
-landsat_rgb_stretched <- stretch(landsat_colors_1230[[1:3]],
-                                 minq = 0.02, maxq = 0.98) |>
-  spatSample(size = 5e5, as.raster = TRUE, method = "regular")
+# resample and then convert to a raster::stack object
+landsat_colors_raster <- landsat_colors_1230 |>
+  spatSample(size = 5e5, as.raster = TRUE, method = "regular")|> 
+  raster::stack()
 
-# set RGB channels
-RGB(landsat_rgb_stretched) <- 3:1
-
-# plot
+# plot using addRasterRGB from leafem
 leaflet() |>
-  addRasterImage(landsat_rgb_stretched)
+  addRasterRGB(x = landsat_colors_raster,
+               quantiles = c(0.02, 0.98))
 ```
 
 
