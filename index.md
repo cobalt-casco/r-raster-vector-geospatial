@@ -11,9 +11,7 @@ maintainers:
 site: sandpaper::sandpaper_site
 ---
 
-**Lesson Authors:** Leah A. Wasser, Megan A. Jones, Zack Brym, Kristina Riemer, Jason Williams, Jeff Hollister,  Mike Smorul, Jemma Stachelek
-
-**Lesson Maintainers:** {{ page.maintainers | join: ', ' }}
+**Lesson Authors:** Leah A. Wasser, Megan A. Jones, Zack Brym, Kristina Riemer, Jason Williams, Jeff Hollister,  Mike Smorul, Jemma Stachelek, Jarrett Byrnes (for COBALT version)
 
 The episodes in this lesson cover how to open, work with, and plot
 vector and raster-format spatial data in R. Additional topics include
@@ -34,7 +32,7 @@ working through this lesson.
 
 This lesson assumes you have some knowledge of `R`. If you've never
 used `R` before, or need a refresher, start with our
-[Introduction to R for Geospatial Data](http://www.datacarpentry.org/r-intro-geospatial/)
+[Introduction to R for Geospatial Data](https://casco-cobalt.github.io/r-intro-geospatial/)
 lesson.
 
 ### Geospatial Skill Level
@@ -42,20 +40,20 @@ lesson.
 This lesson assumes you have some knowledge of geospatial data types
 and common file formats. If you have never worked with geospatial
 data before, or need a refresher, start with our
-[Introduction to Geospatial Concepts](http://www.datacarpentry.org/organization-geospatial/)
+[Introduction to Geospatial Concepts](https://casco-cobalt.github.io/organization-geospatial/)
 lesson.
 
 ### Install Software and Download Data
 
 For installation instructions and to download the data used in this
 lesson, see the
-[Geospatial Workshop Overview](http://www.datacarpentry.org/geospatial-workshop/#setup).
+[Geospatial Workshop Overview](https://casco-cobalt.github.io/geospatial-workshop/#setup).
 
 ### Setup RStudio Project
 
 Make sure you have set up a RStudio project for this lesson, as
 described in the
-[setup instructions](http://www.datacarpentry.org/geospatial-workshop/#setup)
+[setup instructions](https://casco-cobalt.github.io/geospatial-workshop/#setup)
 and that your working directory is correctly set.
 
 

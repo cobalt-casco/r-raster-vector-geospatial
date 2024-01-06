@@ -21,7 +21,15 @@ source: Rmd
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
+First, some libraries you might not have loaded at the moment. 
 
+
+```r
+library(terra)
+library(ggplot2)
+library(dplyr)
+library(tidyterra)
+```
 
 ::::::::::::::::::::::::::::::::::::::::::  prereq
 
@@ -35,46 +43,43 @@ episode.
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 We introduced multi-band raster data in
-[an earlier lesson](https://datacarpentry.org/organization-geospatial/01-intro-raster-data). 
+[an earlier lesson](https://cobalt-casco.github.io/organization-geospatial/01-intro-raster-data). 
 This episode explores how to import and plot a multi-band raster in R.
 
 ## Getting Started with Multi-Band Data in R
 
 In this episode, the multi-band data that we are working with is imagery 
 collected using the
-[NEON Airborne Observation Platform](https://www.neonscience.org/data-collection/airborne-remote-sensing)
-high resolution camera over the
-[NEON Harvard Forest field site](https://www.neonscience.org/field-sites/field-sites-map/HARV).
-Each RGB image is a 3-band raster. The same steps would apply to working with a 
-multi-spectral image with 4 or more bands - like Landsat imagery.
+[Landsat 8 Satellite](https://www.usgs.gov/landsat-missions/landsat-8)
+satellite on row 12 path 30 of it's traverse around the planet. Landsat is a series of multispectral satellites with a 30m pixel resolution. This means that each image has multiple wavelengths of light observed - not just Red, Green, and Blue (RGB). Here are the bands of the Landsat 8 OLI:
 
-By using the `rast()` function along with the `lyrs` parameter, we can read 
-specific raster bands (i.e. the first one); omitting this parater would read 
-instead all bands.
+- Band 1 Coastal Aerosol (0.43 - 0.45 µm) 30 m
+- Band 2 Blue (0.450 - 0.51 µm) 30 m
+- Band 3 Green (0.53 - 0.59 µm) 30 m
+- Band 4 Red (0.64 - 0.67 µm) 30 m
+- Band 5 Near-Infrared (0.85 - 0.88 µm) 30 m
+- Band 6 SWIR 1(1.57 - 1.65 µm) 30 m
+- Band 7 SWIR 2 (2.11 - 2.29 µm) 30 m
+- Band 8 Panchromatic (PAN) (0.50 - 0.68 µm) 15 m
+- Band 9 Cirrus (1.36 - 1.38 µm) 30 m
 
+So, 4, 3, and 2 are RGB. By using the `rast()` function we can read 
+one raster bands (i.e. the first one) or many.
 
-```r
-RGB_band1_HARV <- 
-  rast("data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_RGB_Ortho.tif", 
-       lyrs = 1)
-```
-
-We need to convert this data to a data frame in order to plot it with `ggplot`.
-
-
-```r
-RGB_band1_HARV_df  <- as.data.frame(RGB_band1_HARV, xy = TRUE)
-```
+Let's start by looking at the red band.
 
 
 ```r
+landsat_band4_1230 <- 
+  rast("data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_B4.TIF")
+
 ggplot() +
-  geom_raster(data = RGB_band1_HARV_df,
-              aes(x = x, y = y, alpha = HARV_RGB_Ortho_1)) + 
-  coord_quickmap()
+  geom_spatraster(data = landsat_band4_1230) +
+  scale_fill_distiller(palette = "Greys")
 ```
 
-<img src="fig/05-raster-multi-band-in-r-rendered-harv-rgb-band1-1.png" style="display: block; margin: auto;" />
+<img src="fig/05-raster-multi-band-in-r-rendered-read-single-band-1.png" style="display: block; margin: auto;" />
+
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
@@ -89,134 +94,168 @@ and max values, and band number?
 
 
 ```r
-RGB_band1_HARV
+landsat_band4_1230
 ```
 
 ```{.output}
 class       : SpatRaster 
-dimensions  : 2317, 3073, 1  (nrow, ncol, nlyr)
-resolution  : 0.25, 0.25  (x, y)
-extent      : 731998.5, 732766.8, 4712956, 4713536  (xmin, xmax, ymin, ymax)
-coord. ref. : WGS 84 / UTM zone 18N (EPSG:32618) 
-source      : HARV_RGB_Ortho.tif 
-name        : HARV_RGB_Ortho_1 
-min value   :                0 
-max value   :              255 
+dimensions  : 7991, 7891, 1  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 232485, 469215, 4662585, 4902315  (xmin, xmax, ymin, ymax)
+coord. ref. : WGS 84 / UTM zone 19N (EPSG:32619) 
+source      : LC08_L2SP_012030_20230903_20230912_02_T1_SR_B4.TIF 
+name        : LC08_L2SP_012030_20230903_20230912_02_T1_SR_B4 
 ```
 
 Notice that when we look at the attributes of this band, we see:
-`dimensions  : 2317, 3073, 1  (nrow, ncol, nlyr)` 
+`dimensions  :  7991, 7891, 1  (nrow, ncol, nlyr)` 
 
-This is R telling us that we read only one its bands.
+This is R telling us that we read only one band.
 
 
 
 :::::::::::::::::::::::::
-
 ::::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Raster Stacks in R
+
+Next, we will work with mutiple bands as an R 
+raster object. We will then plot a 3-band composite, or full color, image, and what is called a 'fasle-color' image.
+
+To bring in all bands of a multi-band raster, we use the`rast()` function.
+
+For multi-layer views, we need to look at all of the files we get with a typical sensor image. They are often listed as different files (although they can come in one big file.) Let's see what a typical Landsat image has.
+
+
+```r
+list.files("data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/")
+```
+
+```{.output}
+ [1] "LC08_L2SP_012030_20230903_20230912_02_T1_ANG.txt"          
+ [2] "LC08_L2SP_012030_20230903_20230912_02_T1_MTL.txt"          
+ [3] "LC08_L2SP_012030_20230903_20230912_02_T1_MTL.xml"          
+ [4] "LC08_L2SP_012030_20230903_20230912_02_T1_QA_PIXEL.TIF"     
+ [5] "LC08_L2SP_012030_20230903_20230912_02_T1_QA_RADSAT.TIF"    
+ [6] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B1.TIF"        
+ [7] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B2.TIF"        
+ [8] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B3.TIF"        
+ [9] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B4.TIF"        
+[10] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B5.TIF"        
+[11] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B6.TIF"        
+[12] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B7.TIF"        
+[13] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_QA_AEROSOL.TIF"
+```
+
+That's a lot of files! To load them in with `rast()` in a single object, thought, we will want only those that are TIF files, and we will need the full path to each one. Fortunately, `list.files()` makes that easy for us.
+
+
+```r
+landsat_files <- 
+  list.files("data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1",
+             full.names = TRUE,
+             pattern = "TIF")
+
+landsat_files
+```
+
+```{.output}
+ [1] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_QA_PIXEL.TIF"     
+ [2] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_QA_RADSAT.TIF"    
+ [3] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_B1.TIF"        
+ [4] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_B2.TIF"        
+ [5] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_B3.TIF"        
+ [6] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_B4.TIF"        
+ [7] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_B5.TIF"        
+ [8] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_B6.TIF"        
+ [9] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_B7.TIF"        
+[10] "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/LC08_L2SP_012030_20230903_20230912_02_T1_SR_QA_AEROSOL.TIF"
+```
+
+Great! We can now load those in smoothly with `rast()`.
+
+
+```r
+# load all bands
+landsat_all_1230 <- rast(landsat_files)
+
+landsat_all_1230
+```
+
+```{.output}
+class       : SpatRaster 
+dimensions  : 7991, 7891, 10  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 232485, 469215, 4662585, 4902315  (xmin, xmax, ymin, ymax)
+coord. ref. : WGS 84 / UTM zone 19N (EPSG:32619) 
+sources     : LC08_L2SP_012030_20230903_20230912_02_T1_QA_PIXEL.TIF  
+              LC08_L2SP_012030_20230903_20230912_02_T1_QA_RADSAT.TIF  
+              LC08_L2SP_012030_20230903_20230912_02_T1_SR_B1.TIF  
+              ... and 7 more source(s)
+names       : LC08_~PIXEL, LC08_~ADSAT, LC08_~SR_B1, LC08_~SR_B2, LC08_~SR_B3, LC08_~SR_B4, ... 
+```
+
+Now we have a very different set of dimensions and names.
+
+`dimensions  : 7991, 7891, 10  (nrow, ncol, nlyr)`
+
+10 bands! To see what is loaded, we can just use `names()`
+
+
+```r
+names(landsat_all_1230)
+```
+
+```{.output}
+ [1] "LC08_L2SP_012030_20230903_20230912_02_T1_QA_PIXEL"     
+ [2] "LC08_L2SP_012030_20230903_20230912_02_T1_QA_RADSAT"    
+ [3] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B1"        
+ [4] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B2"        
+ [5] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B3"        
+ [6] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B4"        
+ [7] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B5"        
+ [8] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B6"        
+ [9] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B7"        
+[10] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_QA_AEROSOL"
+```
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
 ## Data Tip
 
 The number of bands associated with a raster's file can also be determined 
-using the `describe()` function: syntax is `describe(sources(RGB_band1_HARV))`.
+using the `describe()` function: syntax is `describe(sources(landsat_all_1230))`.
 
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Image Raster Data Values
-
-As we saw in the previous exercise, this raster contains values between 0 and 
-255. These values represent degrees of brightness associated with the image 
-band. In the case of a RGB image (red, green and blue), band 1 is the red band. 
-When we plot the red band, larger numbers (towards 255) represent pixels with 
-more red in them (a strong red reflection). Smaller numbers (towards 0) 
-represent pixels with less red in them (less red was reflected). To plot an RGB 
-image, we mix red + green + blue values into one single color to create a full 
-color image - similar to the color image a digital camera creates.
-
-### Import A Specific Band
-
-We can use the `rast()` function to import specific bands in our raster object
-by specifying which band we want with `lyrs = N` (N represents the band number we
-want to work with). To import the green band, we would use `lyrs = 2`.
+We just want red, green, blue, and near-infrared for now - bands 2 through 5. Note how that corresponds to layers 4 through 7. So we can subset down. 
 
 
 ```r
-RGB_band2_HARV <-  
-  rast("data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_RGB_Ortho.tif", 
-       lyrs = 2)
+landsat_colors_1230 <- subset(landsat_all_1230,
+                              subset = 4:7)
 ```
 
-We can convert this data to a data frame and plot the same way we plotted the red band:
-
-
-```r
-RGB_band2_HARV_df <- as.data.frame(RGB_band2_HARV, xy = TRUE)
-```
-
-
-```r
-ggplot() +
-  geom_raster(data = RGB_band2_HARV_df,
-              aes(x = x, y = y, alpha = HARV_RGB_Ortho_2)) + 
-  coord_equal()
-```
-
-<img src="fig/05-raster-multi-band-in-r-rendered-rgb-harv-band2-1.png" style="display: block; margin: auto;" />
-
-:::::::::::::::::::::::::::::::::::::::  challenge
-
-## Challenge: Making Sense of Single Band Images
-
-Compare the plots of band 1 (red) and band 2 (green). Is the forested area 
-darker or lighter in band 2 (the green band) compared to band 1 (the red band)?
-
-:::::::::::::::  solution
-
-## Solution
-
-We'd expect a *brighter* value for the forest in band 2 (green) than in band 1 
-(red) because the leaves on trees of most often appear "green" - healthy leaves 
-reflect MORE green light than red light.
-
-
-
-:::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Raster Stacks in R
-
-Next, we will work with all three image bands (red, green and blue) as an R 
-raster object. We will then plot a 3-band composite, or full color, image.
-
-To bring in all bands of a multi-band raster, we use the`rast()` function.
-
-
-```r
-RGB_stack_HARV <- 
-  rast("data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_RGB_Ortho.tif")
-```
 
 Let's preview the attributes of our stack object:
 
 
 ```r
-RGB_stack_HARV
+landsat_colors_1230
 ```
 
 ```{.output}
 class       : SpatRaster 
-dimensions  : 2317, 3073, 3  (nrow, ncol, nlyr)
-resolution  : 0.25, 0.25  (x, y)
-extent      : 731998.5, 732766.8, 4712956, 4713536  (xmin, xmax, ymin, ymax)
-coord. ref. : WGS 84 / UTM zone 18N (EPSG:32618) 
-source      : HARV_RGB_Ortho.tif 
-names       : HARV_RGB_Ortho_1, HARV_RGB_Ortho_2, HARV_RGB_Ortho_3 
-min values  :                0,                0,                0 
-max values  :              255,              255,              255 
+dimensions  : 7991, 7891, 4  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 232485, 469215, 4662585, 4902315  (xmin, xmax, ymin, ymax)
+coord. ref. : WGS 84 / UTM zone 19N (EPSG:32619) 
+sources     : LC08_L2SP_012030_20230903_20230912_02_T1_SR_B2.TIF  
+              LC08_L2SP_012030_20230903_20230912_02_T1_SR_B3.TIF  
+              LC08_L2SP_012030_20230903_20230912_02_T1_SR_B4.TIF  
+              LC08_L2SP_012030_20230903_20230912_02_T1_SR_B5.TIF  
+names       : LC08_L2~1_SR_B2, LC08_L2~1_SR_B3, LC08_L2~1_SR_B4, LC08_L2~1_SR_B5 
 ```
 
 We can view the attributes of each band in the stack in a single output. For 
@@ -225,76 +264,82 @@ view attributes for using an index value:
 
 
 ```r
-RGB_stack_HARV[[2]]
+landsat_colors_1230[[2]]
 ```
 
 ```{.output}
 class       : SpatRaster 
-dimensions  : 2317, 3073, 1  (nrow, ncol, nlyr)
-resolution  : 0.25, 0.25  (x, y)
-extent      : 731998.5, 732766.8, 4712956, 4713536  (xmin, xmax, ymin, ymax)
-coord. ref. : WGS 84 / UTM zone 18N (EPSG:32618) 
-source      : HARV_RGB_Ortho.tif 
-name        : HARV_RGB_Ortho_2 
-min value   :                0 
-max value   :              255 
+dimensions  : 7991, 7891, 1  (nrow, ncol, nlyr)
+resolution  : 30, 30  (x, y)
+extent      : 232485, 469215, 4662585, 4902315  (xmin, xmax, ymin, ymax)
+coord. ref. : WGS 84 / UTM zone 19N (EPSG:32619) 
+source      : LC08_L2SP_012030_20230903_20230912_02_T1_SR_B3.TIF 
+name        : LC08_L2SP_012030_20230903_20230912_02_T1_SR_B3 
 ```
 
-We can also use the `ggplot` functions to plot the data in any layer of our 
-raster object. Remember, we need to convert to a data frame first.
-
-
-```r
-RGB_stack_HARV_df  <- as.data.frame(RGB_stack_HARV, xy = TRUE)
-```
-
-Each band in our RasterStack gets its own column in the data frame. Thus we have:
-
-
-```r
-str(RGB_stack_HARV_df)
-```
-
-```{.output}
-'data.frame':	7120141 obs. of  5 variables:
- $ x               : num  731999 731999 731999 731999 732000 ...
- $ y               : num  4713535 4713535 4713535 4713535 4713535 ...
- $ HARV_RGB_Ortho_1: num  0 2 6 0 16 0 0 6 1 5 ...
- $ HARV_RGB_Ortho_2: num  1 0 9 0 5 0 4 2 1 0 ...
- $ HARV_RGB_Ortho_3: num  0 10 1 0 17 0 4 0 0 7 ...
-```
-
-Let's create a histogram of the first band:
+We can also use the `ggplot` functions to plota histogram of the first (blue) band:
 
 
 ```r
 ggplot() +
-  geom_histogram(data = RGB_stack_HARV_df, aes(HARV_RGB_Ortho_1))
+  geom_histogram(data = landsat_colors_1230, 
+                 aes(x = LC08_L2SP_012030_20230903_20230912_02_T1_SR_B3),
+                 bins = 1e4)
 ```
 
-```{.output}
-`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+<img src="fig/05-raster-multi-band-in-r-rendered-rgb-hist-band1-1.png" style="display: block; margin: auto;" />
+
+
+This tells us that, for example, we might want to cutoff high quantiles when we start to blend colors for an RGB plot.
+
+We can also plot *all* of the bands with either `plot()` or `ggplot()` adding a `facet_wrap(facets = vars(lyr))` call to facet by layer.
+
+
+
+```r
+#plot(landsat_colors_1230)
+
+ggplot() +
+  geom_spatraster(data = landsat_colors_1230) +
+  facet_wrap(facets = vars(lyr)) +
+  scale_fill_distiller(palette = "Greys")
 ```
 
-<img src="fig/05-raster-multi-band-in-r-rendered-rgb-harv-hist-band1-1.png" style="display: block; margin: auto;" />
+<img src="fig/05-raster-multi-band-in-r-rendered-plot-lyrs-1.png" style="display: block; margin: auto;" />
 
-And a raster plot of the second band:
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+## Challenge: Making Sense of Single Band Images
+
+Compare the plots of band 4 (red) and band 5 (near infrared). Is the land
+darker or lighter in band 4 (the red band) compared to band 5 (near infrared)?
+
+:::::::::::::::  solution
+
+## Solution
 
 
 ```r
 ggplot() +
-  geom_raster(data = RGB_stack_HARV_df,
-              aes(x = x, y = y, alpha = HARV_RGB_Ortho_2)) + 
-  coord_quickmap()
+  geom_spatraster(data = landsat_colors_1230[[3:4]]) +
+  facet_wrap(facets = vars(lyr)) +
+  scale_fill_viridis_b()
 ```
 
-<img src="fig/05-raster-multi-band-in-r-rendered-rgb-harv-plot-band2-1.png" style="display: block; margin: auto;" />
+We'd expect a *brighter* value for the land in band 5 (NIR) than in band 4 
+(red) because healthy vegetation reflects MORE NIR light than red light.
 
-We can access any individual band in the same way.
 
-### Create A Three Band Image
 
-To render a final three band, colored image in R, we use the `plotRGB()` function.
+:::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+## Create A Three Band Image
+
+To render a final three band, colored image in R, we use the `plotRGB()` or `geom_spatraster_rgb()` function.
 
 This function allows us to:
 
@@ -303,6 +348,7 @@ This function allows us to:
    order. However, you can define what bands you'd like to plot manually. 
    Manual definition of bands is useful if you have, for example a 
    near-infrared band and want to create a color infrared image.
+
 2. Adjust the `stretch` of the image to increase or decrease contrast.
 
 Let's plot our 3-band image. Note that we can use the `plotRGB()` function 
@@ -311,287 +357,107 @@ function isn't part of the `ggplot2` package).
 
 
 ```r
-plotRGB(RGB_stack_HARV,
-        r = 1, g = 2, b = 3)
+plotRGB(landsat_colors_1230,
+        r = 3, g = 2, b = 1)
 ```
 
-<img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-image-1.png" style="display: block; margin: auto;" />
+That throws an error as sometimes plotRGB doesn't like really large values when it rescales. RGB values for a computer screen are typically between 0 and 255, so, we just need to rescale our values between 0 and 255. We can do that by multiplying the raster values by 255/(max of the raster values). Note, you can either do this so EACH channel is rescalled to 0-255, or, they are all rescaled by one grand value.
 
-The image above looks pretty good. We can explore whether applying a stretch to
+
+```r
+colmax <- max(landsat_colors_1230[[1:3]]) |> values() |> max(na.rm = TRUE)
+
+colmax
+    
+plotRGB(landsat_colors_1230 * 255/colmax,
+        r = 3, g = 2, b = 1, main = "Rescaled for each channel")
+```
+
+<img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-scaled-1.png" style="display: block; margin: auto;" />
+
+The image above looks OK, but dark. You can actually play with the denominator of the scaling to make more interesting ones, or scale by other rasters. But, there are more standard (and better) stretching algorithms. We can explore whether applying a stretch to
 the image might improve clarity and contrast using `stretch="lin"` or
 `stretch="hist"`.
-
-![](fig/dc-spatial-raster/imageStretch_dark.jpg){alt='Image Stretch'}
 
 When the range of pixel brightness values is closer to 0, a darker image is 
 rendered by default. We can stretch the values to extend to the full 0-255 
 range of potential values to increase the visual contrast of the image.
 
-![](fig/dc-spatial-raster/imageStretch_light.jpg){alt='Image Stretch light'}
+![](fig/dc-spatial-raster/imageStretch_dark.jpg){alt='Image Stretch'}
+
 
 When the range of pixel brightness values is closer to 255, a lighter image is 
 rendered by default. We can stretch the values to extend to the full 0-255 
 range of potential values to increase the visual contrast of the image.
 
+![](fig/dc-spatial-raster/imageStretch_light.jpg){alt='Image Stretch light'}
+
+
+We can implement this easily in R where we not only make a linear stretch, but chop off some of the highest and lowest values.
+
 
 ```r
-plotRGB(RGB_stack_HARV,
+plotRGB(landsat_colors_1230,
         r = 1, g = 2, b = 3,
-        scale = 800,
         stretch = "lin")
+```
+
+<img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-lin-stretch-1.png" style="display: block; margin: auto;" />
+
+If the problem is that we want an even distribution of values for each channel, rather than clumps and clusters, we use `hist` as our stretch.
+
+
+```r
+plotRGB(landsat_colors_1230,
+        r = 1, g = 2, b = 3,
+        stretch = "hist")
 ```
 
 <img src="fig/05-raster-multi-band-in-r-rendered-plot-rbg-image-linear-1.png" style="display: block; margin: auto;" />
 
+In this case, the stretch begins to show some things happening offshore a bit more, which might prompt more investigation. 
+
+Note, to do this with ggplot2, we need to apply `stretch()` to the raster first and cut off the lower and upper quantile of values. We can then use `geom_spatraster_rgb()`. Note, to use `stretch()` and get the RGB right, we need to reference the layer numbers of the raster as indices.
+
 
 ```r
-plotRGB(RGB_stack_HARV,
-        r = 1, g = 2, b = 3,
-        scale = 800,
-        stretch = "hist")
+ggplot() +
+  geom_spatraster_rgb(data = stretch(landsat_colors_1230[[c(3,2,1)]],
+                                 minq = 0.02, maxq = 0.98))
 ```
 
-<img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-image-hist-1.png" style="display: block; margin: auto;" />
-
-In this case, the stretch doesn't enhance the contrast our image significantly 
-given the distribution of reflectance (or brightness) values is distributed 
-well between 0 and 255.
+<img src="fig/05-raster-multi-band-in-r-rendered-geom_spatraster_rgb-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Challenge - NoData Values
+## Challenge - False Color Images
 
-Let's explore what happens with NoData values when working with RasterStack 
-objects and using the `plotRGB()` function. We will use the 
-`HARV_Ortho_wNA.tif` GeoTIFF file in the 
-`NEON-DS-Airborne-Remote-Sensing/HARVRGB_Imagery/` directory.
+What we have plotted above is a True Color Image. To help see things, many people use False color Images. Either they switch the bands (so, GRB instead of RGB) or use other bands. What do you see that is different if you try the following. Apply any stretch you like.
 
-1. View the files attributes. Are there `NoData` values assigned for this file?
-2. If so, what is the `NoData` Value?
-3. How many bands does it have?
-4. Load the multi-band raster file into R.
-5. Plot the object as a true color image.
-6. What happened to the black edges in the data?
-7. What does this tell us about the difference in the data structure between
-  `HARV_Ortho_wNA.tif` and `HARV_RGB_Ortho.tif` (R object `RGB_stack`). How can 
-  you check?
+1. Instead of RGB, plot GRB.  
+2. Instead of RBG, plot NRG (where N = NIR). This creates a 'vegetation in red' map, which can be useful for vegetation.
+
 
 :::::::::::::::  solution
 
 ## Answers
 
-1) First we use the `describe()` function to view the data attributes.
+1) Note how we use r, g, and b as channel 1, 2, and 3.
 
 
 ```r
-describe("data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_Ortho_wNA.tif")
+plotRGB(landsat_colors_1230,
+        r = 2, g = 3, b = 1,
+        stretch = "lin")
 ```
 
-```{.output}
- [1] "Driver: GTiff/GeoTIFF"                                                                                                                                                                                                                                                         
- [2] "Files: data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_Ortho_wNA.tif"                                                                                                                                                                                               
- [3] "Size is 3073, 2317"                                                                                                                                                                                                                                                            
- [4] "Coordinate System is:"                                                                                                                                                                                                                                                         
- [5] "PROJCRS[\"WGS 84 / UTM zone 18N\","                                                                                                                                                                                                                                            
- [6] "    BASEGEOGCRS[\"WGS 84\","                                                                                                                                                                                                                                                   
- [7] "        DATUM[\"World Geodetic System 1984\","                                                                                                                                                                                                                                 
- [8] "            ELLIPSOID[\"WGS 84\",6378137,298.257223563,"                                                                                                                                                                                                                       
- [9] "                LENGTHUNIT[\"metre\",1]]],"                                                                                                                                                                                                                                    
-[10] "        PRIMEM[\"Greenwich\",0,"                                                                                                                                                                                                                                               
-[11] "            ANGLEUNIT[\"degree\",0.0174532925199433]],"                                                                                                                                                                                                                        
-[12] "        ID[\"EPSG\",4326]],"                                                                                                                                                                                                                                                   
-[13] "    CONVERSION[\"UTM zone 18N\","                                                                                                                                                                                                                                              
-[14] "        METHOD[\"Transverse Mercator\","                                                                                                                                                                                                                                       
-[15] "            ID[\"EPSG\",9807]],"                                                                                                                                                                                                                                               
-[16] "        PARAMETER[\"Latitude of natural origin\",0,"                                                                                                                                                                                                                           
-[17] "            ANGLEUNIT[\"degree\",0.0174532925199433],"                                                                                                                                                                                                                         
-[18] "            ID[\"EPSG\",8801]],"                                                                                                                                                                                                                                               
-[19] "        PARAMETER[\"Longitude of natural origin\",-75,"                                                                                                                                                                                                                        
-[20] "            ANGLEUNIT[\"degree\",0.0174532925199433],"                                                                                                                                                                                                                         
-[21] "            ID[\"EPSG\",8802]],"                                                                                                                                                                                                                                               
-[22] "        PARAMETER[\"Scale factor at natural origin\",0.9996,"                                                                                                                                                                                                                  
-[23] "            SCALEUNIT[\"unity\",1],"                                                                                                                                                                                                                                           
-[24] "            ID[\"EPSG\",8805]],"                                                                                                                                                                                                                                               
-[25] "        PARAMETER[\"False easting\",500000,"                                                                                                                                                                                                                                   
-[26] "            LENGTHUNIT[\"metre\",1],"                                                                                                                                                                                                                                          
-[27] "            ID[\"EPSG\",8806]],"                                                                                                                                                                                                                                               
-[28] "        PARAMETER[\"False northing\",0,"                                                                                                                                                                                                                                       
-[29] "            LENGTHUNIT[\"metre\",1],"                                                                                                                                                                                                                                          
-[30] "            ID[\"EPSG\",8807]]],"                                                                                                                                                                                                                                              
-[31] "    CS[Cartesian,2],"                                                                                                                                                                                                                                                          
-[32] "        AXIS[\"(E)\",east,"                                                                                                                                                                                                                                                    
-[33] "            ORDER[1],"                                                                                                                                                                                                                                                         
-[34] "            LENGTHUNIT[\"metre\",1]],"                                                                                                                                                                                                                                         
-[35] "        AXIS[\"(N)\",north,"                                                                                                                                                                                                                                                   
-[36] "            ORDER[2],"                                                                                                                                                                                                                                                         
-[37] "            LENGTHUNIT[\"metre\",1]],"                                                                                                                                                                                                                                         
-[38] "    USAGE["                                                                                                                                                                                                                                                                    
-[39] "        SCOPE[\"Engineering survey, topographic mapping.\"],"                                                                                                                                                                                                                  
-[40] "        AREA[\"Between 78°W and 72°W, northern hemisphere between equator and 84°N, onshore and offshore. Bahamas. Canada - Nunavut; Ontario; Quebec. Colombia. Cuba. Ecuador. Greenland. Haiti. Jamica. Panama. Turks and Caicos Islands. United States (USA). Venezuela.\"],"
-[41] "        BBOX[0,-78,84,-72]],"                                                                                                                                                                                                                                                  
-[42] "    ID[\"EPSG\",32618]]"                                                                                                                                                                                                                                                       
-[43] "Data axis to CRS axis mapping: 1,2"                                                                                                                                                                                                                                            
-[44] "Origin = (731998.500000000000000,4713535.500000000000000)"                                                                                                                                                                                                                     
-[45] "Pixel Size = (0.250000000000000,-0.250000000000000)"                                                                                                                                                                                                                           
-[46] "Metadata:"                                                                                                                                                                                                                                                                     
-[47] "  AREA_OR_POINT=Area"                                                                                                                                                                                                                                                          
-[48] "Image Structure Metadata:"                                                                                                                                                                                                                                                     
-[49] "  COMPRESSION=LZW"                                                                                                                                                                                                                                                             
-[50] "  INTERLEAVE=PIXEL"                                                                                                                                                                                                                                                            
-[51] "Corner Coordinates:"                                                                                                                                                                                                                                                           
-[52] "Upper Left  (  731998.500, 4713535.500) ( 72d10'29.27\"W, 42d32'21.80\"N)"                                                                                                                                                                                                     
-[53] "Lower Left  (  731998.500, 4712956.250) ( 72d10'30.11\"W, 42d32' 3.04\"N)"                                                                                                                                                                                                     
-[54] "Upper Right (  732766.750, 4713535.500) ( 72d 9'55.63\"W, 42d32'20.97\"N)"                                                                                                                                                                                                     
-[55] "Lower Right (  732766.750, 4712956.250) ( 72d 9'56.48\"W, 42d32' 2.21\"N)"                                                                                                                                                                                                     
-[56] "Center      (  732382.625, 4713245.875) ( 72d10'12.87\"W, 42d32'12.00\"N)"                                                                                                                                                                                                     
-[57] "Band 1 Block=3073x1 Type=Float64, ColorInterp=Gray"                                                                                                                                                                                                                            
-[58] "  Min=0.000 Max=255.000 "                                                                                                                                                                                                                                                      
-[59] "  Minimum=0.000, Maximum=255.000, Mean=107.837, StdDev=30.019"                                                                                                                                                                                                                 
-[60] "  NoData Value=-9999"                                                                                                                                                                                                                                                          
-[61] "  Metadata:"                                                                                                                                                                                                                                                                   
-[62] "    STATISTICS_MAXIMUM=255"                                                                                                                                                                                                                                                    
-[63] "    STATISTICS_MEAN=107.83651227531"                                                                                                                                                                                                                                           
-[64] "    STATISTICS_MINIMUM=0"                                                                                                                                                                                                                                                      
-[65] "    STATISTICS_STDDEV=30.019177549096"                                                                                                                                                                                                                                         
-[66] "Band 2 Block=3073x1 Type=Float64, ColorInterp=Undefined"                                                                                                                                                                                                                       
-[67] "  Min=0.000 Max=255.000 "                                                                                                                                                                                                                                                      
-[68] "  Minimum=0.000, Maximum=255.000, Mean=130.096, StdDev=32.002"                                                                                                                                                                                                                 
-[69] "  NoData Value=-9999"                                                                                                                                                                                                                                                          
-[70] "  Metadata:"                                                                                                                                                                                                                                                                   
-[71] "    STATISTICS_MAXIMUM=255"                                                                                                                                                                                                                                                    
-[72] "    STATISTICS_MEAN=130.09595363812"                                                                                                                                                                                                                                           
-[73] "    STATISTICS_MINIMUM=0"                                                                                                                                                                                                                                                      
-[74] "    STATISTICS_STDDEV=32.001675868273"                                                                                                                                                                                                                                         
-[75] "Band 3 Block=3073x1 Type=Float64, ColorInterp=Undefined"                                                                                                                                                                                                                       
-[76] "  Min=0.000 Max=255.000 "                                                                                                                                                                                                                                                      
-[77] "  Minimum=0.000, Maximum=255.000, Mean=95.760, StdDev=16.577"                                                                                                                                                                                                                  
-[78] "  NoData Value=-9999"                                                                                                                                                                                                                                                          
-[79] "  Metadata:"                                                                                                                                                                                                                                                                   
-[80] "    STATISTICS_MAXIMUM=255"                                                                                                                                                                                                                                                    
-[81] "    STATISTICS_MEAN=95.759787935476"                                                                                                                                                                                                                                           
-[82] "    STATISTICS_MINIMUM=0"                                                                                                                                                                                                                                                      
-[83] "    STATISTICS_STDDEV=16.577042076977"                                                                                                                                                                                                                                         
-```
-
-2) From the output above, we see that there are `NoData` values and they are 
-assigned the value of -9999.
-
-3) The data has three bands.
-
-4) To read in the file, we will use the `rast()` function:
+2) Here if you stretch with hist,you can get a better split between very vegetated and urbanized areas.
 
 
 ```r
-HARV_NA <- 
-  rast("data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_Ortho_wNA.tif")
-```
-
-5) We can plot the data with the `plotRGB()` function:
-
-
-```r
-plotRGB(HARV_NA,
-        r = 1, g = 2, b = 3)
-```
-
-<img src="fig/05-raster-multi-band-in-r-rendered-harv-na-rgb-1.png" style="display: block; margin: auto;" />
-
-6) The black edges are not plotted.
-
-7) Both data sets have `NoData` values, however, in the RGB\_stack the NoData 
-value is not defined in the tiff tags, thus R renders them as black as the 
-reflectance values are 0. The black edges in the other file are defined as 
--9999 and R renders them as NA.
-
-
-```r
-describe("data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_RGB_Ortho.tif")
-```
-
-```{.output}
- [1] "Driver: GTiff/GeoTIFF"                                                                                                                                                                                                                                                         
- [2] "Files: data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_RGB_Ortho.tif"                                                                                                                                                                                               
- [3] "Size is 3073, 2317"                                                                                                                                                                                                                                                            
- [4] "Coordinate System is:"                                                                                                                                                                                                                                                         
- [5] "PROJCRS[\"WGS 84 / UTM zone 18N\","                                                                                                                                                                                                                                            
- [6] "    BASEGEOGCRS[\"WGS 84\","                                                                                                                                                                                                                                                   
- [7] "        DATUM[\"World Geodetic System 1984\","                                                                                                                                                                                                                                 
- [8] "            ELLIPSOID[\"WGS 84\",6378137,298.257223563,"                                                                                                                                                                                                                       
- [9] "                LENGTHUNIT[\"metre\",1]]],"                                                                                                                                                                                                                                    
-[10] "        PRIMEM[\"Greenwich\",0,"                                                                                                                                                                                                                                               
-[11] "            ANGLEUNIT[\"degree\",0.0174532925199433]],"                                                                                                                                                                                                                        
-[12] "        ID[\"EPSG\",4326]],"                                                                                                                                                                                                                                                   
-[13] "    CONVERSION[\"UTM zone 18N\","                                                                                                                                                                                                                                              
-[14] "        METHOD[\"Transverse Mercator\","                                                                                                                                                                                                                                       
-[15] "            ID[\"EPSG\",9807]],"                                                                                                                                                                                                                                               
-[16] "        PARAMETER[\"Latitude of natural origin\",0,"                                                                                                                                                                                                                           
-[17] "            ANGLEUNIT[\"degree\",0.0174532925199433],"                                                                                                                                                                                                                         
-[18] "            ID[\"EPSG\",8801]],"                                                                                                                                                                                                                                               
-[19] "        PARAMETER[\"Longitude of natural origin\",-75,"                                                                                                                                                                                                                        
-[20] "            ANGLEUNIT[\"degree\",0.0174532925199433],"                                                                                                                                                                                                                         
-[21] "            ID[\"EPSG\",8802]],"                                                                                                                                                                                                                                               
-[22] "        PARAMETER[\"Scale factor at natural origin\",0.9996,"                                                                                                                                                                                                                  
-[23] "            SCALEUNIT[\"unity\",1],"                                                                                                                                                                                                                                           
-[24] "            ID[\"EPSG\",8805]],"                                                                                                                                                                                                                                               
-[25] "        PARAMETER[\"False easting\",500000,"                                                                                                                                                                                                                                   
-[26] "            LENGTHUNIT[\"metre\",1],"                                                                                                                                                                                                                                          
-[27] "            ID[\"EPSG\",8806]],"                                                                                                                                                                                                                                               
-[28] "        PARAMETER[\"False northing\",0,"                                                                                                                                                                                                                                       
-[29] "            LENGTHUNIT[\"metre\",1],"                                                                                                                                                                                                                                          
-[30] "            ID[\"EPSG\",8807]]],"                                                                                                                                                                                                                                              
-[31] "    CS[Cartesian,2],"                                                                                                                                                                                                                                                          
-[32] "        AXIS[\"(E)\",east,"                                                                                                                                                                                                                                                    
-[33] "            ORDER[1],"                                                                                                                                                                                                                                                         
-[34] "            LENGTHUNIT[\"metre\",1]],"                                                                                                                                                                                                                                         
-[35] "        AXIS[\"(N)\",north,"                                                                                                                                                                                                                                                   
-[36] "            ORDER[2],"                                                                                                                                                                                                                                                         
-[37] "            LENGTHUNIT[\"metre\",1]],"                                                                                                                                                                                                                                         
-[38] "    USAGE["                                                                                                                                                                                                                                                                    
-[39] "        SCOPE[\"Engineering survey, topographic mapping.\"],"                                                                                                                                                                                                                  
-[40] "        AREA[\"Between 78°W and 72°W, northern hemisphere between equator and 84°N, onshore and offshore. Bahamas. Canada - Nunavut; Ontario; Quebec. Colombia. Cuba. Ecuador. Greenland. Haiti. Jamica. Panama. Turks and Caicos Islands. United States (USA). Venezuela.\"],"
-[41] "        BBOX[0,-78,84,-72]],"                                                                                                                                                                                                                                                  
-[42] "    ID[\"EPSG\",32618]]"                                                                                                                                                                                                                                                       
-[43] "Data axis to CRS axis mapping: 1,2"                                                                                                                                                                                                                                            
-[44] "Origin = (731998.500000000000000,4713535.500000000000000)"                                                                                                                                                                                                                     
-[45] "Pixel Size = (0.250000000000000,-0.250000000000000)"                                                                                                                                                                                                                           
-[46] "Metadata:"                                                                                                                                                                                                                                                                     
-[47] "  AREA_OR_POINT=Area"                                                                                                                                                                                                                                                          
-[48] "Image Structure Metadata:"                                                                                                                                                                                                                                                     
-[49] "  COMPRESSION=LZW"                                                                                                                                                                                                                                                             
-[50] "  INTERLEAVE=PIXEL"                                                                                                                                                                                                                                                            
-[51] "Corner Coordinates:"                                                                                                                                                                                                                                                           
-[52] "Upper Left  (  731998.500, 4713535.500) ( 72d10'29.27\"W, 42d32'21.80\"N)"                                                                                                                                                                                                     
-[53] "Lower Left  (  731998.500, 4712956.250) ( 72d10'30.11\"W, 42d32' 3.04\"N)"                                                                                                                                                                                                     
-[54] "Upper Right (  732766.750, 4713535.500) ( 72d 9'55.63\"W, 42d32'20.97\"N)"                                                                                                                                                                                                     
-[55] "Lower Right (  732766.750, 4712956.250) ( 72d 9'56.48\"W, 42d32' 2.21\"N)"                                                                                                                                                                                                     
-[56] "Center      (  732382.625, 4713245.875) ( 72d10'12.87\"W, 42d32'12.00\"N)"                                                                                                                                                                                                     
-[57] "Band 1 Block=3073x1 Type=Float64, ColorInterp=Gray"                                                                                                                                                                                                                            
-[58] "  Min=0.000 Max=255.000 "                                                                                                                                                                                                                                                      
-[59] "  Minimum=0.000, Maximum=255.000, Mean=nan, StdDev=nan"                                                                                                                                                                                                                        
-[60] "  NoData Value=-1.69999999999999994e+308"                                                                                                                                                                                                                                      
-[61] "  Metadata:"                                                                                                                                                                                                                                                                   
-[62] "    STATISTICS_MAXIMUM=255"                                                                                                                                                                                                                                                    
-[63] "    STATISTICS_MEAN=nan"                                                                                                                                                                                                                                                       
-[64] "    STATISTICS_MINIMUM=0"                                                                                                                                                                                                                                                      
-[65] "    STATISTICS_STDDEV=nan"                                                                                                                                                                                                                                                     
-[66] "Band 2 Block=3073x1 Type=Float64, ColorInterp=Undefined"                                                                                                                                                                                                                       
-[67] "  Min=0.000 Max=255.000 "                                                                                                                                                                                                                                                      
-[68] "  Minimum=0.000, Maximum=255.000, Mean=nan, StdDev=nan"                                                                                                                                                                                                                        
-[69] "  NoData Value=-1.69999999999999994e+308"                                                                                                                                                                                                                                      
-[70] "  Metadata:"                                                                                                                                                                                                                                                                   
-[71] "    STATISTICS_MAXIMUM=255"                                                                                                                                                                                                                                                    
-[72] "    STATISTICS_MEAN=nan"                                                                                                                                                                                                                                                       
-[73] "    STATISTICS_MINIMUM=0"                                                                                                                                                                                                                                                      
-[74] "    STATISTICS_STDDEV=nan"                                                                                                                                                                                                                                                     
-[75] "Band 3 Block=3073x1 Type=Float64, ColorInterp=Undefined"                                                                                                                                                                                                                       
-[76] "  Min=0.000 Max=255.000 "                                                                                                                                                                                                                                                      
-[77] "  Minimum=0.000, Maximum=255.000, Mean=nan, StdDev=nan"                                                                                                                                                                                                                        
-[78] "  NoData Value=-1.69999999999999994e+308"                                                                                                                                                                                                                                      
-[79] "  Metadata:"                                                                                                                                                                                                                                                                   
-[80] "    STATISTICS_MAXIMUM=255"                                                                                                                                                                                                                                                    
-[81] "    STATISTICS_MEAN=nan"                                                                                                                                                                                                                                                       
-[82] "    STATISTICS_MINIMUM=0"                                                                                                                                                                                                                                                      
-[83] "    STATISTICS_STDDEV=nan"                                                                                                                                                                                                                                                     
+plotRGB(landsat_colors_1230,
+        r = 4, g = 3, b = 2,
+        stretch = "hist")
 ```
 
 :::::::::::::::::::::::::
@@ -602,324 +468,34 @@ describe("data/NEON-DS-Airborne-Remote-Sensing/HARV/RGB_Imagery/HARV_RGB_Ortho.t
 
 ## Data Tip
 
-We can create a raster object from several, individual single-band GeoTIFFs 
-too. We will do this in a later episode,
-[Raster Time Series Data in R](12-time-series-raster/).
-
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
-## SpatRaster in R
-
-The R SpatRaster object type can handle rasters with multiple bands.
-The SpatRaster only holds parameters that describe the properties of raster 
-data that is located somewhere on our computer.
-
-A SpatRasterDataset object can hold references to sub-datasets, that is, 
-SpatRaster objects. In most cases, we can work with a SpatRaster in the same 
-way we might work with a SpatRasterDataset. 
-
-:::::::::::::::::::::::::::::::::::::::::  callout
-
-## More Resources
-
-You can read the help for the `rast()` and `sds()` functions by typing `?rast`
-or `?sds`.
-
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
-
-We can build a SpatRasterDataset using a SpatRaster or a list of SpatRaster:
+You can create interactive RGB overlays as well. But it takes some extra doing,
+as you have to downsample large images, as `geom_spatraster()`
+does natively. You can do this with `spatSample()`. `leaflet` currently does odd
+things to RGB rasters, so, you should use the `leafem` library. Which does not 
+yet handle `SpatRaster` objects from `terra`. Fortunately, it's a small thing to 
+convert it to an old school `raster` stack with `raster::stack()` (we're not 
+loading the whole library to prevent conflicts in function names). Note, for big
+rasters, you can up `maxbytes` in the `addRasterRGB` from it's default of 
+`4*1024*1024`, but, this can cause plotting to take a very very very long time.
 
 
 ```r
-RGB_sds_HARV <- sds(RGB_stack_HARV)
-RGB_sds_HARV <- sds(list(RGB_stack_HARV, RGB_stack_HARV))
+library(leaflet)
+library(leafem)
+
+# resample and then convert to a raster::stack object
+# note, if this raster was small, we wouldn't have to 
+# spatSample()
+landsat_colors_raster <- landsat_colors_1230 |>
+  spatSample(size = 5e5, as.raster = TRUE, method = "regular")|> 
+  raster::stack()
+
+# plot using addRasterRGB from leafem
+leaflet() |>
+  addRasterRGB(x = landsat_colors_raster,
+               quantiles = c(0.02, 0.98))
 ```
 
-We can retrieve the SpatRaster objects from a SpatRasterDataset using 
-subsetting:
-
-
-```r
-RGB_sds_HARV[[1]]
-```
-
-```{.output}
-class       : SpatRaster 
-dimensions  : 2317, 3073, 3  (nrow, ncol, nlyr)
-resolution  : 0.25, 0.25  (x, y)
-extent      : 731998.5, 732766.8, 4712956, 4713536  (xmin, xmax, ymin, ymax)
-coord. ref. : WGS 84 / UTM zone 18N (EPSG:32618) 
-source      : HARV_RGB_Ortho.tif 
-names       : HARV_RGB_Ortho_1, HARV_RGB_Ortho_2, HARV_RGB_Ortho_3 
-min values  :                0,                0,                0 
-max values  :              255,              255,              255 
-```
-
-```r
-RGB_sds_HARV[[2]]
-```
-
-```{.output}
-class       : SpatRaster 
-dimensions  : 2317, 3073, 3  (nrow, ncol, nlyr)
-resolution  : 0.25, 0.25  (x, y)
-extent      : 731998.5, 732766.8, 4712956, 4713536  (xmin, xmax, ymin, ymax)
-coord. ref. : WGS 84 / UTM zone 18N (EPSG:32618) 
-source      : HARV_RGB_Ortho.tif 
-names       : HARV_RGB_Ortho_1, HARV_RGB_Ortho_2, HARV_RGB_Ortho_3 
-min values  :                0,                0,                0 
-max values  :              255,              255,              255 
-```
-
-
-:::::::::::::::::::::::::::::::::::::::  challenge
-
-## Challenge: What Functions Can Be Used on an R Object of a particular class?
-
-We can view various functions (or methods) available to use on an R object with
-`methods(class=class(objectNameHere))`. Use this to figure out:
-
-1. What methods can be used on the `RGB_stack_HARV` object?
-2. What methods can be used on a single band within `RGB_stack_HARV`?
-3. Why do you think there isn't a difference?
-
-:::::::::::::::  solution
-
-## Answers
-
-1) We can see a list of all of the methods available for our
-  RasterStack object:
-
-
-```r
-methods(class=class(RGB_stack_HARV))
-```
-
-```{.output}
-  [1] !                     [                     [[                   
-  [4] [[<-                  [<-                   %in%                 
-  [7] $                     $<-                   activeCat            
- [10] activeCat<-           add<-                 addCats              
- [13] adjacent              aggregate             align                
- [16] all.equal             allNA                 animate              
- [19] anyNA                 app                   approximate          
- [22] area                  Arith                 as.array             
- [25] as.bool               as.character          as.contour           
- [28] as.data.frame         as.factor             as.int               
- [31] as.integer            as.lines              as.list              
- [34] as.logical            as.matrix             as.numeric           
- [37] as.points             as.polygons           as.raster            
- [40] atan_2                atan2                 autocor              
- [43] barplot               blocks                boundaries           
- [46] boxplot               buffer                c                    
- [49] catalyze              categories            cats                 
- [52] cellFromRowCol        cellFromRowColCombine cellFromXY           
- [55] cells                 cellSize              clamp_ts             
- [58] clamp                 classify              click                
- [61] coerce                colFromCell           colFromX             
- [64] colorize              coltab                coltab<-             
- [67] Compare               compare               compareGeom          
- [70] concats               contour               costDist             
- [73] countNA               cover                 crds                 
- [76] crop                  crosstab              crs                  
- [79] crs<-                 datatype              deepcopy             
- [82] density               depth                 depth<-              
- [85] diff                  dim                   dim<-                
- [88] direction             disagg                distance             
- [91] droplevels            expanse               ext                  
- [94] ext<-                 extend                extract              
- [97] fillTime              flip                  focal                
-[100] focal3D               focalCor              focalCpp             
-[103] focalPairs            focalReg              focalValues          
-[106] freq                  global                gridDist             
-[109] gridDistance          has.colors            has.RGB              
-[112] hasMinMax             hasValues             head                 
-[115] hist                  ifel                  image                
-[118] init                  inMemory              inset                
-[121] interpIDW             interpNear            interpolate          
-[124] intersect             is.bool               is.factor            
-[127] is.finite             is.infinite           is.int               
-[130] is.lonlat             is.na                 is.nan               
-[133] is.related            isFALSE               isTRUE               
-[136] lapp                  layerCor              levels               
-[139] levels<-              linearUnits           lines                
-[142] log                   Logic                 logic                
-[145] longnames             longnames<-           makeTiles            
-[148] mask                  match                 math                 
-[151] Math                  Math2                 mean                 
-[154] median                merge                 meta                 
-[157] minmax                modal                 mosaic               
-[160] NAflag                NAflag<-              names                
-[163] names<-               ncell                 ncol                 
-[166] ncol<-                nlyr                  nlyr<-               
-[169] noNA                  not.na                nrow                 
-[172] nrow<-                nsrc                  origin               
-[175] origin<-              pairs                 panel                
-[178] patches               persp                 plet                 
-[181] plot                  plotRGB               points               
-[184] polys                 predict               project              
-[187] quantile              rangeFill             rapp                 
-[190] rast                  rasterize             rasterizeGeom        
-[193] rasterizeWin          rcl                   readStart            
-[196] readStop              readValues            rectify              
-[199] regress               relate                rep                  
-[202] res                   res<-                 resample             
-[205] rescale               rev                   RGB                  
-[208] RGB<-                 roll                  rotate               
-[211] rowColCombine         rowColFromCell        rowFromCell          
-[214] rowFromY              sapp                  saveRDS              
-[217] scale                 scoff                 scoff<-              
-[220] sds                   segregate             sel                  
-[223] selectHighest         selectRange           serialize            
-[226] set.cats              set.crs               set.ext              
-[229] set.names             set.RGB               set.values           
-[232] setMinMax             setValues             shift                
-[235] show                  sieve                 size                 
-[238] sort                  sources               spatSample           
-[241] split                 sprc                  stdev                
-[244] str                   stretch               subset               
-[247] subst                 summary               Summary              
-[250] t                     tail                  tapp                 
-[253] terrain               text                  tighten              
-[256] time                  time<-                timeInfo             
-[259] trans                 trim                  unique               
-[262] units                 units<-               update               
-[265] values                values<-              varnames             
-[268] varnames<-            viewshed              weighted.mean        
-[271] where.max             where.min             which.lyr            
-[274] which.max             which.min             window               
-[277] window<-              wrap                  wrapCache            
-[280] writeCDF              writeRaster           writeStart           
-[283] writeStop             writeValues           xFromCell            
-[286] xFromCol              xmax                  xmax<-               
-[289] xmin                  xmin<-                xres                 
-[292] xyFromCell            yFromCell             yFromRow             
-[295] ymax                  ymax<-                ymin                 
-[298] ymin<-                yres                  zonal                
-[301] zoom                 
-see '?methods' for accessing help and source code
-```
-
-2) And compare that with the methods available for a single band:
-
-
-```r
-methods(class=class(RGB_stack_HARV[[1]]))
-```
-
-```{.output}
-  [1] !                     [                     [[                   
-  [4] [[<-                  [<-                   %in%                 
-  [7] $                     $<-                   activeCat            
- [10] activeCat<-           add<-                 addCats              
- [13] adjacent              aggregate             align                
- [16] all.equal             allNA                 animate              
- [19] anyNA                 app                   approximate          
- [22] area                  Arith                 as.array             
- [25] as.bool               as.character          as.contour           
- [28] as.data.frame         as.factor             as.int               
- [31] as.integer            as.lines              as.list              
- [34] as.logical            as.matrix             as.numeric           
- [37] as.points             as.polygons           as.raster            
- [40] atan_2                atan2                 autocor              
- [43] barplot               blocks                boundaries           
- [46] boxplot               buffer                c                    
- [49] catalyze              categories            cats                 
- [52] cellFromRowCol        cellFromRowColCombine cellFromXY           
- [55] cells                 cellSize              clamp_ts             
- [58] clamp                 classify              click                
- [61] coerce                colFromCell           colFromX             
- [64] colorize              coltab                coltab<-             
- [67] Compare               compare               compareGeom          
- [70] concats               contour               costDist             
- [73] countNA               cover                 crds                 
- [76] crop                  crosstab              crs                  
- [79] crs<-                 datatype              deepcopy             
- [82] density               depth                 depth<-              
- [85] diff                  dim                   dim<-                
- [88] direction             disagg                distance             
- [91] droplevels            expanse               ext                  
- [94] ext<-                 extend                extract              
- [97] fillTime              flip                  focal                
-[100] focal3D               focalCor              focalCpp             
-[103] focalPairs            focalReg              focalValues          
-[106] freq                  global                gridDist             
-[109] gridDistance          has.colors            has.RGB              
-[112] hasMinMax             hasValues             head                 
-[115] hist                  ifel                  image                
-[118] init                  inMemory              inset                
-[121] interpIDW             interpNear            interpolate          
-[124] intersect             is.bool               is.factor            
-[127] is.finite             is.infinite           is.int               
-[130] is.lonlat             is.na                 is.nan               
-[133] is.related            isFALSE               isTRUE               
-[136] lapp                  layerCor              levels               
-[139] levels<-              linearUnits           lines                
-[142] log                   Logic                 logic                
-[145] longnames             longnames<-           makeTiles            
-[148] mask                  match                 math                 
-[151] Math                  Math2                 mean                 
-[154] median                merge                 meta                 
-[157] minmax                modal                 mosaic               
-[160] NAflag                NAflag<-              names                
-[163] names<-               ncell                 ncol                 
-[166] ncol<-                nlyr                  nlyr<-               
-[169] noNA                  not.na                nrow                 
-[172] nrow<-                nsrc                  origin               
-[175] origin<-              pairs                 panel                
-[178] patches               persp                 plet                 
-[181] plot                  plotRGB               points               
-[184] polys                 predict               project              
-[187] quantile              rangeFill             rapp                 
-[190] rast                  rasterize             rasterizeGeom        
-[193] rasterizeWin          rcl                   readStart            
-[196] readStop              readValues            rectify              
-[199] regress               relate                rep                  
-[202] res                   res<-                 resample             
-[205] rescale               rev                   RGB                  
-[208] RGB<-                 roll                  rotate               
-[211] rowColCombine         rowColFromCell        rowFromCell          
-[214] rowFromY              sapp                  saveRDS              
-[217] scale                 scoff                 scoff<-              
-[220] sds                   segregate             sel                  
-[223] selectHighest         selectRange           serialize            
-[226] set.cats              set.crs               set.ext              
-[229] set.names             set.RGB               set.values           
-[232] setMinMax             setValues             shift                
-[235] show                  sieve                 size                 
-[238] sort                  sources               spatSample           
-[241] split                 sprc                  stdev                
-[244] str                   stretch               subset               
-[247] subst                 summary               Summary              
-[250] t                     tail                  tapp                 
-[253] terrain               text                  tighten              
-[256] time                  time<-                timeInfo             
-[259] trans                 trim                  unique               
-[262] units                 units<-               update               
-[265] values                values<-              varnames             
-[268] varnames<-            viewshed              weighted.mean        
-[271] where.max             where.min             which.lyr            
-[274] which.max             which.min             window               
-[277] window<-              wrap                  wrapCache            
-[280] writeCDF              writeRaster           writeStart           
-[283] writeStop             writeValues           xFromCell            
-[286] xFromCol              xmax                  xmax<-               
-[289] xmin                  xmin<-                xres                 
-[292] xyFromCell            yFromCell             yFromRow             
-[295] ymax                  ymax<-                ymin                 
-[298] ymin<-                yres                  zonal                
-[301] zoom                 
-see '?methods' for accessing help and source code
-```
-
-3) A SpatRaster is the same no matter its number of bands.
-  
-  
-
-:::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
