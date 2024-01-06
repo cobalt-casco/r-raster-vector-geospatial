@@ -38,6 +38,7 @@ We are also going to load one new library.
 
 ```{r load_leaflet, message = FALSE, warning = FALSE}
 library(leaflet)
+library(webshot)
 ```
 
 To remind you, this is the data we will be using - 
