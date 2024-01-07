@@ -139,7 +139,7 @@ raster package to create a new object with only the portion of the MODIS data
 that falls within the boundaries of the AOI.
 
 ```{r}
-tubidity_casco <- crop(x = turbidity_modis, y = aoi_boundary_casco)
+turbidity_casco <- crop(x = turbidity_modis, y = aoi_boundary_casco)
 ```
 
 Now we can plot the cropped MODIS data, along with a boundary box showing the
@@ -150,11 +150,10 @@ encompass all the features contained in this object. The `st_as_sfc()` converts
 these 4 coordinates into a polygon that we can plot:
 
 ```{r show-cropped-area}
-
 ggplot() +
   geom_sf(data = st_as_sfc(st_bbox(turbidity_modis)), fill = "green",
           color = "green", alpha = .2) +
-  geom_spatraster(data = tubidity_casco) +
+  geom_spatraster(data = turbidity_casco) +
   scale_fill_gradientn(name = "Turbidity Score", colors = terrain.colors(10)) +
   coord_sf()
 ```
@@ -166,7 +165,7 @@ below).
 
 ```{r view-crop-extent}
 ggplot() +
-  geom_spatraster(data = tubidity_casco) +
+  geom_spatraster(data = turbidity_casco) +
   geom_sf(data = aoi_boundary_casco, color = "blue", fill = NA) +
   scale_fill_gradientn(name = "Turbidity Score", colors = terrain.colors(10)) +
   coord_sf()
