@@ -6,6 +6,9 @@ source: Rmd
 ---
 
 
+```{.output}
+phantomjs has been installed to /home/runner/bin
+```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
@@ -46,6 +49,7 @@ points.
 library(sf)
 library(terra)
 library(ggplot2)
+library(tidyterra)
 ```
 
 
@@ -116,9 +120,7 @@ ggplot() +
   coord_sf()
 ```
 
-```{.error}
-Error in geom_spatraster(data = turbidity_modis): could not find function "geom_spatraster"
-```
+<img src="fig/11-vector-raster-integration-rendered-crop-by-vector-extent-1.png" style="display: block; margin: auto;" />
 
 Now that we have visualized the area of the turbidity data we want to subset, we can
 perform the cropping operation. We are going to `crop()` function from the
@@ -147,9 +149,7 @@ ggplot() +
   coord_sf()
 ```
 
-```{.error}
-Error in geom_spatraster(data = tubidity_casco): could not find function "geom_spatraster"
-```
+<img src="fig/11-vector-raster-integration-rendered-show-cropped-area-1.png" style="display: block; margin: auto;" />
 
 The plot above shows that the full MODS extent (plotted in green) is much larger
 than the resulting cropped raster. Our new cropped MODS now has the same extent
@@ -165,9 +165,7 @@ ggplot() +
   coord_sf()
 ```
 
-```{.error}
-Error in geom_spatraster(data = tubidity_casco): could not find function "geom_spatraster"
-```
+<img src="fig/11-vector-raster-integration-rendered-view-crop-extent-1.png" style="display: block; margin: auto;" />
 
 We can look at the extent of all of our other objects for this field site.
 
@@ -239,9 +237,7 @@ ggplot() +
   geom_sf(data = dmr_casco) 
 ```
 
-```{.error}
-Error in geom_spatraster(data = turbidity_dmr_sites): could not find function "geom_spatraster"
-```
+<img src="fig/11-vector-raster-integration-rendered-challenge-code-crop-raster-points-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::
 
