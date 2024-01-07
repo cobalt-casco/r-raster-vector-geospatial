@@ -11,50 +11,18 @@ source("setup.R")
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
-- Perform a subtraction between two rasters using raster math.
-- Perform a more efficient subtraction between two rasters using the raster `lapp()` function.
+- Perform a math with different raster layers.
+- Perform more math using the raster `lapp()` function.
 - Export raster data as a GeoTIFF file.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: questions
 
-- How do I subtract one raster from another and extract pixel values for defined locations?
+- How do I do math on rasters and extract pixel values for defined locations?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r load-libraries, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
-library(terra)
-library(ggplot2)
-library(dplyr)
-```
-
-```{r load-data, echo=FALSE}
-# Learners will have these data loaded from earlier episode
-# DSM data for Harvard Forest
-DSM_HARV <- 
-  rast("data/NEON-DS-Airborne-Remote-Sensing/HARV/DSM/HARV_dsmCrop.tif")
-
-DSM_HARV_df <- as.data.frame(DSM_HARV, xy = TRUE)
-
-# DTM data for Harvard Forest
-DTM_HARV <- 
-  rast("data/NEON-DS-Airborne-Remote-Sensing/HARV/DTM/HARV_dtmCrop.tif")
-
-DTM_HARV_df <- as.data.frame(DTM_HARV, xy = TRUE)
-
-# DSM data for SJER
-DSM_SJER <- 
-  rast("data/NEON-DS-Airborne-Remote-Sensing/SJER/DSM/SJER_dsmCrop.tif")
-
-DSM_SJER_df <- as.data.frame(DSM_SJER, xy = TRUE)
-
-# DTM data for SJER
-DTM_SJER <- 
-  rast("data/NEON-DS-Airborne-Remote-Sensing/SJER/DTM/SJER_dtmCrop.tif")
-
-DTM_SJER_df <- as.data.frame(DTM_SJER, xy = TRUE)
-```
 
 ::::::::::::::::::::::::::::::::::::::::::  prereq
 
@@ -76,177 +44,277 @@ region around plot locations at a field site.
 ## Raster Calculations in R
 
 We often want to perform calculations on two or more rasters to create a new
-output raster. For example, if we are interested in mapping the heights of 
-trees across an entire field site, we might want to calculate the difference 
-between the Digital Surface Model (DSM, tops of trees) and the Digital Terrain 
-Model (DTM, ground level). The resulting dataset is referred to as a Canopy 
-Height Model (CHM) and represents the actual height of trees, buildings, etc. 
-with the influence of ground elevation removed.
+output raster. For example, if we are interested in getting the observed 
+chlorophyll in the water, we might want to use different Landsat layers to 
+calculate an observed value based on published equations. This can help us
+identify Suberged Aquatic Vegetation (SAV). The resulting data set might 
+show us where seagrass or other vegetation exists. There are two method for this
+we will use today from Zhang 2023 and O'Reilly and Werdell in 2019. The first is
+a calculation of chlorophyll based on three bands that cover different nm of the
+visible spectrum.
 
-![](fig/dc-spatial-raster/lidarTree-height.png){alt='Source: National Ecological Observatory Network (NEON)'}
+![the visible spectrum in nm](fig/Visible-spectrum-400-700-nm.png)
+
+Recall from before that the first few bands of Landsat 8 cover the following:
+- Band 1 Coastal Aerosol (430 - 450 nm) 30 m
+- Band 2 Blue (450 - 510 nm) 30 m
+- Band 3 Green (530 - 590 nm) 30 m
+- Band 4 Red (640 - 670 nm) 30 m
+- Band 5 Near-Infrared (850 - 880 nm) 30 m
+
+To calculate Chla in the water - well, usually we would atmospherically 
+correct for water first, but let's just run with it - we would use the following
+equations
+
+![chl eqn](fig/chl_eqn.png)
+
+Where those a coefficients come from [NASA Algorithms](https://www.earthdata.nasa.gov/apt/documents/chlor-a/v1.0#mathematical_theory). Those three wavelengths correspond to the coastal band, the green band, 
+and the blue band.
+
+The second method is a bit simpler. It's called the Chlorophyll Absorption 
+Ratio Index (CARI).
+
+![CARI eqn](fig/cari.png)
+Let's see how simple it is to make these work for us!
+
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
 ## More Resources
 
-- Check out more on LiDAR CHM, DTM and DSM in this NEON Data Skills overview tutorial:
-  [What is a CHM, DSM and DTM? About Gridded, Raster LiDAR Data](https://www.neonscience.org/chm-dsm-dtm-gridded-lidar-data).
-  
+- [Chlorophyll A algorithms](https://www.earthdata.nasa.gov/apt/documents/chlor-a/v1.0#mathematical_theory) and NASA Earthdata. 
+
+- O’Reilly, J. E., & Werdell, P. J. (2019). Chlorophyll algorithms for ocean color sensors-OC4, OC5 & OC6. [https://doi.org/10.1016/j.rse.2019.04.021](https://doi.org/10.1016/j.rse.2019.04.021)
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-### Load the Data
+### Load Libraries and Pre-Process the Data
 
-For this episode, we will use the DTM and DSM from the NEON Harvard Forest 
-Field site and San Joaquin Experimental Range, which we already have loaded 
-from previous episodes.
+For this episode, we will use the Landsat scene from 2023 and the seagrass beds
+from Casco Bay in 2022 (we'll assume they're close enough to 2023). Let's start
+by loading `terra`, `sf`, and `ggplot2`.
+
+```{r load-libraries, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
+library(terra)
+library(sf)
+library(ggplot2)
+library(tidyterra)
+```
+
+Next, let's load our two different data sources. We will load the rasters into
+one stack for ease of use. We will also load the Casco AOI and Maine State
+borders for use in cropping and masking down to just water.
+
+```{r load-data, results = "hide"}
+# aerosol
+landsat_files <-   list.files(
+  "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/", 
+             pattern = "TIF",
+             full.names = TRUE)
+
+# we only want files 3 through 5 - coastal, blue, and green
+landsat_layers <- rast(landsat_files[3:5])
+
+# give the layers better names
+names(landsat_layers) <- c("coastal", "blue", "green")
+
+# load our shapefile
+seagrass_casco_2022 <- st_read(
+  "data/maine_gov_seagrass/MaineDEP_Casco_Bay_Seagrass_2022/MaineDEP_Casco_Bay_Seagrass_2022.shp")
+
+# Load files for processing
+aoi_boundary_casco <- st_read(
+  "data/maine_gov_maps/casco_aoi/casco_bay_aoi.shp")
+
+maine_borders <- st_read(
+  "data/maine_gov_maps/Maine_State_Boundary_Polygon_Feature/Maine_State_Boundary_Polygon_Feature.shp")
+
+```
+
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
 ## Exercise
 
-Use the `describe()` function to view information about the DTM and DSM data 
-files. Do the two rasters have the same or different CRSs and resolutions? Do 
-they both have defined minimum and maximum values?
+1. Look at the information about the Landsat raster and shapefiles. Are they 
+similar or different?
+
+2. If we want to just look at the Casco Bay region of the Landsat data, 
+what types of spatial operations will we have to execute to make this work?
+
 
 :::::::::::::::  solution
 
 ## Solution
 
 ```{r}
-describe("data/NEON-DS-Airborne-Remote-Sensing/HARV/DTM/HARV_dtmCrop.tif")
-describe("data/NEON-DS-Airborne-Remote-Sensing/HARV/DSM/HARV_dsmCrop.tif")
+describe(sources(landsat_layers))
+seagrass_casco_2022
 ```
+
+Different in CRS and extent. We will have to project and crop.
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-We've already loaded and worked with these two data files in
-earlier episodes. Let's plot them each once more to remind ourselves
-what this data looks like. First we'll plot the DTM elevation data:
+So, we have to get Landsat into the same CRS as our Maine data. We will then
+have to crop it down to the Casco region. This is actually one of those cases
+where it will be faster to reproject the vectors than the raster for 
+the cropping.
 
-```{r harv-dtm-plot}
- ggplot() +
-      geom_raster(data = DTM_HARV_df , 
-              aes(x = x, y = y, fill = HARV_dtmCrop)) +
-     scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) + 
-     coord_quickmap()
+```{r reproject-crop}
+aoi_boundary_casco_projected <- st_transform(aoi_boundary_casco,
+                                             crs(landsat_layers))
+
+landsat_layers_casco <- crop(landsat_layers,
+                             aoi_boundary_casco_projected)
+
+landsat_layers_casco <- project(landsat_layers_casco, 
+                                crs(seagrass_casco_2022))
 ```
 
-And then the DSM elevation data:
+## Masking Out Land with a Vector
 
-```{r harv-dsm-plot}
- ggplot() +
-      geom_raster(data = DSM_HARV_df , 
-              aes(x = x, y = y, fill = HARV_dsmCrop)) +
-     scale_fill_gradientn(name = "Elevation", colors = terrain.colors(10)) + 
-     coord_quickmap()
+Let's see what we have after the cropping.
+
+```{r}
+ggplot() +
+  geom_spatraster(data = landsat_layers_casco) +
+  facet_wrap(~lyr) +
+  scale_fill_distiller(palette = "Greys")
 ```
+
+This is neat, but...... it's dominated by the land. We want to mask the land.
+Otherwise, the signal is going to be dominated by land and not sea. Fortunately,
+we can use the coastline of the state from the maine shapefile with `mask()`. 
+By default, mask keeps what is IN polygons. So we will need to use the argument
+`inverse = TRUE`. We also need our coastline to have the same extent as our 
+raster, so, we'll need to crop it first. 
+
+We will also recrop to the AOI again, as our previous crop leaves some cruft around the edges.
+
+```{r}
+casco_coastline <- st_crop(maine_borders |> st_make_valid(), 
+                           aoi_boundary_casco) 
+
+# mask and crop
+landsat_layers_casco_bay <- mask(landsat_layers_casco,
+                                 casco_coastline,
+                                 inverse = TRUE) |> 
+  crop(aoi_boundary_casco)
+
+```
+
+Did it blend?
+
+```{r show_water}
+ggplot() +
+  geom_spatraster(data = landsat_layers_casco_bay ) +
+  facet_wrap(~lyr) +
+  scale_fill_distiller(palette = "Greys", na.value = NA)
+```
+
+This looks great. There are still some really really high and low values. We might want to figure out a threshold for clamping. Looking at the histogram below, 10,000
+seems reasonable for the upper, and something like 7,000 for the lower. We will
+use `values=FALSE` to just remove very high or very low values and make them NA.
+
+```{r clamp}
+hist(landsat_layers_casco_bay, breaks = 100)
+
+landsat_layers_casco_bay <- clamp(landsat_layers_casco_bay, 
+                                  lower = 7000,
+                                  upper = 9000,
+                                  value = FALSE)
+```
+
+Replot it, and, wow, you can really start to see some variability
 
 ## Two Ways to Perform Raster Calculations
 
-We can calculate the difference between two rasters in two different ways:
+We can calculate with  rasters in two different ways:
 
-- by directly subtracting the two rasters in R using raster math
+- by directly using the rasters in R using raster math
 
 or for more efficient processing - particularly if our rasters are large and/or
 the calculations we are performing are complex:
 
 - using the `lapp()` function.
 
-## Raster Math \& Canopy Height Models
+## Raster Math \& CARI
 
 We can perform raster calculations by subtracting (or adding,
 multiplying, etc) two rasters. In the geospatial world, we call this
 "raster math".
 
-Let's subtract the DTM from the DSM to create a Canopy Height Model.
-After subtracting, let's create a dataframe so we can plot with `ggplot`.
+Let's calculate (green - blue)/(green + blue) to get our CARI score.
+After doing this, let's  plot with `ggplot`.
 
 ```{r raster-math}
-CHM_HARV <- DSM_HARV - DTM_HARV
+casco_cari <- (landsat_layers_casco_bay$green - landsat_layers_casco_bay$blue) /
+  (landsat_layers_casco_bay$green + landsat_layers_casco_bay$blue) 
+  
+names(casco_cari) <- "CARI"
 
-CHM_HARV_df <- as.data.frame(CHM_HARV, xy = TRUE)
+ggplot() +
+  geom_spatraster(data = casco_cari) +
+  scale_fill_viridis_c()
 ```
 
-We can now plot the output CHM.
-
-```{r harv-chm-plot}
- ggplot() +
-   geom_raster(data = CHM_HARV_df , 
-               aes(x = x, y = y, fill = HARV_dsmCrop)) + 
-   scale_fill_gradientn(name = "Canopy Height", colors = terrain.colors(10)) + 
-   coord_quickmap()
-```
 
 Let's have a look at the distribution of values in our newly created
-Canopy Height Model (CHM).
+CARI Model (CHM).
 
 ```{r create-hist}
-ggplot(CHM_HARV_df) +
-    geom_histogram(aes(HARV_dsmCrop))
+hist(casco_cari,
+     maxcell = ncell(casco_cari))
 ```
 
-Notice that the range of values for the output CHM is between 0 and 30 meters. 
-Does this make sense for trees in Harvard Forest?
+We are definitely starting to see some coastal features here, although whether
+it is chlorophyll or just coastal runoff is unclear.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
 ## Challenge: Explore CHM Raster Values
 
 It's often a good idea to explore the range of values in a raster dataset just 
-like we might explore a dataset that we collected in the field.
+like we might explore a dataset that we collected in the field. Or the 
+spatial distribution to see if it lines up with expectations.
 
-1. What is the min and maximum value for the Harvard Forest Canopy Height Model (`CHM_HARV`) that we just created?
-2. What are two ways you can check this range of data for `CHM_HARV`?
-3. What is the distribution of all the pixel values in the CHM?
-4. Plot a histogram with 6 bins instead of the default and change the color of the histogram.
-5. Plot the `CHM_HARV` raster using breaks that make sense for the data. Include an appropriate color palette for the data, plot title and no axes ticks / labels.
+1. Zoom in on an island (Mackworth if you like). What does the spatial 
+distribution look like? Use `ggplot2` or `leaflet`.
+
+2. Overlay the seagrass bed shapefile. What do you see?
 
 :::::::::::::::  solution
 
 ## Answers
 
-1) There are missing values in our data, so we need to specify
-  `na.rm = TRUE`.
+1) Zooming in, some of the highest values are close to shorelines.
 
 ```{r}
-min(CHM_HARV_df$HARV_dsmCrop, na.rm = TRUE)
-max(CHM_HARV_df$HARV_dsmCrop, na.rm = TRUE)
+library(leaflet)
+
+leaflet() |>
+  addTiles() |>
+  addRasterImage(x = casco_cari)
 ```
 
-2) Possible ways include:
+2) 
 
-- Create a histogram
-- Use the `min()`, `max()`, and `range()` functions.
-- Print the object and look at the `values` attribute.
+```{r}
+library(leaflet)
 
-3) 
-```{r chm-harv-hist}
-ggplot(CHM_HARV_df) +
-    geom_histogram(aes(HARV_dsmCrop))
-```
+pal <- colorNumeric("Spectral", values(casco_cari), na.color = NA)
 
-4) 
-```{r chm-harv-hist-green}
-ggplot(CHM_HARV_df) +
-    geom_histogram(aes(HARV_dsmCrop), colour="black", 
-                   fill="darkgreen", bins = 6)
-```
-
-5) 
-```{r chm-harv-raster}
-custom_bins <- c(0, 10, 20, 30, 40)
-CHM_HARV_df <- CHM_HARV_df %>%
-                  mutate(canopy_discrete = cut(HARV_dsmCrop, 
-                                               breaks = custom_bins))
-
-ggplot() +
-  geom_raster(data = CHM_HARV_df , aes(x = x, y = y,
-                                       fill = canopy_discrete)) + 
-     scale_fill_manual(values = terrain.colors(4)) + 
-     coord_quickmap()
+leaflet() |>
+  addTiles() |>
+  addRasterImage(x = casco_cari,
+                 colors = pal) |>
+  addPolygons(data = seagrass_casco_2022,
+               color = "black",
+               weight = 1) |>
+  addLegend(pal = pal, values = values(casco_cari))
 ```
 
 :::::::::::::::::::::::::
@@ -272,6 +340,11 @@ them using efficient processing methods. The syntax is
 In which raster can be either a SpatRaster or a SpatRasterDataset which is an 
 object that holds rasters. See `help(sds)`. 
 
+If you have a raster, stack, you can instead use `app()`
+
+`outputRaster <- app(x, fun=functionName)`
+
+
 :::::::::::::::::::::::::::::::::::::::::  callout
 
 ## Data Tip
@@ -281,8 +354,8 @@ of raster objects (each one created by calling `rast`).
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-Let's perform the same subtraction calculation that we calculated above using
-raster math, using the `lapp()` function.
+Let's perform the chla calculation that we calculated above using
+raster math, using the `app()` function.
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
@@ -298,30 +371,60 @@ function in R is:
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ```{r raster-overlay}
-CHM_ov_HARV <- lapp(sds(list(DSM_HARV, DTM_HARV)), 
-                    fun = function(r1, r2) { return( r1 - r2) })
+get_chl <- function(rast_stack){
+  
+  #eqn 3.1
+  x <- max(rast_stack[1], rast_stack[2])/rast_stack[3]
+  
+  #eqn 3.2
+  0.42540 + -3.21679*x + 2.86907*x^2 + -0.62628*x^3 + -1.09333*x^4 
+  }
+
+casco_chla <- app(landsat_layers_casco_bay, 
+                    fun = get_chl)
+
+names(casco_chla) <- "chla"
 ```
 
-Next we need to convert our new object to a data frame for plotting with
-`ggplot`.
-
-```{r}
-CHM_ov_HARV_df <- as.data.frame(CHM_ov_HARV, xy = TRUE)
-```
-
-Now we can plot the CHM:
+Now we can plot the CHLa:
 
 ```{r harv-chm-overlay}
  ggplot() +
-   geom_raster(data = CHM_ov_HARV_df, 
-               aes(x = x, y = y, fill = HARV_dsmCrop)) + 
-   scale_fill_gradientn(name = "Canopy Height", colors = terrain.colors(10)) + 
-   coord_quickmap()
+   geom_spatraster(data = casco_chla) + 
+   scale_fill_distiller(palette = "Greens") +
+  labs(fill = "Chl a")
 ```
 
 How do the plots of the CHM created with manual raster math and the `lapp()`
 function compare?
 
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+## Challenge: Explore CHM Raster Values
+
+How does Chla compare to CARI? Check it out with `leaflet()`
+
+::::::::::::::: solution
+
+Qualitatively, they look about the same!
+
+```{r}
+library(leaflet)
+
+pal_chl <- colorNumeric("Spectral", values(casco_chla), na.color = NA)
+
+leaflet() |>
+  addTiles() |>
+  addRasterImage(x = casco_chla,
+                 colors = pal_chl) |>
+  addPolygons(data = seagrass_casco_2022,
+               color = "black",
+               weight = 1) |>
+  addLegend(pal = pal_chl, values = values(casco_chla))
+```
+
+:::::::::::::::
+:::::::::::::::::::::::::::::::::::::::  
 ## Export a GeoTIFF
 
 Now that we've created a new raster, let's export the data as a GeoTIFF
@@ -329,8 +432,8 @@ file using
 the `writeRaster()` function.
 
 When we write this raster object to a GeoTIFF file we'll name it
-`CHM_HARV.tiff`. This name allows us to quickly remember both what the data
-contains (CHM data) and for where (HARVard Forest). The `writeRaster()` function
+`casco_cari.tif`. This name allows us to quickly remember both what the data
+contains (CARI data) and for where (Casco bay). The `writeRaster()` function
 by default writes the output file to your working directory unless you specify a
 full file path.
 
@@ -339,7 +442,7 @@ We will also tell R to overwrite any data that is already in a file of the same
 name.
 
 ```{r write-raster, eval=FALSE}
-writeRaster(CHM_ov_HARV, "CHM_HARV.tiff",
+writeRaster(casco_cari, "data/casco_cari.tif",
             filetype="GTiff",
             overwrite=TRUE,
             NAflag=-9999)
@@ -355,103 +458,12 @@ The function arguments that we used above include:
 - **NAflag:** set the GeoTIFF tag for `NoDataValue` to -9999, the National
   Ecological Observatory Network's (NEON) standard `NoDataValue`.
 
-:::::::::::::::::::::::::::::::::::::::  challenge
-
-## Challenge: Explore the NEON San Joaquin Experimental Range Field Site
-
-Data are often more interesting and powerful when we compare them across 
-various locations. Let's compare some data collected over Harvard Forest to 
-data collected in Southern California. The
-[NEON San Joaquin Experimental Range (SJER) field site](https://www.neonscience.org/field-sites/field-sites-map/SJER)
-located in Southern California has a very different ecosystem and climate than
-the
-[NEON Harvard Forest Field Site](https://www.neonscience.org/field-sites/field-sites-map/HARV)
-in Massachusetts.
-
-Import the SJER DSM and DTM raster files and create a Canopy Height Model.
-Then compare the two sites. Be sure to name your R objects and outputs
-carefully, as follows: objectType\_SJER (e.g. `DSM_SJER`). This will help you
-keep track of data from different sites!
-
-0. You should have the DSM and DTM data for the SJER site already
-  loaded from the
-  [Plot Raster Data in R](02-raster-plot/)
-  episode.) Don't forget to check the CRSs and units of the data.
-1. Create a CHM from the two raster layers and check to make sure the data
-  are what you expect.
-2. Plot the CHM from SJER.
-3. Export the SJER CHM as a GeoTIFF.
-4. Compare the vegetation structure of the Harvard Forest and San Joaquin
-  Experimental Range.
-
-:::::::::::::::  solution
-
-## Answers
-
-1) Use the `lapp()` function to subtract the two rasters \& create the CHM.
-
-```{r}
-CHM_ov_SJER <- lapp(sds(list(DSM_SJER, DTM_SJER)),
-                       fun = function(r1, r2){ return(r1 - r2) })
-```
-
-Convert the output to a dataframe:
-
-```{r}
-CHM_ov_SJER_df <- as.data.frame(CHM_ov_SJER, xy = TRUE)
-```
-
-Create a histogram to check that the data distribution makes sense:
-
-```{r sjer-chm-overlay-hist}
-ggplot(CHM_ov_SJER_df) +
-    geom_histogram(aes(SJER_dsmCrop))
-```
-
-2) Create a plot of the CHM:
-
-```{r sjer-chm-overlay-raster}
- ggplot() +
-      geom_raster(data = CHM_ov_SJER_df, 
-              aes(x = x, y = y, 
-                   fill = SJER_dsmCrop)
-              ) + 
-     scale_fill_gradientn(name = "Canopy Height", 
-        colors = terrain.colors(10)) + 
-     coord_quickmap()
-```
-
-3) Export the CHM object to a file:
-
-```{r}
-writeRaster(CHM_ov_SJER, "chm_ov_SJER.tiff",
-            filetype = "GTiff",
-            overwrite = TRUE,
-            NAflag = -9999)
-```
-
-4) Compare the SJER and HARV CHMs.
-  Tree heights are much shorter in SJER. You can confirm this by
-  looking at the histograms of the two CHMs.
-
-```{r compare-chm-harv-sjer}
-ggplot(CHM_HARV_df) +
-    geom_histogram(aes(HARV_dsmCrop))
-
-ggplot(CHM_ov_SJER_df) +
-    geom_histogram(aes(SJER_dsmCrop))
-```
-
-:::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
 
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
 - Rasters can be computed on using mathematical functions.
-- The `lapp()` function provides an efficient way to do raster math.
+- The `lapp()` and `app()` function provides an efficient way to do raster math.
 - The `writeRaster()` function can be used to write raster data to a file.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
