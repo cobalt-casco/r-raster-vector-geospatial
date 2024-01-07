@@ -436,7 +436,7 @@ boundaries of the AOI.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tubidity_casco</span> <span class="op">&lt;-</span> <span class="fu">crop</span><span class="op">(</span>x <span class="op">=</span> <span class="va">turbidity_modis</span>, y <span class="op">=</span> <span class="va">aoi_boundary_casco</span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="va">turbidity_casco</span> <span class="op">&lt;-</span> <span class="fu">crop</span><span class="op">(</span>x <span class="op">=</span> <span class="va">turbidity_modis</span>, y <span class="op">=</span> <span class="va">aoi_boundary_casco</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Now we can plot the cropped MODIS data, along with a boundary box
 showing the full MODIS extent. However, remember, since this is raster
@@ -453,7 +453,7 @@ that we can plot:</p>
 <code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="fu">st_as_sfc</span><span class="op">(</span><span class="fu">st_bbox</span><span class="op">(</span><span class="va">turbidity_modis</span><span class="op">)</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">"green"</span>,</span>
 <span>          color <span class="op">=</span> <span class="st">"green"</span>, alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_spatraster</span><span class="op">(</span>data <span class="op">=</span> <span class="va">tubidity_casco</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_spatraster</span><span class="op">(</span>data <span class="op">=</span> <span class="va">turbidity_casco</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_fill_gradientn</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Turbidity Score"</span>, colors <span class="op">=</span> <span class="fu">terrain.colors</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">coord_sf</span><span class="op">(</span><span class="op">)</span></span></code></pre>
 </div>
@@ -466,7 +466,7 @@ was used as a crop extent (blue border below).</p>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_spatraster</span><span class="op">(</span>data <span class="op">=</span> <span class="va">tubidity_casco</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_spatraster</span><span class="op">(</span>data <span class="op">=</span> <span class="va">turbidity_casco</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_sf</span><span class="op">(</span>data <span class="op">=</span> <span class="va">aoi_boundary_casco</span>, color <span class="op">=</span> <span class="st">"blue"</span>, fill <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_fill_gradientn</span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Turbidity Score"</span>, colors <span class="op">=</span> <span class="fu">terrain.colors</span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">coord_sf</span><span class="op">(</span><span class="op">)</span></span></code></pre>
@@ -492,9 +492,10 @@ site.</p>
 <code class="sourceCode R"><span><span class="fu">st_bbox</span><span class="op">(</span><span class="va">turbidity_casco</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'turbidity_casco' not found</code></pre>
+<pre class="output" tabindex="0"><code>     xmin      ymin      xmax      ymax 
+-70.25000  43.58333 -69.83333  43.95833 </code></pre>
 </div>
 <div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -554,7 +555,7 @@ locations.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -605,36 +606,20 @@ tower located at the NEON Harvard Forest field site.</p>
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">names</span><span class="op">(</span><span class="va">turbidity_casco</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"turbidity"</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error: object 'turbidity_casco' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb21">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">turbidity_df</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span>x <span class="op">=</span> <span class="va">turbidity_casco</span>, </span>
+<code class="sourceCode R"><span><span class="fu">names</span><span class="op">(</span><span class="va">turbidity_casco</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"turbidity"</span></span>
+<span></span>
+<span><span class="va">turbidity_df</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span>x <span class="op">=</span> <span class="va">turbidity_casco</span>, </span>
 <span>                     y <span class="op">=</span> <span class="va">aoi_boundary_casco</span>, </span>
-<span>                     raw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
+<span>                     raw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">str</span><span class="op">(</span><span class="va">turbidity_df</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'turbidity_casco' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb23">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">str</span><span class="op">(</span><span class="va">turbidity_df</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'turbidity_df' not found</code></pre>
+<pre class="output" tabindex="0"><code>'data.frame':	90 obs. of  2 variables:
+ $ ID       : num  1 1 1 1 1 1 1 1 1 1 ...
+ $ turbidity: num  NA NA NA NA NA NA NA NA NA NA ...</code></pre>
 </div>
 <p>When we use the <code>extract()</code> function, R extracts the value
 for each pixel located within the boundary of the polygon being used to
@@ -645,7 +630,7 @@ function extracted values from 90 pixels.</p>
 better understand the structure or height distribution of turbidity at
 our site. We will use the column <code>turbidity</code> from our data
 frame as our x values.</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -656,23 +641,29 @@ frame as our x values.</p>
 <span>  <span class="fu">ylab</span><span class="op">(</span><span class="st">"Frequency of Pixels"</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'turbidity_df' not found</code></pre>
+<pre class="output" tabindex="0"><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
 </div>
-<p>We can also use the <code>summary()</code> function to view
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning: Removed 52 rows containing non-finite values (`stat_bin()`).</code></pre>
+</div>
+<figure><img src="fig/11-vector-raster-integration-rendered-view-extract-histogram-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We can also use the <code>summary()</code> function to view
 descriptive statistics including min, max, and mean height values. These
 values help us better understand vegetation at our field site.</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">summary</span><span class="op">(</span><span class="va">turbidity_df</span><span class="op">$</span><span class="va">turbidity</span><span class="op">)</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'turbidity_df' not found</code></pre>
+<pre class="output" tabindex="0"><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+ 0.7771  1.6590  2.8625  2.8668  3.6165  6.0000      52 </code></pre>
 </div>
 </section><section id="summarize-extracted-raster-values"><h2 class="section-heading">Summarize Extracted Raster Values<a class="anchor" aria-label="anchor" href="#summarize-extracted-raster-values"></a>
 </h2>
@@ -680,29 +671,21 @@ values help us better understand vegetation at our field site.</p>
 the type of summary statistic we are interested in using the
 <code>fun =</code> argument. Let’s extract a mean height value for our
 AOI.</p>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mean_turbidity_aoi</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span>x <span class="op">=</span> <span class="va">turbidity_casco</span>, </span>
 <span>                                 y <span class="op">=</span> <span class="va">aoi_boundary_casco</span>, </span>
-<span>                                fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
+<span>                                fun <span class="op">=</span> <span class="va">mean</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mean_turbidity_aoi</span></span></code></pre>
 </div>
 <div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="error" tabindex="0"><code>Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'turbidity_casco' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb31">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">mean_turbidity_aoi</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in eval(expr, envir, enclos): object 'mean_turbidity_aoi' not found</code></pre>
+<pre class="output" tabindex="0"><code>  ID turbidity
+1  1  2.866811</code></pre>
 </div>
 <p>It appears that the mean height value, extracted from our LiDAR data
 derived canopy height model is 22.43 meters.</p>
@@ -720,32 +703,18 @@ region are included in the extract.</p>
 Image Source: National Ecological Observatory Network (NEON)</p>
 <p>Let’s put this into practice by figuring out the mean tree height in
 the 20m around the tower location (<code>point_HARV</code>).</p>
-<div class="codewrapper sourceCode" id="cb33">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mean_turbidity_sites</span> <span class="op">&lt;-</span> <span class="fu">extract</span><span class="op">(</span>x <span class="op">=</span> <span class="va">turbidity_casco</span>,</span>
 <span>                                  y <span class="op">=</span> <span class="fu">st_buffer</span><span class="op">(</span><span class="va">dmr_casco</span>, dist <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>,</span>
 <span>                                  fun <span class="op">=</span> <span class="va">mean</span>,</span>
-<span>                                raw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
+<span>                                raw <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">hist</span><span class="op">(</span><span class="va">mean_turbidity_sites</span><span class="op">$</span><span class="va">turbidity</span><span class="op">)</span></span></code></pre>
 </div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'turbidity_casco' not found</code></pre>
-</div>
-<div class="codewrapper sourceCode" id="cb35">
-<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">hist</span><span class="op">(</span><span class="va">mean_turbidity_sites</span><span class="op">$</span><span class="va">turbidity</span><span class="op">)</span></span></code></pre>
-</div>
-<div class="codewrapper">
-<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="error" tabindex="0"><code>Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'hist': object 'mean_turbidity_sites' not found</code></pre>
-</div>
-<div id="challenge-extract-temperature-values-for-seagrass-beds" class="callout challenge">
+<figure><img src="fig/11-vector-raster-integration-rendered-extract-point-to-buffer-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div id="challenge-extract-temperature-values-for-seagrass-beds" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
@@ -772,10 +741,10 @@ to <code>seagrass_casco_2022</code></p></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Answers</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <ol style="list-style-type: decimal"><li>We can do this as a processing chain!</li>
-</ol><div class="codewrapper sourceCode" id="cb37">
+</ol><div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -786,7 +755,7 @@ to <code>seagrass_casco_2022</code></p></li>
 <span>  <span class="fu">crop</span><span class="op">(</span><span class="va">seagrass_casco_2022</span><span class="op">)</span></span></code></pre>
 </div>
 <ol start="2" style="list-style-type: decimal"><li>We can extract now. Note, some beds will throw an NaN, as</li>
-</ol><div class="codewrapper sourceCode" id="cb38">
+</ol><div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -800,7 +769,7 @@ to <code>seagrass_casco_2022</code></p></li>
 </div>
 <ol start="3" style="list-style-type: decimal"><li>It’s just a <code>geom_point()</code>
 </li>
-</ol><div class="codewrapper sourceCode" id="cb39">
+</ol><div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
