@@ -47,6 +47,7 @@ points.
 library(sf)
 library(terra)
 library(ggplot2)
+library(tidyterra)
 ```
 
 
