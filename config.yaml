@@ -11,13 +11,13 @@
 carpentry: 'dc'
 
 # Overall title for pages.
-title: 'Introduction to Geospatial Raster and Vector Data with R'
+title: 'Introduction to Geospatial Raster and Vector Data with R for COBALT'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: '2015-10-22'
+created: '2023-11-05'
 
 # Comma-separated list of keywords for the lesson
-keywords: 'software, data, lesson, The Carpentries'
+keywords: 'software, data, lesson, The Carpentries, Casco Bay, seagrass'
 
 # Life cycle stage of the lesson
 # possible values: pre-alpha, alpha, beta, stable
@@ -27,13 +27,13 @@ life_cycle: 'transition-step-2'
 license: 'CC-BY 4.0'
 
 # Link to the source repository for this lesson
-source: 'https://github.com/datacarpentry/r-raster-vector-geospatial/'
+source: 'https://github.com/cobalt-casco/r-raster-vector-geospatial'
 
 # Default branch of your lesson
 branch: 'main'
 
 # Who to contact if there are any issues
-contact: 'team@carpentries.org'
+contact: 'jarrett.byrnes@umb.edu'
 
 # Navigation ------------------------------------------------
 #
@@ -61,8 +61,7 @@ contact: 'team@carpentries.org'
 episodes: 
 - 01-raster-structure.Rmd
 - 02-raster-plot.Rmd
-- 03-raster-reproject-in-r.Rmd
-- 04-raster-calculations-in-r.Rmd
+#- 03-raster-reproject-in-r.Rmd
 - 05-raster-multi-band-in-r.Rmd
 - 06-vector-open-shapefile-in-r.Rmd
 - 07-vector-shapefile-attributes-in-r.Rmd
@@ -70,9 +69,10 @@ episodes:
 - 09-vector-when-data-dont-line-up-crs.Rmd
 - 10-vector-csv-to-shapefile-in-r.Rmd
 - 11-vector-raster-integration.Rmd
-- 12-time-series-raster.Rmd
-- 13-plot-time-series-rasters-in-r.Rmd
-- 14-extract-ndvi-from-rasters-in-r.Rmd
+#- 04-raster-calculations-in-r.Rmd #moved to after, as it's complex!
+#- 12-time-series-raster.Rmd
+#- 13-plot-time-series-rasters-in-r.Rmd
+##- 14-extract-ndvi-from-rasters-in-r.Rmd #not relevant here
 
 # Information for Learners
 learners: 
