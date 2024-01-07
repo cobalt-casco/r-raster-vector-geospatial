@@ -129,7 +129,7 @@ that falls within the boundaries of the AOI.
 
 
 ```r
-tubidity_casco <- crop(x = turbidity_modis, y = aoi_boundary_casco)
+turbidity_casco <- crop(x = turbidity_modis, y = aoi_boundary_casco)
 ```
 
 Now we can plot the cropped MODIS data, along with a boundary box showing the
@@ -144,7 +144,7 @@ these 4 coordinates into a polygon that we can plot:
 ggplot() +
   geom_sf(data = st_as_sfc(st_bbox(turbidity_modis)), fill = "green",
           color = "green", alpha = .2) +
-  geom_spatraster(data = tubidity_casco) +
+  geom_spatraster(data = turbidity_casco) +
   scale_fill_gradientn(name = "Turbidity Score", colors = terrain.colors(10)) +
   coord_sf()
 ```
@@ -159,7 +159,7 @@ below).
 
 ```r
 ggplot() +
-  geom_spatraster(data = tubidity_casco) +
+  geom_spatraster(data = turbidity_casco) +
   geom_sf(data = aoi_boundary_casco, color = "blue", fill = NA) +
   scale_fill_gradientn(name = "Turbidity Score", colors = terrain.colors(10)) +
   coord_sf()
@@ -183,8 +183,9 @@ st_bbox(turbidity_modis)
 st_bbox(turbidity_casco)
 ```
 
-```{.error}
-Error in eval(expr, envir, enclos): object 'turbidity_casco' not found
+```{.output}
+     xmin      ymin      xmax      ymax 
+-70.25000  43.58333 -69.83333  43.95833 
 ```
 
 ```r
@@ -281,28 +282,18 @@ Harvard Forest field site.
 
 ```r
 names(turbidity_casco) <- "turbidity"
-```
 
-```{.error}
-Error: object 'turbidity_casco' not found
-```
-
-```r
 turbidity_df <- extract(x = turbidity_casco, 
                      y = aoi_boundary_casco, 
                      raw = FALSE)
-```
 
-```{.error}
-Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'turbidity_casco' not found
-```
-
-```r
 str(turbidity_df)
 ```
 
-```{.error}
-Error in eval(expr, envir, enclos): object 'turbidity_df' not found
+```{.output}
+'data.frame':	90 obs. of  2 variables:
+ $ ID       : num  1 1 1 1 1 1 1 1 1 1 ...
+ $ turbidity: num  NA NA NA NA NA NA NA NA NA NA ...
 ```
 
 When we use the `extract()` function, R extracts the value for each pixel
@@ -323,9 +314,15 @@ ggplot() +
   ylab("Frequency of Pixels")
 ```
 
-```{.error}
-Error in eval(expr, envir, enclos): object 'turbidity_df' not found
+```{.output}
+`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
 ```
+
+```{.warning}
+Warning: Removed 52 rows containing non-finite values (`stat_bin()`).
+```
+
+<img src="fig/11-vector-raster-integration-rendered-view-extract-histogram-1.png" style="display: block; margin: auto;" />
 
 We can also use the `summary()` function to view descriptive statistics
 including min, max, and mean height values. These values help us better
@@ -336,8 +333,9 @@ understand vegetation at our field site.
 summary(turbidity_df$turbidity)
 ```
 
-```{.error}
-Error in h(simpleError(msg, call)): error in evaluating the argument 'object' in selecting a method for function 'summary': object 'turbidity_df' not found
+```{.output}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+ 0.7771  1.6590  2.8625  2.8668  3.6165  6.0000      52 
 ```
 
 ## Summarize Extracted Raster Values
@@ -351,18 +349,13 @@ extract a mean height value for our AOI.
 mean_turbidity_aoi <- extract(x = turbidity_casco, 
                                  y = aoi_boundary_casco, 
                                 fun = mean, na.rm = TRUE)
-```
 
-```{.error}
-Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'turbidity_casco' not found
-```
-
-```r
 mean_turbidity_aoi
 ```
 
-```{.error}
-Error in eval(expr, envir, enclos): object 'mean_turbidity_aoi' not found
+```{.output}
+  ID turbidity
+1  1  2.866811
 ```
 
 It appears that the mean height value, extracted from our LiDAR data derived
@@ -390,19 +383,11 @@ mean_turbidity_sites <- extract(x = turbidity_casco,
                                   y = st_buffer(dmr_casco, dist = 20),
                                   fun = mean,
                                 raw = FALSE)
-```
 
-```{.error}
-Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'extract': object 'turbidity_casco' not found
-```
-
-```r
 hist(mean_turbidity_sites$turbidity)
 ```
 
-```{.error}
-Error in h(simpleError(msg, call)): error in evaluating the argument 'x' in selecting a method for function 'hist': object 'mean_turbidity_sites' not found
-```
+<img src="fig/11-vector-raster-integration-rendered-extract-point-to-buffer-1.png" style="display: block; margin: auto;" />
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
