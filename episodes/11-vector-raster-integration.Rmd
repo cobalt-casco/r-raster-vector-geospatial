@@ -1,5 +1,5 @@
 ---
-title: Manipulate Raster Data
+title: Extracting Data from Rasters using Vectors
 teaching: 40
 exercises: 20
 source: Rmd
@@ -23,36 +23,6 @@ source("setup.R")
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r load-libraries, echo=FALSE, results="hide", message=FALSE, warning=FALSE}
-library(sf)
-library(terra)
-library(ggplot2)
-library(dplyr)
-```
-
-```{r load-data, echo=FALSE, results="hide"}
-# Learners will have this data loaded from earlier episodes
-point_HARV <-
-  st_read("data/NEON-DS-Site-Layout-Files/HARV/HARVtower_UTM18N.shp")
-lines_HARV <-
-  st_read("data/NEON-DS-Site-Layout-Files/HARV/HARV_roads.shp")
-aoi_boundary_HARV <-
-  st_read("data/NEON-DS-Site-Layout-Files/HARV/HarClip_UTMZ18.shp")
-
-# CHM
-CHM_HARV <-
-  rast("data/NEON-DS-Airborne-Remote-Sensing/HARV/CHM/HARV_chmCrop.tif")
-
-CHM_HARV_df <- as.data.frame(CHM_HARV, xy = TRUE)
-
-# plot locations
-plot_locations_HARV <-
-  read.csv("data/NEON-DS-Site-Layout-Files/HARV/HARV_PlotLocations.csv")
-utm18nCRS <- st_crs(point_HARV)
-plot_locations_sp_HARV <- st_as_sf(plot_locations_HARV,
-                                   coords = c("easting", "northing"),
-                                   crs = utm18nCRS)
-```
 
 ::::::::::::::::::::::::::::::::::::::::::  prereq
 
@@ -65,10 +35,20 @@ episode.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Load Libraries
+
 This episode explains how to crop a raster using the extent of a vector
 layer. We will also cover how to extract values from a raster that occur
 within a set of polygons, or in a buffer (surrounding) region around a set of
 points.
+
+
+```{r load-libraries, echo=TRUE, results="hide", message=FALSE, warning=FALSE}
+library(sf)
+library(terra)
+library(ggplot2)
+```
+
 
 ## Crop a Raster to Vector Extent
 
@@ -81,37 +61,47 @@ represents the overall geographic coverage of the spatial object.
 Ecological Observatory Network (NEON)
 
 The graphic below illustrates the extent of several of the spatial layers that
-we have worked with in this workshop:
+we have worked with in this workshop and one new one:
 
 - Area of interest (AOI) -- blue
-- Roads and trails -- purple
-- Vegetation plot locations (marked with white dots)-- black
-- A canopy height model (CHM) in GeoTIFF format -- green
+- Seagrass Beds -- purple
+- Areas surveyed for kelp and urchins (marked with white dots)-- black
+- Water turbidity in GeoTIFF format -- green
 
-```{r view-extents, echo=FALSE, results="hide"}
-# code not shown, for demonstration purposes only
-# create CHM as a vector layer
-CHM_HARV_sp <- st_as_sf(CHM_HARV_df, coords = c("x", "y"), crs = utm18nCRS)
-# approximate the boundary box with a random sample of raster points
-CHM_rand_sample <- sample_n(CHM_HARV_sp, 10000)
-lines_HARV <- st_read("data/NEON-DS-Site-Layout-Files/HARV/HARV_roads.shp")
-plots_HARV <-
-  st_read("data/NEON-DS-Site-Layout-Files/HARV/PlotLocations_HARV.shp")
+```{r view-extents, echo=TRUE, results="hide"}
+# Casco AOI
+aoi_boundary_casco <- st_read(
+  "data/maine_gov_maps/casco_aoi/casco_bay_aoi.shp")
+
+# seagrass in 2022
+seagrass_casco_2022 <- st_read(
+  "data/maine_gov_seagrass/MaineDEP_Casco_Bay_Seagrass_2022/MaineDEP_Casco_Bay_Seagrass_2022.shp")
+
+# subtidal samples
+dmr_casco <- 
+  read.csv("data/maine_dmr/casco_kelp_urchin.csv") |>
+  st_as_sf(coords = c("longitude", "latitude"), crs = 4326)
+
+# turbidity from modis
+turbidity_modis <- rast("data/modis/GIOVANNI-g4.timeAvgMap.MODISA_L3m_KD_Mo_4km_R2022_0_Kd_490.20230701-20230930.71W_42N_66W_45N.tif")
 ```
 
 ```{r compare-data-extents, echo=FALSE}
 # code not shown, for demonstration purposes only
+modis_aoi <- ext(turbidity_modis) |> as.vector() |> 
+  st_bbox() |>st_as_sfc() |> st_set_crs(4326)
+
 ggplot() +
-  geom_sf(data = st_convex_hull(st_union(CHM_rand_sample)), fill = "green") +
-  geom_sf(data = st_convex_hull(st_union(lines_HARV)),
+  geom_sf(data = st_convex_hull(st_union(modis_aoi)), fill = "lightgreen") +
+  geom_sf(data = aoi_boundary_casco, fill = "lightblue") +
+  geom_sf(data = st_convex_hull(st_union(seagrass_casco_2022)),
           fill = "purple", alpha =  0.2) +
-  geom_sf(data = lines_HARV, aes(color = TYPE), size = 1) +
-  geom_sf(data = aoi_boundary_HARV, fill = "blue") +
-  geom_sf(data = st_convex_hull(st_union(plot_locations_sp_HARV)),
+  geom_sf(data = seagrass_casco_2022, size = 2, color = "black") +
+  geom_sf(data = st_convex_hull(st_union(dmr_casco)),
           fill = "black", alpha = 0.4) +
-  geom_sf(data = plots_HARV, color = "white") +
+#  geom_sf(data = dmr_casco, color = "white", size = 0.2) +
   theme(legend.position = "none") +
-  coord_sf()
+  coord_sf() + theme_classic()
 
 ```
 
@@ -129,175 +119,105 @@ spatial object. To do this, we need to specify the raster to be cropped and the
 spatial object that will be used to crop the raster. R will use the `extent` of
 the spatial object as the cropping boundary.
 
-To illustrate this, we will crop the Canopy Height Model (CHM) to only include
+To illustrate this, we will crop the MODIS turbidity data to only include
 the area of interest (AOI). Let's start by plotting the full extent of the CHM
 data and overlay where the AOI falls within it. The boundaries of the AOI will
 be colored blue, and we use `fill = NA` to make the area transparent.
 
 ```{r crop-by-vector-extent}
 ggplot() +
-  geom_raster(data = CHM_HARV_df, aes(x = x, y = y, fill = HARV_chmCrop)) +
-  scale_fill_gradientn(name = "Canopy Height", colors = terrain.colors(10)) +
-  geom_sf(data = aoi_boundary_HARV, color = "blue", fill = NA) +
+  geom_spatraster(data = turbidity_modis) +
+  scale_fill_gradientn(name = "Turbidity Score", colors = terrain.colors(10)) +
+  geom_sf(data = aoi_boundary_casco, color = "blue", fill = NA) +
   coord_sf()
 ```
 
-Now that we have visualized the area of the CHM we want to subset, we can
+Now that we have visualized the area of the turbidity data we want to subset, we can
 perform the cropping operation. We are going to `crop()` function from the
-raster package to create a new object with only the portion of the CHM data
+raster package to create a new object with only the portion of the MODIS data
 that falls within the boundaries of the AOI.
 
 ```{r}
-CHM_HARV_Cropped <- crop(x = CHM_HARV, y = aoi_boundary_HARV)
+tubidity_casco <- crop(x = turbidity_modis, y = aoi_boundary_casco)
 ```
 
-Now we can plot the cropped CHM data, along with a boundary box showing the
-full CHM extent. However, remember, since this is raster data, we need to
+Now we can plot the cropped MODIS data, along with a boundary box showing the
+full MODIS extent. However, remember, since this is raster data, we need to
 convert to a data frame in order to plot using `ggplot`. To get the boundary
-box from CHM, the `st_bbox()` will extract the 4 corners of the rectangle that
+box from MODIS, the `st_bbox()` will extract the 4 corners of the rectangle that
 encompass all the features contained in this object. The `st_as_sfc()` converts
 these 4 coordinates into a polygon that we can plot:
 
 ```{r show-cropped-area}
-CHM_HARV_Cropped_df <- as.data.frame(CHM_HARV_Cropped, xy = TRUE)
 
 ggplot() +
-  geom_sf(data = st_as_sfc(st_bbox(CHM_HARV)), fill = "green",
+  geom_sf(data = st_as_sfc(st_bbox(turbidity_modis)), fill = "green",
           color = "green", alpha = .2) +
-  geom_raster(data = CHM_HARV_Cropped_df,
-              aes(x = x, y = y, fill = HARV_chmCrop)) +
-  scale_fill_gradientn(name = "Canopy Height", colors = terrain.colors(10)) +
+  geom_spatraster(data = tubidity_casco) +
+  scale_fill_gradientn(name = "Turbidity Score", colors = terrain.colors(10)) +
   coord_sf()
 ```
 
-The plot above shows that the full CHM extent (plotted in green) is much larger
-than the resulting cropped raster. Our new cropped CHM now has the same extent
-as the `aoi_boundary_HARV` object that was used as a crop extent (blue border
+The plot above shows that the full MODS extent (plotted in green) is much larger
+than the resulting cropped raster. Our new cropped MODS now has the same extent
+as the `aoi_boundary_casco` object that was used as a crop extent (blue border
 below).
 
 ```{r view-crop-extent}
 ggplot() +
-  geom_raster(data = CHM_HARV_Cropped_df,
-              aes(x = x, y = y, fill = HARV_chmCrop)) +
-  geom_sf(data = aoi_boundary_HARV, color = "blue", fill = NA) +
-  scale_fill_gradientn(name = "Canopy Height", colors = terrain.colors(10)) +
+  geom_spatraster(data = tubidity_casco) +
+  geom_sf(data = aoi_boundary_casco, color = "blue", fill = NA) +
+  scale_fill_gradientn(name = "Turbidity Score", colors = terrain.colors(10)) +
   coord_sf()
 ```
 
 We can look at the extent of all of our other objects for this field site.
 
 ```{r view-extent}
-st_bbox(CHM_HARV)
-st_bbox(CHM_HARV_Cropped)
-st_bbox(aoi_boundary_HARV)
-st_bbox(plot_locations_sp_HARV)
+st_bbox(turbidity_modis)
+st_bbox(turbidity_casco)
+st_bbox(aoi_boundary_casco)
+st_bbox(seagrass_casco_2022)
+st_bbox(dmr_casco)
 ```
 
-Our plot location extent is not the largest but is larger than the AOI
-Boundary. It would be nice to see our vegetation plot locations plotted on top
-of the Canopy Height Model information.
+Our `dmr_casco` location extent is not the largest It would be nice to see our vegetation plot locations plotted on top of the turbidity information.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
 ## Challenge: Crop to Vector Points Extent
 
-1. Crop the Canopy Height Model to the extent of the study plot locations.
-2. Plot the vegetation plot location points on top of the Canopy Height Model.
+1. Crop the MODIS turbidity data to the extent of the study plot locations.
+2. Plot the DMR site location points on top of the turbidity data.
 
 :::::::::::::::  solution
 
 ## Answers
 
 ```{r challenge-code-crop-raster-points}
-
-CHM_plots_HARVcrop <- crop(x = CHM_HARV, y = plot_locations_sp_HARV)
-
-CHM_plots_HARVcrop_df <- as.data.frame(CHM_plots_HARVcrop, xy = TRUE)
+turbidity_dmr_sites <- crop(x = turbidity_modis, y = dmr_casco)
 
 ggplot() +
-  geom_raster(data = CHM_plots_HARVcrop_df,
-              aes(x = x, y = y, fill = HARV_chmCrop)) +
+  geom_spatraster(data = turbidity_dmr_sites) +
   scale_fill_gradientn(name = "Canopy Height", colors = terrain.colors(10)) +
-  geom_sf(data = plot_locations_sp_HARV) +
-  coord_sf()
+  geom_sf(data = dmr_casco) 
 ```
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-In the plot above, created in the challenge, all the vegetation plot locations
-(black dots) appear on the Canopy Height Model raster layer except for one. One
-is situated on the blank space to the left of the map. Why?
+In the plot above, created in the challenge, all the site locations
+(black dots) appear on the turbidity raster layer except for a few. some
+are situated on the blank space to the left of the map. Why?
 
-A modification of the first figure in this episode is below, showing the
-relative extents of all the spatial objects. Notice that the extent for our
-vegetation plot layer (black) extends further west than the extent of our CHM
-raster (bright green). The `crop()` function will make a raster extent smaller,
-it will not expand the extent in areas where there are no data. Thus, the
-extent of our vegetation plot layer will still extend further west than the
-extent of our (cropped) raster data (dark green).
+The raster data is in a resolution such that many of the coastal pixels are
+eliminated as not valid data. Check the resolution of the raster. It's 0.417 
+degrees. 1 degree is ~ 111,111 meters. So, 1 pixel here is ~ 4,600 meters, or 
+4.6km. We are going to lose a lot of things close to the coast.
 
-```{r, echo=FALSE}
-# code not shown, demonstration only
-# create CHM_plots_HARVcrop as a vector layer
-CHM_plots_HARVcrop_sp <- st_as_sf(CHM_plots_HARVcrop_df, coords = c("x", "y"),
-                                  crs = utm18nCRS)
-# approximate the boundary box with random sample of raster points
-CHM_plots_HARVcrop_sp_rand_sample = sample_n(CHM_plots_HARVcrop_sp, 10000)
-```
-
-```{r repeat-compare-data-extents, ref.label="compare-data-extents", echo=FALSE}
-```
-
-## Define an Extent
-
-So far, we have used a vector layer to crop the extent of a raster dataset.
-Alternatively, we can also the `ext()` function to define an extent to be
-used as a cropping boundary. This creates a new object of class extent. Here we
-will provide the `ext()` function our xmin, xmax, ymin, and ymax (in that
-order).
-
-```{r}
-new_extent <- ext(732161.2, 732238.7, 4713249, 4713333)
-class(new_extent)
-```
-
-:::::::::::::::::::::::::::::::::::::::::  callout
-
-## Data Tip
-
-The extent can be created from a numeric vector (as shown above), a matrix, or
-a list. For more details see the `ext()` function help file
-(`?terra::ext`).
-
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
-Once we have defined our new extent, we can use the `crop()` function to crop
-our raster to this extent object.
-
-```{r crop-using-drawn-extent}
-CHM_HARV_manual_cropped <- crop(x = CHM_HARV, y = new_extent)
-```
-
-To plot this data using `ggplot()` we need to convert it to a dataframe.
-
-```{r}
-CHM_HARV_manual_cropped_df <- as.data.frame(CHM_HARV_manual_cropped, xy = TRUE)
-```
-
-Now we can plot this cropped data. We will show the AOI boundary on the same
-plot for scale.
-
-```{r show-manual-crop-area}
-ggplot() +
-  geom_sf(data = aoi_boundary_HARV, color = "blue", fill = NA) +
-  geom_raster(data = CHM_HARV_manual_cropped_df,
-              aes(x = x, y = y, fill = HARV_chmCrop)) +
-  scale_fill_gradientn(name = "Canopy Height", colors = terrain.colors(10)) +
-  coord_sf()
-```
+Thinking about data source resolution is key in thinking about rasters when
+you want to get data close to the coast versus more offshore.
 
 ## Extract Raster Pixels Values Using Vector Polygons
 
@@ -319,30 +239,33 @@ requires:
   `raw = FALSE` (this is optional).
 
 We will begin by extracting all canopy height pixel values located within our
-`aoi_boundary_HARV` polygon which surrounds the tower located at the NEON
+`aoi_boundary_casco` polygon which surrounds the tower located at the NEON
 Harvard Forest field site.
 
 ```{r extract-from-raster}
-tree_height <- extract(x = CHM_HARV, y = aoi_boundary_HARV, raw = FALSE)
+names(turbidity_casco) <- "turbidity"
 
-str(tree_height)
+turbidity_df <- extract(x = turbidity_casco, 
+                     y = aoi_boundary_casco, 
+                     raw = FALSE)
+
+str(turbidity_df)
 ```
 
 When we use the `extract()` function, R extracts the value for each pixel
 located within the boundary of the polygon being used to perform the extraction
-- in this case the `aoi_boundary_HARV` object (a single polygon). Here, the
-function extracted values from 18,450 pixels.
+- in this case the `aoi_boundary_casco` object (a single polygon). Here, the
+function extracted values from 90 pixels.
 
-We can create a histogram of tree height values within the boundary to better
-understand the structure or height distribution of trees at our site. We will
-use the column `HARV_chmCrop` from our data frame as our x values, as this
-column represents the tree heights for each pixel.
+We can create a histogram of turbidity values within the boundary to better
+understand the structure or height distribution of turbidity at our site. We will
+use the column `turbidity` from our data frame as our x values.
 
 ```{r view-extract-histogram}
 ggplot() +
-  geom_histogram(data = tree_height, aes(x = HARV_chmCrop)) +
-  ggtitle("Histogram of CHM Height Values (m)") +
-  xlab("Tree Height") +
+  geom_histogram(data = turbidity_df, aes(x = turbidity)) +
+  ggtitle("Histogram of turbidity values") +
+  xlab("turbidity") +
   ylab("Frequency of Pixels")
 ```
 
@@ -351,7 +274,7 @@ including min, max, and mean height values. These values help us better
 understand vegetation at our field site.
 
 ```{r}
-summary(tree_height$HARV_chmCrop)
+summary(turbidity_df$turbidity)
 ```
 
 ## Summarize Extracted Raster Values
@@ -361,10 +284,11 @@ of summary statistic we are interested in using the `fun =` argument. Let's
 extract a mean height value for our AOI.
 
 ```{r summarize-extract}
-mean_tree_height_AOI <- extract(x = CHM_HARV, y = aoi_boundary_HARV,
-                                fun = mean)
+mean_turbidity_aoi <- extract(x = turbidity_casco, 
+                                 y = aoi_boundary_casco, 
+                                fun = mean, na.rm = TRUE)
 
-mean_tree_height_AOI
+mean_turbidity_aoi
 ```
 
 It appears that the mean height value, extracted from our LiDAR data derived
@@ -387,46 +311,61 @@ Let's put this into practice by figuring out the mean tree height in the 20m
 around the tower location (`point_HARV`).
 
 ```{r extract-point-to-buffer}
-mean_tree_height_tower <- extract(x = CHM_HARV,
-                                  y = st_buffer(point_HARV, dist = 20),
-                                  fun = mean)
+mean_turbidity_sites <- extract(x = turbidity_casco,
+                                  y = st_buffer(dmr_casco, dist = 20),
+                                  fun = mean,
+                                raw = FALSE)
 
-mean_tree_height_tower
+hist(mean_turbidity_sites$turbidity)
 ```
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-## Challenge: Extract Raster Height Values For Plot Locations
+## Challenge: Extract Temperature Values For Seagrass Beds
 
-1) Use the plot locations object (`plot_locations_sp_HARV`) to extract an
-  average tree height for the area within 20m of each vegetation plot location
-  in the study area. Because there are multiple plot locations, there will be
-  multiple averages returned.
+You can also extract data from polygons. Let's look at temperature in seagrass
+beds in 2022.
 
-2) Create a plot showing the mean tree height of each area.
+1) Load up "data/landsat_casco/b10_cropped/LC08_L2SP_011030_20220909_20220914_02_T1_ST_B10.TIF". Reproject it and crop it to the extent of `seagrass_casco_2022` - 
+smaller rasters = faster extraction.
+
+2) Extract the average SST in each bed. `cbind()` it back to 
+`seagrass_casco_2022` 
+
+3) Plot SST by Hectares of seagrass bed.
 
 :::::::::::::::  solution
 
 ## Answers
 
+1. We can do this as a processing chain!
+
 ```{r hist-tree-height-veg-plot}
-# extract data at each plot location
-mean_tree_height_plots_HARV <- extract(x = CHM_HARV,
-                                       y = st_buffer(plot_locations_sp_HARV,
-                                                     dist = 20),
-                                       fun = mean)
-
-# view data
-mean_tree_height_plots_HARV
-
-# plot data
-ggplot(data = mean_tree_height_plots_HARV, aes(ID, HARV_chmCrop)) +
-  geom_col() +
-  ggtitle("Mean Tree Height at each Plot") +
-  xlab("Plot ID") +
-  ylab("Tree Height (m)")
+sst <- rast(
+  "data/landsat_casco/b10_cropped/LC08_L2SP_011030_20220909_20220914_02_T1_ST_B10.TIF"
+  ) |>
+  project(crs(seagrass_casco_2022)) |>
+  crop(seagrass_casco_2022)
 ```
 
+2. We can extract now. Note, some beds will throw an NaN, as 
+
+```{r}
+temp_beds <- extract(sst,
+                     seagrass_casco_2022,
+                     fun = mean,
+                     na.rm = TRUE,
+                     raw = FALSE)
+
+seagrass_casco_2022 <- cbind(seagrass_casco_2022, temp_beds)
+```
+
+3. It's just a `geom_point()`
+
+```{r}
+ggplot(data = seagrass_casco_2022) +
+  geom_point(aes(x = SST_F_20220909, y = Hectares))
+```
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
