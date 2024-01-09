@@ -5,7 +5,7 @@ if(!webshot::is_phantomjs_installed()){
   webshot::install_phantomjs()
 }
 
-
+library(webshot)
 
 ## file structure
 

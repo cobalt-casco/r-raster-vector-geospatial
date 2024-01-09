@@ -288,7 +288,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Plot Raster Data</h1>
-        <p>Last updated on 2024-01-07 |
+        <p>Last updated on 2024-01-09 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/02-raster-plot.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -300,11 +300,6 @@
 
         
 
-<div class="codewrapper">
-<h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="output" tabindex="0"><code>phantomjs has been installed to /home/runner/bin</code></pre>
-</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -332,7 +327,7 @@
 </div>
 <p>First, let’s load some libraries. You should have them loaded from
 the previous less, but in case you don’t -</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb1">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -342,14 +337,14 @@ the previous less, but in case you don’t -</p>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">dplyr</span><span class="op">)</span></span></code></pre>
 </div>
 <p>We are also going to load one new library.</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">leaflet</span><span class="op">)</span></span></code></pre>
 </div>
 <p>To remind you, this is the data we will be using -</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -396,7 +391,7 @@ make these decisions, it is useful to first explore the distribution of
 the data using a bar plot. To begin with, we will use
 <code>dplyr</code>’s <code>mutate()</code> function combined with
 <code>cut()</code> to split the data into 4 bins.</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -408,7 +403,7 @@ the data using a bar plot. To begin with, we will use
 </div>
 <figure><img src="fig/02-raster-plot-rendered-histogram-breaks-ggplot-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>If we want to know the cutoff values for the groups, we can ask for
 the unique values of <code>fct_sst</code>:</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -423,7 +418,7 @@ Levels: (50,56.2] (56.2,62.5] (62.5,68.8] (68.8,75]</code></pre>
 <p>And we can get the count of values in each group using
 <code>dplyr</code>’s <code>group_by()</code> and <code>count()</code>
 functions:</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -448,7 +443,7 @@ round the cutoff values so that we have groups for the ranges of 50 –
 55F, 55 – 60F, 65 - 70F and 70-75F. To implement this we will give
 <code>mutate()</code> a numeric vector of break points instead of the
 number of breaks we want.</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -496,7 +491,7 @@ means “from 65 through 70”.</p>
 </div>
 </div>
 <p>And now we can plot our bar plot again, using the new groups:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -506,7 +501,7 @@ means “from 65 through 70”.</p>
 </div>
 <figure><img src="fig/02-raster-plot-rendered-histogram-custom-breaks-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>And we can get the count of values in each group in the same way we
 did before:</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -534,7 +529,7 @@ can use the <code>scale_color_binned()</code> color scale. This is a
 feature of <code>ggplot2</code> that lets you create bins on the fly and
 plot them. We can specify our custom breaks with the <code>breaks</code>
 argument.</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -545,7 +540,7 @@ argument.</p>
 <figure><img src="fig/02-raster-plot-rendered-raster-with-breaks-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>A lot of color scales have binned versions. We could have done the
 above with <code>scale_fill_viridis_b()</code>. Or we could place with
 <code>scale_fill_fermenter()</code> which comes from <a href="https://colorbrewer2.org/" class="external-link">Color Brewer</a>.</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -556,7 +551,7 @@ above with <code>scale_fill_viridis_b()</code>. Or we could place with
 </div>
 <figure><img src="fig/02-raster-plot-rendered-raster-with-breaks-fermenter-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Note the choices of palette. ColorBrewer supplies quite a few to
 try!</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -566,7 +561,7 @@ try!</p>
 for R, and it’s a topic well worth searching out when you want to
 customize your own plots to the nth degree. You can even make your own
 custom palette with <code>scale_fill_stepsn()</code>.</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -587,7 +582,7 @@ There are also many wonderful palette packages, like <a href="https://github.com
 function. So, if we wanted to give the fill name “SST (F)”, label the X
 and Y axis, and give this plot a title of “SST on Sept 9, 2023” we can
 do so easily.</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -606,7 +601,7 @@ are many wonderful packages out there like <a href="https://yutannihilation.gith
 <p>Within ggplot itself, chekc out the different <code>theme_*()</code>
 functions, such as <code>theme_void()</code>. We can use the
 <code>base_size</code> argument to specify a base font size as well.</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -649,7 +644,7 @@ to remind you.</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -686,7 +681,7 @@ like, as they allow users a degree of interactivity.</p>
 <p>For a basic level of interactivity - just to explore -
 <code>terra</code> includes a function called <code>plet()</code> which
 lets us look at our raster interactively.</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -694,7 +689,7 @@ lets us look at our raster interactively.</p>
 </div>
 <figure><img src="fig/02-raster-plot-rendered-plet-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>This is great, and we can even put some reference behind it with the
 <code>tiles</code> argument.</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -723,7 +718,7 @@ same, or different?</p></li>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -766,7 +761,7 @@ audience. It works by building a map up in a sequence of layers, like
 element. For example, to generate the above map, we’d have to first
 initialize a <code>leaflet()</code> map, then <code>addTiles()</code>,
 and finally <code>addRasterImage()</code>.</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -783,7 +778,7 @@ which looks a bit odd, but, you can get the arguments for different
 tilesets from <a href="https://leaflet-extras.github.io/leaflet-providers/preview/index.html" class="external-link">this
 site</a>. Or use <code>addProviderTiles()</code> to just specify a
 provider and map.</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -806,7 +801,7 @@ for <code>addLegend()</code> or for other maps to have equivalent
 scales. Here’s an example using the <code>RdYlBu</code> palette. Don’t
 forget to set <code>na.color = "transparent"</code> if you don’t want to
 see it.</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -849,7 +844,7 @@ multiple tile sets</li>
 </button>
 <div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -946,17 +941,17 @@ zoom in and out.</li>
     {
   "@context": "https://schema.org",
   "@type": "TrainingMaterial",
-  "@id": "https://datacarpentry.org/r-raster-vector-geospatial/02-raster-plot.html",
+  "@id": "https://cobalt-casco.github.io/r-raster-vector-geospatial/02-raster-plot.html",
   "inLanguage": "en",
   "dct:conformsTo": "https://bioschemas.org/profiles/TrainingMaterial/1.0-RELEASE",
   "description": "A Carpentries Lesson teaching foundational data and coding skills to researchers worldwide",
   "keywords": "software, data, lesson, The Carpentries, Casco Bay, seagrass",
   "name": "Plot Raster Data",
   "creativeWorkStatus": "active",
-  "url": "https://datacarpentry.org/r-raster-vector-geospatial/02-raster-plot.html",
-  "identifier": "https://datacarpentry.org/r-raster-vector-geospatial/02-raster-plot.html",
+  "url": "https://cobalt-casco.github.io/r-raster-vector-geospatial/02-raster-plot.html",
+  "identifier": "https://cobalt-casco.github.io/r-raster-vector-geospatial/02-raster-plot.html",
   "dateCreated": "2023-11-05",
-  "dateModified": "2024-01-07",
+  "dateModified": "2024-01-09",
   "datePublished": "2024-01-09"
 }
 
