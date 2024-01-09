@@ -6,6 +6,9 @@ source: Rmd
 ---
 
 
+```{.output}
+phantomjs has been installed to /home/runner/bin
+```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
