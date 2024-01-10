@@ -32,6 +32,9 @@ See the [lesson homepage](.) for detailed information about the software,
 data, and other prerequisites you will need to work through the examples in 
 this episode.
 
+You will also need some [new data](https://figshare.com/ndownloader/files/43988577)
+that you should unzip and put into the `data/landsat_casco` folder.
+
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -62,9 +65,13 @@ Recall from before that the first few bands of Landsat 8 cover the following:
 - Band 4 Red (640 - 670 nm) 30 m
 - Band 5 Near-Infrared (850 - 880 nm) 30 m
 
-To calculate Chla in the water - well, usually we would atmospherically 
-correct for water first, but let's just run with it - we would use the following
-equations
+To calculate Chla in the water, we will use imagery from Landsat that has been
+algorithmically corrected for water - i.e., algorithms that don't just correct
+the imagery for things in the atmosphere, but that literally try their best to
+correct for all of the spectral properties of what is in the water. We are going
+to use three bands from a Landsat scene in winter of 2023, as phytoplankton is
+at a low and we are more likely to see what is on the seafloor. The imagery has
+been corrected using [ACOLITE](https://odnature.naturalsciences.be/remsem/software-and-data/acolite). With the three bands, in units of Rrs - in essence water leaving irradiance / downwellign irradiance. To learn more, [see here](https://www.oceanopticsbook.info/view/inherent-and-apparent-optical-properties/reflectances).
 
 ![chl eqn](fig/chl_eqn.png)
 
@@ -90,6 +97,8 @@ Let's see how simple it is to make these work for us!
 
 ### Load Libraries and Pre-Process the Data
 
+![New Hampshire and Southern Maine in Winter 2023](data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R/L8_OLI_2023_02_07_15_27_04_012030_L2R_rgb_rhos.png)
+
 For this episode, we will use the Landsat scene from 2023 and the seagrass beds
 from Casco Bay in 2022 (we'll assume they're close enough to 2023). Let's start
 by loading `terra`, `sf`, and `ggplot2`.
@@ -106,17 +115,17 @@ one stack for ease of use. We will also load the Casco AOI and Maine State
 borders for use in cropping and masking down to just water.
 
 ```{r load-data, results = "hide"}
-# aerosol
-landsat_files <-   list.files(
-  "data/landsat_casco/LC08_L2SP_012030_20230903_20230912_02_T1/", 
-             pattern = "TIF",
-             full.names = TRUE)
+#ACOLITE corrected Rrs
+landsat_files <- list.files(
+  "data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R/",
+           pattern = "tif",
+           full.names = TRUE)
 
 # we only want files 3 through 5 - coastal, blue, and green
-landsat_layers <- rast(landsat_files[3:5])
+landsat_layers <- rast(landsat_files)
 
 # give the layers better names
-names(landsat_layers) <- c("coastal", "blue", "green")
+names(landsat_layers) <- c("blue_443", "blue_483", "green_561")
 
 # load our shapefile
 seagrass_casco_2022 <- st_read(
@@ -215,17 +224,16 @@ ggplot() +
   scale_fill_distiller(palette = "Greys", na.value = NA)
 ```
 
-This looks great. There are still some really really high and low values. We might want to figure out a threshold for clamping. Looking at the histogram below, 10,000
-seems reasonable for the upper, and something like 7,000 for the lower. We will
-use `values=FALSE` to just remove very high or very low values and make them NA.
+This looks great. There are still some really really high and low values. We might want to figure out a threshold for clamping. Looking at the histogram below, something like 0.02 for the upper seems reasonable. We will
+use `values=FALSE` to just remove very high values and make them NA.
 
 ```{r clamp}
-hist(landsat_layers_casco_bay, breaks = 100)
+hist(landsat_layers_casco_bay, breaks = 100, xlim = c(0,0.02))
 
-landsat_layers_casco_bay <- clamp(landsat_layers_casco_bay, 
-                                  lower = 7000,
-                                  upper = 9000,
-                                  value = FALSE)
+landsat_layers_casco_bay <- clamp(landsat_layers_casco_bay,
+                                   lower = 0,
+                                   upper = 0.02,
+                                   value = FALSE)
 ```
 
 Replot it, and, wow, you can really start to see some variability
@@ -251,14 +259,15 @@ Let's calculate (green - blue)/(green + blue) to get our CARI score.
 After doing this, let's  plot with `ggplot`.
 
 ```{r raster-math}
-casco_cari <- (landsat_layers_casco_bay$green - landsat_layers_casco_bay$blue) /
-  (landsat_layers_casco_bay$green + landsat_layers_casco_bay$blue) 
+casco_cari <- (landsat_layers_casco_bay$green_561 - landsat_layers_casco_bay$blue_483) /
+  (landsat_layers_casco_bay$green_561 + landsat_layers_casco_bay$blue_483) 
   
 names(casco_cari) <- "CARI"
 
 ggplot() +
   geom_spatraster(data = casco_cari) +
-  scale_fill_viridis_c()
+  scale_fill_viridis_c() +
+  labs(fill = "CARI")
 ```
 
 
@@ -305,7 +314,7 @@ leaflet() |>
 ```{r}
 library(leaflet)
 
-pal <- colorNumeric("Spectral", values(casco_cari), na.color = NA)
+pal <- colorNumeric("viridis", values(casco_cari), na.color = NA)
 
 leaflet() |>
   addTiles() |>
@@ -374,10 +383,10 @@ function in R is:
 get_chl <- function(rast_stack){
   
   #eqn 3.1
-  x <- max(rast_stack[1], rast_stack[2])/rast_stack[3]
+  x <- log10(max(rast_stack[1], rast_stack[2])/rast_stack[3])
   
   #eqn 3.2
-  0.42540 + -3.21679*x + 2.86907*x^2 + -0.62628*x^3 + -1.09333*x^4 
+  10^(0.30963 + -2.40052*x + 1.28932*x^2 + 0.52802*x^3 + -1.33825*x^4) 
   }
 
 casco_chla <- app(landsat_layers_casco_bay, 
@@ -391,7 +400,7 @@ Now we can plot the CHLa:
 ```{r harv-chm-overlay}
  ggplot() +
    geom_spatraster(data = casco_chla) + 
-   scale_fill_distiller(palette = "Greens") +
+  scale_fill_viridis_c() +
   labs(fill = "Chl a")
 ```
 
@@ -411,7 +420,7 @@ Qualitatively, they look about the same!
 ```{r}
 library(leaflet)
 
-pal_chl <- colorNumeric("Spectral", values(casco_chla), na.color = NA)
+pal_chl <- colorNumeric("viridis", values(casco_chla), na.color = NA)
 
 leaflet() |>
   addTiles() |>
@@ -419,7 +428,8 @@ leaflet() |>
                  colors = pal_chl) |>
   addPolygons(data = seagrass_casco_2022,
                color = "black",
-               weight = 1) |>
+               weight = 2,
+              fill = NA) |>
   addLegend(pal = pal_chl, values = values(casco_chla))
 ```
 
