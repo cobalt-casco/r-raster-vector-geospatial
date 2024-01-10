@@ -200,7 +200,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="05-raster-multi-band-in-r.html">3. Work with Multi-Band Rasters</a>
+        <a href="06-vector-open-shapefile-in-r.html">3. Open and Plot Vector Layers</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -212,7 +212,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="06-vector-open-shapefile-in-r.html">4. Open and Plot Vector Layers</a>
+        <a href="07-vector-shapefile-attributes-in-r.html">4. Explore and Plot by Vector Layer Attributes</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -224,7 +224,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="07-vector-shapefile-attributes-in-r.html">5. Explore and Plot by Vector Layer Attributes</a>
+        <a href="08-vector-plot-shapefiles-custom-legend.html">5. Plot Multiple Vector Layers</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -236,7 +236,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="08-vector-plot-shapefiles-custom-legend.html">6. Plot Multiple Vector Layers</a>
+        <a href="09-vector-when-data-dont-line-up-crs.html">6. Handling Spatial Projection &amp; CRS</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -248,7 +248,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="09-vector-when-data-dont-line-up-crs.html">7. Handling Spatial Projection &amp; CRS</a>
+        <a href="10-vector-csv-to-shapefile-in-r.html">7. Convert from .csv to a Vector Layer</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -260,7 +260,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="10-vector-csv-to-shapefile-in-r.html">8. Convert from .csv to a Vector Layer</a>
+        <a href="11-vector-raster-integration.html">8. Extracting Data from Rasters using Vectors</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -272,7 +272,19 @@
 <div class="accordion accordion-flush" id="accordionFlush10">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading10">
-        <a href="11-vector-raster-integration.html">9. Extracting Data from Rasters using Vectors</a>
+        <a href="05-raster-multi-band-in-r.html">9. Work with Multi-Band Rasters</a>
+    </div>
+<!--/div.accordion-header-->
+        
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush11">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading11">
+        <a href="04-raster-calculations-in-r.html">10. Raster Calculations</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -358,15 +370,6 @@ scheme manually.</li>
 <li>Interactive plotting with <code>plet()</code> and the
 <code>leaflet</code> library can lead to even better insights as you
 zoom in and out.</li>
-</ul></section><section id="05-raster-multi-band-in-r"><h2 class="section-heading"><a href="05-raster-multi-band-in-r.html">Work with Multi-Band Rasters</a></h2>
-<hr class="half-width">
-<ul>
-<li>A single raster file can contain multiple bands or layers.</li>
-<li>Use the <code>rast()</code> function to load all bands in a
-multi-layer raster file into R.</li>
-<li>Individual bands within a SpatRaster can be accessed, analyzed, and
-visualized using the same functions no matter how many bands it
-holds.</li>
 </ul></section><section id="06-vector-open-shapefile-in-r"><h2 class="section-heading"><a href="06-vector-open-shapefile-in-r.html">Open and Plot Vector Layers</a></h2>
 <hr class="half-width">
 <ul>
@@ -455,6 +458,23 @@ to a spatial object.</li>
 <li>Use the <code>extract()</code> function to extract pixels from a
 raster object that fall within a particular extent boundary.</li>
 <li>Use the <code>ext()</code> function to define an extent.</li>
+</ul></section><section id="05-raster-multi-band-in-r"><h2 class="section-heading"><a href="05-raster-multi-band-in-r.html">Work with Multi-Band Rasters</a></h2>
+<hr class="half-width">
+<ul>
+<li>A single raster file can contain multiple bands or layers.</li>
+<li>Use the <code>rast()</code> function to load all bands in a
+multi-layer raster file into R.</li>
+<li>Individual bands within a SpatRaster can be accessed, analyzed, and
+visualized using the same functions no matter how many bands it
+holds.</li>
+</ul></section><section id="04-raster-calculations-in-r"><h2 class="section-heading"><a href="04-raster-calculations-in-r.html">Raster Calculations</a></h2>
+<hr class="half-width">
+<ul>
+<li>Rasters can be computed on using mathematical functions.</li>
+<li>The <code>lapp()</code> and <code>app()</code> function provides an
+efficient way to do raster math.</li>
+<li>The <code>writeRaster()</code> function can be used to write raster
+data to a file.</li>
 </ul></section>
 </div>
     </main>
@@ -503,8 +523,8 @@ raster object that fall within a particular extent boundary.</li>
   "url": "https://cobalt-casco.github.io/r-raster-vector-geospatial/instructor/key-points.html",
   "identifier": "https://cobalt-casco.github.io/r-raster-vector-geospatial/instructor/key-points.html",
   "dateCreated": "2023-11-05",
-  "dateModified": "2024-01-09",
-  "datePublished": "2024-01-09"
+  "dateModified": "2024-01-10",
+  "datePublished": "2024-01-10"
 }
 
   </script><script>

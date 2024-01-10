@@ -199,7 +199,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="05-raster-multi-band-in-r.html">3. Work with Multi-Band Rasters</a>
+        <a href="06-vector-open-shapefile-in-r.html">3. Open and Plot Vector Layers</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -211,7 +211,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="06-vector-open-shapefile-in-r.html">4. Open and Plot Vector Layers</a>
+        <a href="07-vector-shapefile-attributes-in-r.html">4. Explore and Plot by Vector Layer Attributes</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -223,7 +223,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="07-vector-shapefile-attributes-in-r.html">5. Explore and Plot by Vector Layer Attributes</a>
+        <a href="08-vector-plot-shapefiles-custom-legend.html">5. Plot Multiple Vector Layers</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -235,7 +235,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="08-vector-plot-shapefiles-custom-legend.html">6. Plot Multiple Vector Layers</a>
+        <a href="09-vector-when-data-dont-line-up-crs.html">6. Handling Spatial Projection &amp; CRS</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -247,7 +247,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="09-vector-when-data-dont-line-up-crs.html">7. Handling Spatial Projection &amp; CRS</a>
+        <a href="10-vector-csv-to-shapefile-in-r.html">7. Convert from .csv to a Vector Layer</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -259,7 +259,7 @@
 <div class="accordion accordion-flush" id="accordionFlush9">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading9">
-        <a href="10-vector-csv-to-shapefile-in-r.html">8. Convert from .csv to a Vector Layer</a>
+        <a href="11-vector-raster-integration.html">8. Extracting Data from Rasters using Vectors</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -271,7 +271,19 @@
 <div class="accordion accordion-flush" id="accordionFlush10">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading10">
-        <a href="11-vector-raster-integration.html">9. Extracting Data from Rasters using Vectors</a>
+        <a href="05-raster-multi-band-in-r.html">9. Work with Multi-Band Rasters</a>
+    </div>
+<!--/div.accordion-header-->
+        
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush11">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading11">
+        <a href="04-raster-calculations-in-r.html">10. Raster Calculations</a>
     </div>
 <!--/div.accordion-header-->
         
@@ -397,28 +409,7 @@ Raster plot showing location of extreme values
 <h3 id="02-raster-plot-figure-12">Figure 12</h3>
 <figure><img src="fig/02-raster-plot-rendered-show-leaflet-tiles-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
 <h3 id="02-raster-plot-figure-13">Figure 13</h3>
-<figure><img src="fig/02-raster-plot-rendered-show-leaflet-colors-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="05-raster-multi-band-in-r"><h2 class="section-heading"><a href="05-raster-multi-band-in-r.html">Work with Multi-Band Rasters</a></h2>
-<hr class="half-width">
-<h3 id="05-raster-multi-band-in-r-figure-1">Figure 1</h3>
-<figure><img src="fig/05-raster-multi-band-in-r-rendered-read-single-band-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-raster-multi-band-in-r-figure-2">Figure 2</h3>
-<figure><img src="fig/05-raster-multi-band-in-r-rendered-rgb-hist-band1-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-raster-multi-band-in-r-figure-3">Figure 3</h3>
-<figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-lyrs-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-raster-multi-band-in-r-figure-4">Figure 4</h3>
-<figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-scaled-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-raster-multi-band-in-r-figure-5">Figure 5</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Image Stretch’</p>
-<figure><img src="fig/dc-spatial-raster/imageStretch_dark.jpg" alt="Image Stretch" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-raster-multi-band-in-r-figure-6">Figure 6</h3>
-<p aria-hidden="true">Image 1 of 1: ‘Image Stretch light’</p>
-<figure><img src="fig/dc-spatial-raster/imageStretch_light.jpg" alt="Image Stretch light" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-raster-multi-band-in-r-figure-7">Figure 7</h3>
-<figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-lin-stretch-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-raster-multi-band-in-r-figure-8">Figure 8</h3>
-<figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-rbg-image-linear-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
-<h3 id="05-raster-multi-band-in-r-figure-9">Figure 9</h3>
-<figure><img src="fig/05-raster-multi-band-in-r-rendered-geom_spatraster_rgb-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="06-vector-open-shapefile-in-r"><h2 class="section-heading"><a href="06-vector-open-shapefile-in-r.html">Open and Plot Vector Layers</a></h2>
+<figure><img src="fig/02-raster-plot-rendered-show-leaflet-colors-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="06-vector-open-shapefile-in-r"><h2 class="section-heading"><a href="06-vector-open-shapefile-in-r.html">Open and Plot Vector Layers</a></h2>
 <hr class="half-width">
 <h3 id="06-vector-open-shapefile-in-r-figure-1">Figure 1</h3>
 <p aria-hidden="true">Image 1 of 1: ‘Extent image’</p>
@@ -545,7 +536,43 @@ Image Source: National Ecological Observatory Network (NEON)</p>
 <h3 id="11-vector-raster-integration-figure-10">Figure 10</h3>
 <figure><img src="fig/11-vector-raster-integration-rendered-extract-point-to-buffer-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
 <h3 id="11-vector-raster-integration-figure-11">Figure 11</h3>
-<figure><img src="fig/11-vector-raster-integration-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section>
+<figure><img src="fig/11-vector-raster-integration-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="05-raster-multi-band-in-r"><h2 class="section-heading"><a href="05-raster-multi-band-in-r.html">Work with Multi-Band Rasters</a></h2>
+<hr class="half-width">
+<h3 id="05-raster-multi-band-in-r-figure-1">Figure 1</h3>
+<figure><img src="fig/05-raster-multi-band-in-r-rendered-read-single-band-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="05-raster-multi-band-in-r-figure-2">Figure 2</h3>
+<figure><img src="fig/05-raster-multi-band-in-r-rendered-rgb-hist-band1-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="05-raster-multi-band-in-r-figure-3">Figure 3</h3>
+<figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-lyrs-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="05-raster-multi-band-in-r-figure-4">Figure 4</h3>
+<figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-scaled-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="05-raster-multi-band-in-r-figure-5">Figure 5</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Image Stretch’</p>
+<figure><img src="fig/dc-spatial-raster/imageStretch_dark.jpg" alt="Image Stretch" class="figure mx-auto d-block"></figure><hr>
+<h3 id="05-raster-multi-band-in-r-figure-6">Figure 6</h3>
+<p aria-hidden="true">Image 1 of 1: ‘Image Stretch light’</p>
+<figure><img src="fig/dc-spatial-raster/imageStretch_light.jpg" alt="Image Stretch light" class="figure mx-auto d-block"></figure><hr>
+<h3 id="05-raster-multi-band-in-r-figure-7">Figure 7</h3>
+<figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-lin-stretch-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="05-raster-multi-band-in-r-figure-8">Figure 8</h3>
+<figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-rbg-image-linear-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr>
+<h3 id="05-raster-multi-band-in-r-figure-9">Figure 9</h3>
+<figure><img src="fig/05-raster-multi-band-in-r-rendered-geom_spatraster_rgb-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><hr></section><section id="04-raster-calculations-in-r"><h2 class="section-heading"><a href="04-raster-calculations-in-r.html">Raster Calculations</a></h2>
+<hr class="half-width">
+<h3 id="04-raster-calculations-in-r-figure-1">Figure 1</h3>
+<p aria-hidden="true">Image 1 of 1: ‘[decorative]’</p>
+<figure><img src="fig/Visible-spectrum-400-700-nm.png" alt="" class="figure mx-auto d-block"><figcaption>the visible spectrum in nm</figcaption></figure><hr>
+<h3 id="04-raster-calculations-in-r-figure-2">Figure 2</h3>
+<p aria-hidden="true">Image 1 of 1: ‘[decorative]’</p>
+<figure><img src="fig/chl_eqn.png" alt="" class="figure mx-auto d-block"><figcaption>chl eqn</figcaption></figure><hr>
+<h3 id="04-raster-calculations-in-r-figure-3">Figure 3</h3>
+<p aria-hidden="true">Image 1 of 1: ‘CARI eqn’</p>
+<p><img src="fig/cari.png" alt="CARI eqn" class="figure"> Let’s see how simple it is
+to make these work for us!</p>
+<hr>
+<h3 id="04-raster-calculations-in-r-figure-4">Figure 4</h3>
+<p aria-hidden="true">Image 1 of 1: ‘[decorative]’</p>
+<figure><img src="data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R/L8_OLI_2023_02_07_15_27_04_012030_L2R_rgb_rhos.png" alt="" class="figure mx-auto d-block"><figcaption>New Hampshire and Southern Maine in Winter 2023</figcaption></figure><hr></section>
 </div>
     </main>
 </div>
@@ -593,8 +620,8 @@ Image Source: National Ecological Observatory Network (NEON)</p>
   "url": "https://cobalt-casco.github.io/r-raster-vector-geospatial/images.html",
   "identifier": "https://cobalt-casco.github.io/r-raster-vector-geospatial/images.html",
   "dateCreated": "2023-11-05",
-  "dateModified": "2024-01-09",
-  "datePublished": "2024-01-09"
+  "dateModified": "2024-01-10",
+  "datePublished": "2024-01-10"
 }
 
   </script><script>
