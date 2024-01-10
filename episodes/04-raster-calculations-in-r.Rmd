@@ -7,7 +7,7 @@ source: Rmd
 
 ```{r setup, echo=FALSE, results="hide", message=FALSE, warning = FALSE}
 source("setup.R")
-knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, fig.width = 8)
 ```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
@@ -116,16 +116,16 @@ one stack for ease of use. We will also load the Casco AOI and Maine State
 borders for use in cropping and masking down to just water.
 
 ```{r load-data, results = "hide"}
-#ACOLITE corrected Rrs
+# ACOLITE corrected Rrs - note, just the tifs, as the png is a thumbnail
 landsat_files <- list.files(
   "data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R/",
            pattern = "tif",
            full.names = TRUE)
 
-# we only want files 3 through 5 - coastal, blue, and green
+# Load all of the tifs
 landsat_layers <- rast(landsat_files)
 
-# give the layers better names
+# give the layers better names 
 names(landsat_layers) <- c("blue_443", "blue_483", "green_561")
 
 # load our shapefile
@@ -229,8 +229,10 @@ This looks great. There are still some really really high and low values. We mig
 use `values=FALSE` to just remove very high values and make them NA.
 
 ```{r clamp}
+# what do things look like?
 hist(landsat_layers_casco_bay, breaks = 100, xlim = c(0,0.02))
 
+#we include lower and upper for good measure
 landsat_layers_casco_bay <- clamp(landsat_layers_casco_bay,
                                    lower = 0,
                                    upper = 0.02,
