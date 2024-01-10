@@ -383,9 +383,9 @@ plot(b10_casco_2023)
 :::::::::::::::::::::::::::::::::::::::::::
 
 
-This map shows the elevation of our study site in Harvard Forest. From the
-legend, we can see that the maximum elevation is ~400, but we can't tell whether
-this is 400 feet or 400 meters because the legend doesn't show us the units. We
+This map shows the sea surface temperature of our Casco Bay at one point in 
+time in 2023. We can see that the maximum temperature is 80. While intuitively we 
+know this is Farenheit (80C would be.... something), we don't know for sure. We
 can look at the metadata of our object to see what the units are. Much of the
 metadata that we're interested in is part of the CRS. We introduced the
 concept of a CRS in [an earlier
@@ -456,8 +456,8 @@ zone. Image source: Chrismurf at English Wikipedia, via [Wikimedia Commons](http
 ## Calculate Raster Min and Max Values
 
 It is useful to know the minimum or maximum values of a raster dataset. In this
-case, given we are working with elevation data, these values represent the
-min/max elevation range at our site.
+case, given we are working with temperature data, these values represent the
+min/max sea surface temperature range in Casco Bay.
 
 Raster statistics are often calculated and embedded in a GeoTIFF for us. We
 can view these values:
@@ -504,20 +504,19 @@ b10_casco_2023 <- setMinMax(b10_casco_2023)
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-We can see that the elevation at our site ranges from NaNm to
-NaNm.
+We can see that the temperature at our site ranges from ~47F to ~80F.
 
 ## Raster Bands
 
-The Digital Surface Model object (`b10_casco_2023`) that we've been working with is a
-single band raster. This means that there is only one dataset stored in the
-raster: surface elevation in meters for one time period.
+The Sea Surface Temperature object (`b10_casco_2023`) that we've been working with is a
+single band raster. This means that there is only one data set stored in the
+raster: SST at one time point.
 
 ![](fig/dc-spatial-raster/single_multi_raster.png){alt='Multi-band raster image'}
 
 A raster dataset can contain one or more bands. We can use the `rast()`
 function to import one single band from a single or multi-band raster. We can
-view the number of bands in a raster using the `nly()` function.
+view the number of bands in a raster using the `nlyr()` function.
 
 
 ```r
