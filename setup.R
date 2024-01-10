@@ -29,7 +29,7 @@ if (! file.exists("data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R")) {
   dest <- tempfile()
   download.file("https://figshare.com/ndownloader/files/43988577", dest,
                 mode = "wb")
-  unzip(dest, exdir = "data")
+  unzip(dest, exdir = "data/landsat_casco")
 }
 
 
