@@ -32,7 +32,7 @@ working through this lesson.
 
 This lesson assumes you have some knowledge of `R`. If you've never
 used `R` before, or need a refresher, start with our
-[Introduction to R for Geospatial Data](https://casco-cobalt.github.io/r-intro-geospatial/)
+[Introduction to R for Geospatial Data](https://cobalt-casco.github.io/r-intro-geospatial/)
 lesson.
 
 ### Geospatial Skill Level
@@ -40,20 +40,20 @@ lesson.
 This lesson assumes you have some knowledge of geospatial data types
 and common file formats. If you have never worked with geospatial
 data before, or need a refresher, start with our
-[Introduction to Geospatial Concepts](https://casco-cobalt.github.io/organization-geospatial/)
+[Introduction to Geospatial Concepts](https://cobalt-casco.github.io/organization-geospatial/)
 lesson.
 
 ### Install Software and Download Data
 
 For installation instructions and to download the data used in this
 lesson, see the
-[Geospatial Workshop Overview](https://casco-cobalt.github.io/geospatial-workshop/#setup).
+[Geospatial Workshop Overview](https://cobalt-casco.github.io/geospatial-workshop/#setup).
 
 ### Setup RStudio Project
 
 Make sure you have set up a RStudio project for this lesson, as
 described in the
-[setup instructions](https://casco-cobalt.github.io/geospatial-workshop/#setup)
+[setup instructions](https://cobalt-casco.github.io/geospatial-workshop/#setup)
 and that your working directory is correctly set.
 
 
