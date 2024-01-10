@@ -6,9 +6,6 @@ source: Rmd
 ---
 
 
-```{.output}
-phantomjs has been installed to /home/runner/bin
-```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
@@ -304,14 +301,7 @@ We will also recrop to the AOI again, as our previous crop leaves some cruft aro
 ```r
 casco_coastline <- st_crop(maine_borders |> st_make_valid(), 
                            aoi_boundary_casco) 
-```
 
-```{.warning}
-Warning: attribute variables are assumed to be spatially constant throughout
-all geometries
-```
-
-```r
 # mask and crop
 landsat_layers_casco_bay <- mask(landsat_layers_casco,
                                  casco_coastline,
