@@ -5,8 +5,9 @@ exercises: 20
 source: Rmd
 ---
 
-```{r setup, echo=FALSE, results="hide"}
+```{r setup, echo=FALSE, results="hide", message=FALSE, warning = FALSE}
 source("setup.R")
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
 ```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
