@@ -6,6 +6,17 @@ source: Rmd
 ---
 
 
+```{.warning}
+Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'
+```
+
+```{.error}
+Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'
+```
 
 ::::::::::::::::::::::::::::::::::::::: objectives
 
@@ -316,7 +327,8 @@ ggplot() +
 ```
 
 ```{.warning}
-Warning: Removed 52 rows containing non-finite values (`stat_bin()`).
+Warning: Removed 52 rows containing non-finite outside the scale range
+(`stat_bin()`).
 ```
 
 <img src="fig/11-vector-raster-integration-rendered-view-extract-histogram-1.png" style="display: block; margin: auto;" />
@@ -438,7 +450,8 @@ ggplot(data = seagrass_casco_2022) +
 ```
 
 ```{.warning}
-Warning: Removed 314 rows containing missing values (`geom_point()`).
+Warning: Removed 314 rows containing missing values or values outside the scale range
+(`geom_point()`).
 ```
 
 <img src="fig/11-vector-raster-integration-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
