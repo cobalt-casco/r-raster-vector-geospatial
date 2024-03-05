@@ -373,7 +373,8 @@ exists. There are two method for this we will use today from Zhang 2023
 and O’Reilly and Werdell in 2019. The first is a calculation of
 chlorophyll based on three bands that cover different nm of the visible
 spectrum.</p>
-<figure><img src="fig/Visible-spectrum-400-700-nm.png" alt="" class="figure mx-auto d-block"><figcaption>the visible spectrum in nm</figcaption></figure><p>Recall from before that the first few bands of Landsat 8 cover the
+<figure><img src="fig/Visible-spectrum-400-700-nm.png" alt="the visible spectrum in nm" class="figure mx-auto d-block"><div class="figcaption">the visible spectrum in nm</div>
+</figure><p>Recall from before that the first few bands of Landsat 8 cover the
 following: - Band 1 Coastal Aerosol (430 - 450 nm) 30 m - Band 2 Blue
 (450 - 510 nm) 30 m - Band 3 Green (530 - 590 nm) 30 m - Band 4 Red (640
 - 670 nm) 30 m - Band 5 Near-Infrared (850 - 880 nm) 30 m</p>
@@ -388,20 +389,20 @@ using <a href="https://odnature.naturalsciences.be/remsem/software-and-data/acol
 With the three bands, in units of Rrs - in essence water leaving
 irradiance / downwellign irradiance. To learn more, <a href="https://www.oceanopticsbook.info/view/inherent-and-apparent-optical-properties/reflectances" class="external-link">see
 here</a>.</p>
-<figure><img src="fig/chl_eqn.png" alt="" class="figure mx-auto d-block"><figcaption>chl eqn</figcaption></figure><p>Where those a coefficients come from <a href="https://www.earthdata.nasa.gov/apt/documents/chlor-a/v1.0#mathematical_theory" class="external-link">NASA
+<figure><img src="fig/chl_eqn.png" alt="chl eqn" class="figure mx-auto d-block"><div class="figcaption">chl eqn</div>
+</figure><p>Where those a coefficients come from <a href="https://www.earthdata.nasa.gov/apt/documents/chlor-a/v1.0#mathematical_theory" class="external-link">NASA
 Algorithms</a>. Those three wavelengths correspond to the coastal band,
 the green band, and the blue band.</p>
 <p>The second method is a bit simpler. It’s called the Chlorophyll
 Absorption Ratio Index (CARI).</p>
 <p><img src="fig/cari.png" alt="CARI eqn" class="figure"> Let’s see how simple it is
 to make these work for us!</p>
-<div id="more-resources" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="more-resources" class="callout-inner">
-<h3 class="callout-title">More Resources<a class="anchor" aria-label="anchor" href="#more-resources"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="more-resources">More Resources<a class="anchor" aria-label="anchor" href="#more-resources"></a></h3>
 <div class="callout-content">
 <ul><li><p><a href="https://www.earthdata.nasa.gov/apt/documents/chlor-a/v1.0#mathematical_theory" class="external-link">Chlorophyll
 A algorithms</a> and NASA Earthdata.</p></li>
@@ -412,7 +413,9 @@ algorithms for ocean color sensors-OC4, OC5 &amp; OC6. <a href="https://doi.org/
 </div>
 <div class="section level3">
 <h3 id="load-libraries-and-pre-process-the-data">Load Libraries and Pre-Process the Data<a class="anchor" aria-label="anchor" href="#load-libraries-and-pre-process-the-data"></a></h3>
-<figure><img src="data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R/L8_OLI_2023_02_07_15_27_04_012030_L2R_rgb_rhos.png" alt="" class="figure mx-auto d-block"><figcaption>New Hampshire and Southern Maine in Winter 2023</figcaption></figure><p>For this episode, we will use the Landsat scene from 2023 and the
+<figure><img src="data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R/L8_OLI_2023_02_07_15_27_04_012030_L2R_rgb_rhos.png" alt="New Hampshire and Southern Maine in Winter 2023" class="figure mx-auto d-block"><div class="figcaption">New Hampshire and Southern Maine in Winter
+2023</div>
+</figure><p>For this episode, we will use the Landsat scene from 2023 and the
 seagrass beds from Casco Bay in 2022 (we’ll assume they’re close enough
 to 2023). Let’s start by loading <code>terra</code>, <code>sf</code>,
 and <code>ggplot2</code>.</p>
@@ -1250,13 +1253,12 @@ which is an object that holds rasters. See <code>help(sds)</code>.</p>
 <p>If you have a raster, stack, you can instead use
 <code>app()</code></p>
 <p><code>outputRaster &lt;- app(x, fun=functionName)</code></p>
-<div id="data-tip" class="callout callout">
+<div id="callout2" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a></h3>
 <div class="callout-content">
 <p>To create a SpatRasterDataset, we call the function <code>sds</code>
 which can take a list of raster objects (each one created by calling
@@ -1266,13 +1268,12 @@ which can take a list of raster objects (each one created by calling
 </div>
 <p>Let’s perform the chla calculation that we calculated above using
 raster math, using the <code>app()</code> function.</p>
-<div id="data-tip-1" class="callout callout">
+<div id="callout3" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip-1" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip-1"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip-1">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip-1"></a></h3>
 <div class="callout-content">
 <p>A custom function consists of a defined set of commands performed on
 a input object. Custom functions are particularly useful for tasks that
@@ -1466,7 +1467,7 @@ data to a file.</li>
   "identifier": "https://cobalt-casco.github.io/r-raster-vector-geospatial/04-raster-calculations-in-r.html",
   "dateCreated": "2023-11-05",
   "dateModified": "2024-01-10",
-  "datePublished": "2024-02-27"
+  "datePublished": "2024-03-05"
 }
 
   </script><script>

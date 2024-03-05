@@ -427,12 +427,12 @@ loaded.</p>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">tidyterra</span><span class="op">)</span></span>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">dplyr</span><span class="op">)</span></span></code></pre>
 </div>
-<div id="introduce-the-data" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="introduce-the-data" class="callout-inner">
-<h3 class="callout-title">Introduce the Data<a class="anchor" aria-label="anchor" href="#introduce-the-data"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="introduce-the-data">Introduce the Data<a class="anchor" aria-label="anchor" href="#introduce-the-data"></a>
 </h3>
 <div class="callout-content">
 <p>If not already discussed, introduce the datasets that will be used in
@@ -548,12 +548,12 @@ above.</p>
 <p>Now that we’ve previewed the metadata for our GeoTIFF, let’s import
 this raster dataset into R and explore its metadata more closely. We can
 use the <code>rast()</code> function to open a raster in R.</p>
-<div id="data-tip---object-names" class="callout callout">
+<div id="callout2" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip---object-names" class="callout-inner">
-<h3 class="callout-title">Data Tip - Object names<a class="anchor" aria-label="anchor" href="#data-tip---object-names"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip---object-names">Data Tip - Object names<a class="anchor" aria-label="anchor" href="#data-tip---object-names"></a>
 </h3>
 <div class="callout-content">
 <p>To improve code readability, file and object names should be used
@@ -734,12 +734,12 @@ another projection, or use the original one, we have to set a
 <figure style="text-align: center"><img src="fig/01-raster-structure-rendered-ggplot-raster-tidyterra-crs-1.png" alt="Raster plot with ggplot2 using the viridis color scale on the original CRS" class="figure mx-auto d-block"><figcaption>
 Raster plot with ggplot2 using the viridis color scale on the original
 CRS
-</figcaption></figure><div id="plotting-tip" class="callout callout">
+</figcaption></figure><div id="callout3" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="plotting-tip" class="callout-inner">
-<h3 class="callout-title">Plotting Tip<a class="anchor" aria-label="anchor" href="#plotting-tip"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="plotting-tip">Plotting Tip<a class="anchor" aria-label="anchor" href="#plotting-tip"></a>
 </h3>
 <div class="callout-content">
 <p>More information about the Viridis palette used above at <a href="https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html" class="external-link">R
@@ -863,8 +863,10 @@ meters</li>
 <p>Note that the zone is unique to the UTM projection. Not all CRSs will
 have a zone. Image source: Chrismurf at English Wikipedia, via <a href="https://en.wikipedia.org/wiki/Universal_Transverse_Mercator_coordinate_system#/media/File:Utm-zones-USA.svg" class="external-link">Wikimedia
 Commons</a> (CC-BY).</p>
-<figure><img src="fig/Utm-zones-USA.svg" alt="UTM zones in the USA." class="figure mx-auto d-block"><figcaption>The UTM zones across the continental United States.
-From: <a href="https://upload.wikimedia.org/wikipedia/commons/8/8d/Utm-zones-USA.svg" class="external-link uri">https://upload.wikimedia.org/wikipedia/commons/8/8d/Utm-zones-USA.svg</a></figcaption></figure>
+<figure><img src="fig/Utm-zones-USA.svg" alt="UTM zones in the USA." class="figure mx-auto d-block"><div class="figcaption">The UTM zones across the continental United
+States. From: <a href="https://upload.wikimedia.org/wikipedia/commons/8/8d/Utm-zones-USA.svg" class="external-link uri">https://upload.wikimedia.org/wikipedia/commons/8/8d/Utm-zones-USA.svg</a>
+</div>
+</figure>
 </div>
 </section><section id="calculate-raster-min-and-max-values"><h2 class="section-heading">Calculate Raster Min and Max Values<a class="anchor" aria-label="anchor" href="#calculate-raster-min-and-max-values"></a>
 </h2>
@@ -910,12 +912,12 @@ max       80.46152</code></pre>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 80.46152</code></pre>
 </div>
-<div id="data-tip---set-min-and-max-values" class="callout callout">
+<div id="callout4" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip---set-min-and-max-values" class="callout-inner">
-<h3 class="callout-title">Data Tip - Set min and max values<a class="anchor" aria-label="anchor" href="#data-tip---set-min-and-max-values"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip---set-min-and-max-values">Data Tip - Set min and max values<a class="anchor" aria-label="anchor" href="#data-tip---set-min-and-max-values"></a>
 </h3>
 <div class="callout-content">
 <p>If the minimum and maximum values haven’t already been calculated, we
@@ -1209,12 +1211,12 @@ resolution of 1x1 and units in meters, therefore resolution of 5x5 means
 </div>
 </div>
 </div>
-<div id="more-resources" class="callout callout">
+<div id="callout5" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="more-resources" class="callout-inner">
-<h3 class="callout-title">More Resources<a class="anchor" aria-label="anchor" href="#more-resources"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="more-resources">More Resources<a class="anchor" aria-label="anchor" href="#more-resources"></a>
 </h3>
 <div class="callout-content">
 <ul>
@@ -1449,12 +1451,12 @@ related ones that are quite useful.</p>
 </table>
 <p>Try them out with <code>b10_casco_2023_df$SST_F_20230920</code> to
 see how they differ.</p>
-<div id="data-tips" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tips" class="callout-inner">
-<h3 class="callout-title">Data Tips<a class="anchor" aria-label="anchor" href="#data-tips"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tips">Data Tips<a class="anchor" aria-label="anchor" href="#data-tips"></a>
 </h3>
 <div class="callout-content">
 <p>Note that when we assign break values a set of 6 values will result
@@ -1709,12 +1711,12 @@ same, or different?</p></li>
 </div>
 </div>
 </div>
-<div id="data-tips-1" class="callout callout">
+<div id="callout2" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tips-1" class="callout-inner">
-<h3 class="callout-title">Data Tips<a class="anchor" aria-label="anchor" href="#data-tips-1"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tips-1">Data Tips<a class="anchor" aria-label="anchor" href="#data-tips-1"></a>
 </h3>
 <div class="callout-content">
 <p>If you want to make sure things can be seen behind the raster, try
@@ -2007,12 +2009,12 @@ particularly interested in the geospatial metadata, describing the
 format, CRS, extent, and other components of the vector data, and the
 attributes which describe properties associated with each individual
 vector object.</p>
-<div id="data-tip" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
 </h3>
 <div class="callout-content">
 <p>The <a href="07-vector-shapefile-attributes-in-r/">Explore and Plot
@@ -2180,7 +2182,7 @@ layer?</p></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>First we import the data:</p>
 <div class="codewrapper sourceCode" id="cb14">
@@ -3121,12 +3123,12 @@ like beds are less dense.</p>
 </div>
 </div>
 </div>
-<div id="data-tip" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
 </h3>
 <div class="callout-content">
 <p>You can plot multiple plot panels next to each other using the <a href="https://patchwork.data-imaginist.com/" class="external-link">patchwork</a> library.</p>
@@ -3848,8 +3850,10 @@ provider (for example, a government agency).</li>
 region. For instance, many states in the US prefer to use a State Plane
 projection customized for that state.</li>
 </ol>
-<figure><img src="fig/map_usa_different_projections.jpg" alt="" class="figure mx-auto d-block"><figcaption>Maps of the United States using data in different
-projections. Source: opennews.org, from: <a href="https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg" class="external-link uri">https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg</a></figcaption></figure><p>Notice the differences in shape associated with each different
+<figure><img src="fig/map_usa_different_projections.jpg" alt="Maps of the United States using data in different projections. Source: opennews.org, from: https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg" class="figure mx-auto d-block"><div class="figcaption">Maps of the United States using data in
+different projections. Source: opennews.org, from: <a href="https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg" class="external-link uri">https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg</a>
+</div>
+</figure><p>Notice the differences in shape associated with each different
 projection. These differences are a direct result of the calculations
 used to “flatten” the data onto a 2-dimensional map. Often data are
 stored purposefully in a particular projection that optimizes the
@@ -3935,12 +3939,12 @@ which is most often recorded in decimal degrees.</p>
 ellipsoid (how the earth’s roundness is calculated) is WGS84.</p>
 <p>The projections are very different. Refer to UTM versus UTM in the
 figure of the US above.</p>
-<div id="data-tip" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
 </h3>
 <div class="callout-content">
 <p>the last portion of each <code>proj4</code> string could potentially
@@ -4058,12 +4062,12 @@ then an object with an extent to crop it to.</p>
 looked at above. This means, we will have to REPROJECT one of the two
 objects in order to crop it successfully, and then work in a common
 CRS.</p>
-<div id="which-data-source-should-i-reproject" class="callout callout">
+<div id="callout2" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="which-data-source-should-i-reproject" class="callout-inner">
-<h3 class="callout-title">Which data source should I reproject?<a class="anchor" aria-label="anchor" href="#which-data-source-should-i-reproject"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="which-data-source-should-i-reproject">Which data source should I reproject?<a class="anchor" aria-label="anchor" href="#which-data-source-should-i-reproject"></a>
 </h3>
 <div class="callout-content">
 <p>Projection works on a pixel by pixel basis. That means that for every
@@ -4138,12 +4142,12 @@ max value   :       79.34391 </code></pre>
 code).</p>
 <p>To transform <code>sf</code> vector data, we would have used the
 function <code>st_transform()</code>.</p>
-<div id="proj4-crs-resources" class="callout callout">
+<div id="callout3" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="proj4-crs-resources" class="callout-inner">
-<h3 class="callout-title">Proj4 &amp; CRS Resources<a class="anchor" aria-label="anchor" href="#proj4-crs-resources"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="proj4-crs-resources">Proj4 &amp; CRS Resources<a class="anchor" aria-label="anchor" href="#proj4-crs-resources"></a>
 </h3>
 <div class="callout-content">
 <ul>
@@ -4642,7 +4646,7 @@ together.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5413,7 +5417,7 @@ resolution, min and max values, and band number?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5552,12 +5556,12 @@ names       : LC08_~PIXEL, LC08_~ADSAT, LC08_~SR_B1, LC08_~SR_B2, LC08_~SR_B3, L
  [9] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_B7"        
 [10] "LC08_L2SP_012030_20230903_20230912_02_T1_SR_QA_AEROSOL"</code></pre>
 </div>
-<div id="data-tip" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
 </h3>
 <div class="callout-content">
 <p>The number of bands associated with a raster’s file can also be
@@ -5664,7 +5668,7 @@ infrared)?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Show me the solution</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5804,7 +5808,7 @@ in red’ map, which can be useful for vegetation.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Answers</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>Note how we use r, g, and b as channel 1, 2, and 3.</li>
@@ -5833,12 +5837,12 @@ very vegetated and urbanized areas.</li>
 </div>
 </div>
 </div>
-<div id="data-tip-1" class="callout callout">
+<div id="callout2" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip-1" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip-1"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip-1">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip-1"></a>
 </h3>
 <div class="callout-content">
 <p>You can create interactive RGB overlays as well. But it takes some
@@ -5968,7 +5972,8 @@ exists. There are two method for this we will use today from Zhang 2023
 and O’Reilly and Werdell in 2019. The first is a calculation of
 chlorophyll based on three bands that cover different nm of the visible
 spectrum.</p>
-<figure><img src="fig/Visible-spectrum-400-700-nm.png" alt="" class="figure mx-auto d-block"><figcaption>the visible spectrum in nm</figcaption></figure><p>Recall from before that the first few bands of Landsat 8 cover the
+<figure><img src="fig/Visible-spectrum-400-700-nm.png" alt="the visible spectrum in nm" class="figure mx-auto d-block"><div class="figcaption">the visible spectrum in nm</div>
+</figure><p>Recall from before that the first few bands of Landsat 8 cover the
 following: - Band 1 Coastal Aerosol (430 - 450 nm) 30 m - Band 2 Blue
 (450 - 510 nm) 30 m - Band 3 Green (530 - 590 nm) 30 m - Band 4 Red (640
 - 670 nm) 30 m - Band 5 Near-Infrared (850 - 880 nm) 30 m</p>
@@ -5983,19 +5988,20 @@ using <a href="https://odnature.naturalsciences.be/remsem/software-and-data/acol
 With the three bands, in units of Rrs - in essence water leaving
 irradiance / downwellign irradiance. To learn more, <a href="https://www.oceanopticsbook.info/view/inherent-and-apparent-optical-properties/reflectances" class="external-link">see
 here</a>.</p>
-<figure><img src="fig/chl_eqn.png" alt="" class="figure mx-auto d-block"><figcaption>chl eqn</figcaption></figure><p>Where those a coefficients come from <a href="https://www.earthdata.nasa.gov/apt/documents/chlor-a/v1.0#mathematical_theory" class="external-link">NASA
+<figure><img src="fig/chl_eqn.png" alt="chl eqn" class="figure mx-auto d-block"><div class="figcaption">chl eqn</div>
+</figure><p>Where those a coefficients come from <a href="https://www.earthdata.nasa.gov/apt/documents/chlor-a/v1.0#mathematical_theory" class="external-link">NASA
 Algorithms</a>. Those three wavelengths correspond to the coastal band,
 the green band, and the blue band.</p>
 <p>The second method is a bit simpler. It’s called the Chlorophyll
 Absorption Ratio Index (CARI).</p>
 <p><img src="fig/cari.png" alt="CARI eqn" class="figure"> Let’s see how simple it is
 to make these work for us!</p>
-<div id="more-resources" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="more-resources" class="callout-inner">
-<h3 class="callout-title">More Resources<a class="anchor" aria-label="anchor" href="#more-resources"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="more-resources">More Resources<a class="anchor" aria-label="anchor" href="#more-resources"></a>
 </h3>
 <div class="callout-content">
 <ul>
@@ -6010,7 +6016,9 @@ algorithms for ocean color sensors-OC4, OC5 &amp; OC6. <a href="https://doi.org/
 <div class="section level3">
 <h3 id="load-libraries-and-pre-process-the-data">Load Libraries and Pre-Process the Data<a class="anchor" aria-label="anchor" href="#load-libraries-and-pre-process-the-data"></a>
 </h3>
-<figure><img src="data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R/L8_OLI_2023_02_07_15_27_04_012030_L2R_rgb_rhos.png" alt="" class="figure mx-auto d-block"><figcaption>New Hampshire and Southern Maine in Winter 2023</figcaption></figure><p>For this episode, we will use the Landsat scene from 2023 and the
+<figure><img src="data/landsat_casco/L8_OLI_2023_02_07_15_27_04_012030_L2R/L8_OLI_2023_02_07_15_27_04_012030_L2R_rgb_rhos.png" alt="New Hampshire and Southern Maine in Winter 2023" class="figure mx-auto d-block"><div class="figcaption">New Hampshire and Southern Maine in Winter
+2023</div>
+</figure><p>For this episode, we will use the Landsat scene from 2023 and the
 seagrass beds from Casco Bay in 2022 (we’ll assume they’re close enough
 to 2023). Let’s start by loading <code>terra</code>, <code>sf</code>,
 and <code>ggplot2</code>.</p>
@@ -6865,12 +6873,12 @@ which is an object that holds rasters. See <code>help(sds)</code>.</p>
 <p>If you have a raster, stack, you can instead use
 <code>app()</code></p>
 <p><code>outputRaster &lt;- app(x, fun=functionName)</code></p>
-<div id="data-tip" class="callout callout">
+<div id="callout2" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
 </h3>
 <div class="callout-content">
 <p>To create a SpatRasterDataset, we call the function <code>sds</code>
@@ -6881,12 +6889,12 @@ which can take a list of raster objects (each one created by calling
 </div>
 <p>Let’s perform the chla calculation that we calculated above using
 raster math, using the <code>app()</code> function.</p>
-<div id="data-tip-1" class="callout callout">
+<div id="callout3" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip-1" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip-1"></a>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip-1">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip-1"></a>
 </h3>
 <div class="callout-content">
 <p>A custom function consists of a defined set of commands performed on
@@ -7077,8 +7085,8 @@ data to a file.</li>
   "url": "https://cobalt-casco.github.io/r-raster-vector-geospatial/aio.html",
   "identifier": "https://cobalt-casco.github.io/r-raster-vector-geospatial/aio.html",
   "dateCreated": "2023-11-05",
-  "dateModified": "2024-02-27",
-  "datePublished": "2024-02-27"
+  "dateModified": "2024-03-05",
+  "datePublished": "2024-03-05"
 }
 
   </script><script>

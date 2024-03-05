@@ -414,8 +414,10 @@ provider (for example, a government agency).</li>
 <li>The data are stored in a particular CRS that is customized to a
 region. For instance, many states in the US prefer to use a State Plane
 projection customized for that state.</li>
-</ol><figure><img src="../fig/map_usa_different_projections.jpg" alt="" class="figure mx-auto d-block"><figcaption>Maps of the United States using data in different
-projections. Source: opennews.org, from: <a href="https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg" class="external-link uri">https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg</a></figcaption></figure><p>Notice the differences in shape associated with each different
+</ol><figure><img src="../fig/map_usa_different_projections.jpg" alt="Maps of the United States using data in different projections. Source: opennews.org, from: https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg" class="figure mx-auto d-block"><div class="figcaption">Maps of the United States using data in
+different projections. Source: opennews.org, from: <a href="https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg" class="external-link uri">https://media.opennews.org/cache/06/37/0637aa2541b31f526ad44f7cb2db7b6c.jpg</a>
+</div>
+</figure><p>Notice the differences in shape associated with each different
 projection. These differences are a direct result of the calculations
 used to “flatten” the data onto a 2-dimensional map. Often data are
 stored purposefully in a particular projection that optimizes the
@@ -496,13 +498,12 @@ which is most often recorded in decimal degrees.</p>
 ellipsoid (how the earth’s roundness is calculated) is WGS84.</p>
 <p>The projections are very different. Refer to UTM versus UTM in the
 figure of the US above.</p>
-<div id="data-tip" class="callout callout">
+<div id="callout1" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="data-tip" class="callout-inner">
-<h3 class="callout-title">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="data-tip">Data Tip<a class="anchor" aria-label="anchor" href="#data-tip"></a></h3>
 <div class="callout-content">
 <p>the last portion of each <code>proj4</code> string could potentially
 be something like <code>+towgs84=0,0,0</code>. This is a conversion
@@ -617,13 +618,12 @@ then an object with an extent to crop it to.</p>
 looked at above. This means, we will have to REPROJECT one of the two
 objects in order to crop it successfully, and then work in a common
 CRS.</p>
-<div id="which-data-source-should-i-reproject" class="callout callout">
+<div id="callout2" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="which-data-source-should-i-reproject" class="callout-inner">
-<h3 class="callout-title">Which data source should I reproject?<a class="anchor" aria-label="anchor" href="#which-data-source-should-i-reproject"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="which-data-source-should-i-reproject">Which data source should I reproject?<a class="anchor" aria-label="anchor" href="#which-data-source-should-i-reproject"></a></h3>
 <div class="callout-content">
 <p>Projection works on a pixel by pixel basis. That means that for every
 pixel in your data, your computer will be doing work. As your data sets
@@ -697,13 +697,12 @@ max value   :       79.34391 </code></pre>
 code).</p>
 <p>To transform <code>sf</code> vector data, we would have used the
 function <code>st_transform()</code>.</p>
-<div id="proj4-crs-resources" class="callout callout">
+<div id="callout3" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
 </div>
-<div id="proj4-crs-resources" class="callout-inner">
-<h3 class="callout-title">Proj4 &amp; CRS Resources<a class="anchor" aria-label="anchor" href="#proj4-crs-resources"></a>
-</h3>
+<div class="section level3 callout-title callout-inner">
+<h3 class="callout-title" id="proj4-crs-resources">Proj4 &amp; CRS Resources<a class="anchor" aria-label="anchor" href="#proj4-crs-resources"></a></h3>
 <div class="callout-content">
 <ul><li><a href="https://proj4.org/" class="external-link">Official PROJ library
 documentation</a></li>
@@ -928,7 +927,7 @@ vector data.</li>
   "identifier": "https://cobalt-casco.github.io/r-raster-vector-geospatial/instructor/09-vector-when-data-dont-line-up-crs.html",
   "dateCreated": "2023-11-05",
   "dateModified": "2024-01-09",
-  "datePublished": "2024-02-27"
+  "datePublished": "2024-03-05"
 }
 
   </script><script>
