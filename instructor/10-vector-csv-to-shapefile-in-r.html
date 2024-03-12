@@ -300,7 +300,7 @@
       </div>
       <hr></nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Convert from .csv to a Vector Layer</h1>
-        <p>Last updated on 2024-01-09 |
+        <p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/10-vector-csv-to-shapefile-in-r.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
         
@@ -314,6 +314,20 @@
 
         
 
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -351,7 +365,7 @@ Episode<a class="anchor" aria-label="anchor" href="#things-youll-need-to-complet
 about the software, data, and other prerequisites you will need to work
 through the examples in this episode.</p>
 <p>You’ll need to load the following libraries</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -393,7 +407,7 @@ spatial object.</p>
 <hr class="half-width"><p>To begin let’s import a <code>.csv</code> file that contains site
 coordinate locations from these subtidal locations and look at the
 structure of that new object:</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -431,7 +445,7 @@ lucky, our <code>.csv</code> will contain columns labeled:</p>
 <li>Latitude and Longitude OR</li>
 <li>easting and northing (UTM coordinates)</li>
 </ul><p>Let’s check out the column names of our dataframe.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -451,7 +465,7 @@ lucky, our <code>.csv</code> will contain columns labeled:</p>
 information. The <code>dmr$longitude</code> and
 <code>dmr$latitude</code> columns contain coordinate values. We can
 confirm this by looking at the first six rows of our data.</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -462,7 +476,7 @@ confirm this by looking at the first six rows of our data.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] -70.66749 -70.55645 -70.38046 -70.32038 -70.30401 -70.10721</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -507,7 +521,7 @@ this, we need to specify:</p>
 <li>The CRS. Either as an object or an EPSG code.</li>
 </ol><p>We will use the <code>st_as_sf()</code> function to perform the
 conversion.</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -516,7 +530,7 @@ conversion.</p>
 <span>                   crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre>
 </div>
 <p>We should double check the CRS to make sure it is correct.</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -559,7 +573,7 @@ GEOGCRS["WGS 84",
 </h2>
 <hr class="half-width"><p>We now have a spatial R object, we can plot our newly created spatial
 object.</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -571,7 +585,7 @@ object.</p>
 <figure><img src="../fig/10-vector-csv-to-shapefile-in-r-rendered-plot-data-points-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Looks good! If we really want to check, we can either load up our
 state of Maine shapefile or plot it against a tiles with
 <code>leaflet</code>.</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -605,9 +619,9 @@ together.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -658,7 +672,7 @@ will create a buffer area using a distance specified in meters. So,
 <code>1e4</code> would be 10km.</p>
 <p>This technique can be a nice way to put a new vector file in context,
 as follows.</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -697,7 +711,7 @@ directory.</li>
 <li>the driver which specifies the file format (ESRI Shapefile)</li>
 </ul><p>We can now export the spatial object as an ESRI
 <code>shapefile</code>. Note - this will make a few files.</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -758,7 +772,7 @@ to a spatial object.</li>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.3" class="external-link">pegboard (0.7.3)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.4" class="external-link">pegboard (0.7.4)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
 			</div>
 		</footer></div> <!-- / div.container -->
 	<div id="to-top">
@@ -780,8 +794,8 @@ to a spatial object.</li>
   "url": "https://cobalt-casco.github.io/r-raster-vector-geospatial/instructor/10-vector-csv-to-shapefile-in-r.html",
   "identifier": "https://cobalt-casco.github.io/r-raster-vector-geospatial/instructor/10-vector-csv-to-shapefile-in-r.html",
   "dateCreated": "2023-11-05",
-  "dateModified": "2024-01-09",
-  "datePublished": "2024-03-05"
+  "dateModified": "2024-03-12",
+  "datePublished": "2024-03-12"
 }
 
   </script><script>

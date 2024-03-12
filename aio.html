@@ -349,7 +349,7 @@
         
 <section id="aio-01-raster-structure"><p>Content from <a href="01-raster-structure.html">Intro to Raster Data</a></p>
 <hr>
-<p>Last updated on 2024-01-10 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/01-raster-structure.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
@@ -359,6 +359,20 @@
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="output" tabindex="0"><code>phantomjs has been installed to /home/runner/bin</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
 </div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
@@ -418,7 +432,7 @@ to R for Geospatial Data</a> lesson. We will use two additional packages
 in this episode to work with raster data - the <code>terra</code> and
 <code>sf</code> packages. Make sure that you have these packages
 loaded.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -451,7 +465,7 @@ GeoTIFF format contains a set of embedded tags with metadata about the
 raster data. We can use the function <code>describe()</code> to get
 information about our raster data before we read that data into R. It is
 ideal to do this before importing your data.</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -529,7 +543,7 @@ ideal to do this before importing your data.</p>
 </div>
 <p>If you wish to store this information in R, you can do the
 following:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -565,7 +579,7 @@ collected from Harvard Forest so we’ll use a naming convention of
 </div>
 <p>First we will load our raster file into R and view the data
 structure.</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -591,7 +605,7 @@ max value   :       80.46152 </code></pre>
 other data range statistics. Similar to other R data structures like
 vectors and data frame columns, descriptive statistics for raster data
 can be retrieved like</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -618,7 +632,7 @@ can be retrieved like</p>
 statistics using every cell in the raster, it will take a random sample
 of 100,000 cells and calculate from that instead. To force calculation
 all the values, you can use the function <code>values</code>:</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -641,7 +655,7 @@ options. First, We can convert it to a dataframe. We learned about
 dataframes in <a href="https://cobalt-casco.github.io/r-intro-geospatial/04-data-structures-part2/index.html" class="external-link">an
 earlier lesson</a>. The <code>terra</code> package has an built-in
 function for conversion to a plotable dataframe.</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -649,7 +663,7 @@ function for conversion to a plotable dataframe.</p>
 </div>
 <p>Now when we view the structure of our data, we will see a standard
 dataframe format.</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -671,7 +685,7 @@ projection for our plots. This approximation is suitable for small areas
 that are not too close to the poles. Other coordinate systems are
 available in ggplot2 if needed, you can learn about them at their help
 page <code>?coord_map</code>.</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -695,7 +709,7 @@ have another geom - <code>geom_spatraster</code> that deals with rasters
 loaded by <code>terra</code>. Also, as land is NA in this data, it will
 plot it quite nicely by default. We’ll also use
 <code>coord_sf()</code></p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -716,7 +730,7 @@ because spatial data is always plotted using the <code>coord_sf()</code>
 coordinate system which defaults to 4326. If we want to show things in
 another projection, or use the original one, we have to set a
 <code>datum</code> argument.</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -765,10 +779,10 @@ from the <code>terra</code> package.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show plot</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>See <code>?plot</code> for more arguments to customize the plot</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -793,7 +807,7 @@ what meanings they have.</p>
 </h3>
 <p>We can view the CRS string associated with our R object using
 the<code>crs()</code> function.</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -821,7 +835,7 @@ the<code>crs()</code> function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Answers</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p><code>+units=m</code> tells us that our data is in meters.</p>
 </div>
@@ -877,7 +891,7 @@ values represent the min/max sea surface temperature range in Casco
 Bay.</p>
 <p>Raster statistics are often calculated and embedded in a GeoTIFF for
 us. We can view these values:</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -890,7 +904,7 @@ us. We can view these values:</p>
 min       47.09686
 max       80.46152</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -901,7 +915,7 @@ max       80.46152</code></pre>
 </h3>
 <pre class="output" tabindex="0"><code>[1] 47.09686</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -922,7 +936,7 @@ max       80.46152</code></pre>
 <div class="callout-content">
 <p>If the minimum and maximum values haven’t already been calculated, we
 can calculate them using the <code>setMinMax()</code> function.</p>
-<div class="codewrapper sourceCode" id="cb31">
+<div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -943,7 +957,7 @@ is only one data set stored in the raster: SST at one time point.</p>
 <code>rast()</code> function to import one single band from a single or
 multi-band raster. We can view the number of bands in a raster using the
 <code>nlyr()</code> function.</p>
-<div class="codewrapper sourceCode" id="cb32">
+<div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -992,7 +1006,7 @@ just as we would for field data to identify questionable values.</p>
 <p>Plotting data with appropriate highlighting can help reveal patterns
 in bad values and may suggest a solution. For example, let’s look at the
 range of our SST raster.</p>
-<div class="codewrapper sourceCode" id="cb34">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1011,7 +1025,7 @@ where we might have bad data, we can use <code>classify()</code> which
 takes a matrix with three columns. The first is a low value. The second
 is a high value. And the third is how we want that classified. Let’s say
 we wanted to look at bad values in our SST dataset.</p>
-<div class="codewrapper sourceCode" id="cb36">
+<div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1031,7 +1045,7 @@ Raster plot showing location of extreme values
 </figcaption></figure><p>Yeah, it’s some spots at the tail-end of the coast that could indeed
 by pixels contaminated by land. To fix that, we can set values outside
 of our range to NA using <code>clamp()</code></p>
-<div class="codewrapper sourceCode" id="cb37">
+<div class="codewrapper sourceCode" id="cb39">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1056,7 +1070,7 @@ max       75.00000</code></pre>
 using the <code>geom_histogram()</code> function which produces a
 histogram. Histograms are often useful in identifying outliers and bad
 data values in our raster data.</p>
-<div class="codewrapper sourceCode" id="cb39">
+<div class="codewrapper sourceCode" id="cb41">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1078,7 +1092,7 @@ value with <code>binwidth</code>.</p>
 data. We can define the number of bins we want in the histogram by using
 the <code>bins</code> value in the <code>geom_histogram()</code>
 function.</p>
-<div class="codewrapper sourceCode" id="cb41">
+<div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1119,9 +1133,9 @@ file:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Answers</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb42">
+<div class="codewrapper sourceCode" id="cb44">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1247,12 +1261,26 @@ to convert it to a dataframe.</li>
 </div>
 </section></section><section id="aio-02-raster-plot"><p>Content from <a href="02-raster-plot.html">Plot Raster Data</a></p>
 <hr>
-<p>Last updated on 2024-01-09 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/02-raster-plot.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -1284,7 +1312,7 @@ to convert it to a dataframe.</li>
 </div>
 <p>First, let’s load some libraries. You should have them loaded from
 the previous less, but in case you don’t -</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1294,14 +1322,14 @@ the previous less, but in case you don’t -</p>
 <span><span class="kw">library</span><span class="op">(</span><span class="va">dplyr</span><span class="op">)</span></span></code></pre>
 </div>
 <p>We are also going to load one new library.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">leaflet</span><span class="op">)</span></span></code></pre>
 </div>
 <p>To remind you, this is the data we will be using -</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1350,7 +1378,7 @@ make these decisions, it is useful to first explore the distribution of
 the data using a bar plot. To begin with, we will use
 <code>dplyr</code>’s <code>mutate()</code> function combined with
 <code>cut()</code> to split the data into 4 bins.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1362,7 +1390,7 @@ the data using a bar plot. To begin with, we will use
 </div>
 <figure><img src="fig/02-raster-plot-rendered-histogram-breaks-ggplot-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>If we want to know the cutoff values for the groups, we can ask for
 the unique values of <code>fct_sst</code>:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1377,7 +1405,7 @@ Levels: (50,56.2] (56.2,62.5] (62.5,68.8] (68.8,75]</code></pre>
 <p>And we can get the count of values in each group using
 <code>dplyr</code>’s <code>group_by()</code> and <code>count()</code>
 functions:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1402,7 +1430,7 @@ round the cutoff values so that we have groups for the ranges of 50 –
 55F, 55 – 60F, 65 - 70F and 70-75F. To implement this we will give
 <code>mutate()</code> a numeric vector of break points instead of the
 number of breaks we want.</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1468,7 +1496,7 @@ means “from 65 through 70”.</p>
 </div>
 </div>
 <p>And now we can plot our bar plot again, using the new groups:</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1478,7 +1506,7 @@ means “from 65 through 70”.</p>
 </div>
 <figure><img src="fig/02-raster-plot-rendered-histogram-custom-breaks-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>And we can get the count of values in each group in the same way we
 did before:</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1506,7 +1534,7 @@ can use the <code>scale_color_binned()</code> color scale. This is a
 feature of <code>ggplot2</code> that lets you create bins on the fly and
 plot them. We can specify our custom breaks with the <code>breaks</code>
 argument.</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1517,7 +1545,7 @@ argument.</p>
 <figure><img src="fig/02-raster-plot-rendered-raster-with-breaks-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>A lot of color scales have binned versions. We could have done the
 above with <code>scale_fill_viridis_b()</code>. Or we could place with
 <code>scale_fill_fermenter()</code> which comes from <a href="https://colorbrewer2.org/" class="external-link">Color Brewer</a>.</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1528,7 +1556,7 @@ above with <code>scale_fill_viridis_b()</code>. Or we could place with
 </div>
 <figure><img src="fig/02-raster-plot-rendered-raster-with-breaks-fermenter-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Note the choices of palette. ColorBrewer supplies quite a few to
 try!</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1538,7 +1566,7 @@ try!</p>
 for R, and it’s a topic well worth searching out when you want to
 customize your own plots to the nth degree. You can even make your own
 custom palette with <code>scale_fill_stepsn()</code>.</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1560,7 +1588,7 @@ There are also many wonderful palette packages, like <a href="https://github.com
 function. So, if we wanted to give the fill name “SST (F)”, label the X
 and Y axis, and give this plot a title of “SST on Sept 9, 2023” we can
 do so easily.</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1579,7 +1607,7 @@ are many wonderful packages out there like <a href="https://yutannihilation.gith
 <p>Within ggplot itself, chekc out the different <code>theme_*()</code>
 functions, such as <code>theme_void()</code>. We can use the
 <code>base_size</code> argument to specify a base font size as well.</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1622,9 +1650,9 @@ to remind you.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1662,7 +1690,7 @@ like, as they allow users a degree of interactivity.</p>
 <p>For a basic level of interactivity - just to explore -
 <code>terra</code> includes a function called <code>plet()</code> which
 lets us look at our raster interactively.</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1670,7 +1698,7 @@ lets us look at our raster interactively.</p>
 </div>
 <figure><img src="fig/02-raster-plot-rendered-plet-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>This is great, and we can even put some reference behind it with the
 <code>tiles</code> argument.</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1699,9 +1727,9 @@ same, or different?</p></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Answers</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1744,7 +1772,7 @@ audience. It works by building a map up in a sequence of layers, like
 element. For example, to generate the above map, we’d have to first
 initialize a <code>leaflet()</code> map, then <code>addTiles()</code>,
 and finally <code>addRasterImage()</code>.</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1761,7 +1789,7 @@ which looks a bit odd, but, you can get the arguments for different
 tilesets from <a href="https://leaflet-extras.github.io/leaflet-providers/preview/index.html" class="external-link">this
 site</a>. Or use <code>addProviderTiles()</code> to just specify a
 provider and map.</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1784,7 +1812,7 @@ for <code>addLegend()</code> or for other maps to have equivalent
 scales. Here’s an example using the <code>RdYlBu</code> palette. Don’t
 forget to set <code>na.color = "transparent"</code> if you don’t want to
 see it.</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1827,9 +1855,9 @@ multiple tile sets</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Answers</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1882,12 +1910,26 @@ zoom in and out.</li>
 </div>
 </section></section><section id="aio-06-vector-open-shapefile-in-r"><p>Content from <a href="06-vector-open-shapefile-in-r.html">Open and Plot Vector Layers</a></p>
 <hr>
-<p>Last updated on 2024-01-09 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/06-vector-open-shapefile-in-r.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -1918,7 +1960,7 @@ elements.</li>
 </div>
 </div>
 <p>First, some libraries you might not have loaded at the moment.</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1958,7 +2000,7 @@ R. We will also use the <code>terra</code> package, which has been
 loaded in previous episodes, so we can explore raster and vector spatial
 metadata using similar commands. Make sure you have the <code>sf</code>
 library loaded.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -1979,7 +2021,7 @@ study area (or our Area Of Interest or AOI, hence the name
 <code>st_read()</code>. <code>st_read()</code> requires the file path to
 the ESRI <code>shapefile</code>.</p>
 <p>Let’s import our AOI:</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2044,7 +2086,7 @@ objects in the vector layer.</li>
 <code>st_geometry_type()</code>, <code>st_crs()</code> and
 <code>st_bbox()</code> functions. First, let’s view the geometry type
 for our AOI vector layer:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2059,7 +2101,7 @@ for our AOI vector layer:</p>
 <p>Our <code>aoi_boundary_casco</code> is a polygon spatial object. The
 18 levels shown below our output list the possible categories of the
 geometry type. Now let’s check what CRS this file data is in:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2090,7 +2132,7 @@ GEOGCRS["WGS 84",
 The CRS is critical to interpreting the spatial object’s extent values
 as it specifies units. To find the extent of our AOI, we can use the
 <code>st_bbox()</code> function:</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2109,7 +2151,7 @@ spatial object. Image Source: National Ecological Observatory Network
 (NEON).</p>
 <figure><img src="fig/dc-spatial-vector/spatial_extent.png" alt="Extent image" class="figure mx-auto d-block"></figure><p>Lastly, we can view all of the metadata and attributes for this R
 spatial object by printing it to the screen:</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2143,7 +2185,7 @@ to convert vector data to a dataframe before plotting with
 color, and fill for our plot. When plotting <code>sf</code> objects with
 <code>ggplot2</code>, you need to use the <code>coord_sf()</code>
 coordinate system.</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2185,7 +2227,7 @@ layer?</p></li>
 <div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>First we import the data:</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2203,7 +2245,7 @@ Dimension:     XY
 Bounding box:  xmin: -71.04662 ymin: 43.06728 xmax: -66.95202 ymax: 47.35999
 Geodetic CRS:  WGS 84</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2222,7 +2264,7 @@ Bounding box:  xmin: -70.9817 ymin: 43.0859 xmax: -66.9838 ymax: 47.35484
 Geodetic CRS:  WGS 84</code></pre>
 </div>
 <p>Then we check its class:</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2233,7 +2275,7 @@ Geodetic CRS:  WGS 84</code></pre>
 </h3>
 <pre class="output" tabindex="0"><code>[1] "sf"         "data.frame"</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2245,7 +2287,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <pre class="output" tabindex="0"><code>[1] "sf"         "data.frame"</code></pre>
 </div>
 <p>We also check the CRS and extent of each object:</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2272,7 +2314,7 @@ GEOGCRS["WGS 84",
             ANGLEUNIT["degree",0.0174532925199433]],
     ID["EPSG",4326]]</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2284,7 +2326,7 @@ GEOGCRS["WGS 84",
 <pre class="output" tabindex="0"><code>     xmin      ymin      xmax      ymax 
 -71.04662  43.06728 -66.95202  47.35999 </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2311,7 +2353,7 @@ GEOGCRS["WGS 84",
             ANGLEUNIT["degree",0.0174532925199433]],
     ID["EPSG",4326]]</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2353,12 +2395,26 @@ dataframe.</li>
 </div>
 </section></section><section id="aio-07-vector-shapefile-attributes-in-r"><p>Content from <a href="07-vector-shapefile-attributes-in-r.html">Explore and Plot by Vector Layer Attributes</a></p>
 <hr>
-<p>Last updated on 2024-01-09 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/07-vector-shapefile-attributes-in-r.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -2416,7 +2472,7 @@ here</a>.</p>
 <p>We will continue using the <code>sf</code> and <code>ggplot2</code>
 packages in this episode. Make sure that you have these packages
 loaded.</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2427,7 +2483,7 @@ loaded.</p>
 <p>We will continue to work with the ESRI <code>shapefiles</code>
 (vector layers). Let’s start looking at seagrass beds around Casco Bay
 from 2022.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2459,7 +2515,7 @@ see a summary of all of the metadata associated with our
 <code>seagrass_casco_2022</code> object, we can view the object with
 <code>View(seagrass_casco_2022)</code> or print a summary of the object
 itself to the console.</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2522,7 +2578,7 @@ First 10 features:
 <p>We can use the <code>ncol</code> function to count the number of
 attributes associated with a spatial object too. Note that the geometry
 is just another column and counts towards the total.</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2535,7 +2591,7 @@ is just another column and counts towards the total.</p>
 </div>
 <p>We can view the individual name of each attribute using the
 <code>names()</code> function in R:</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2551,7 +2607,7 @@ is just another column and counts towards the total.</p>
 </div>
 <p>We could also view just the first 6 rows of attribute values using
 the <code>head()</code> function to get a preview of the data:</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2618,13 +2674,13 @@ Maine?</p></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>To find the number of attributes, we use the <code>ncol()</code>
 function:</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2642,7 +2698,7 @@ Dimension:     XY
 Bounding box:  xmin: -71.04662 ymin: 43.06728 xmax: -66.95202 ymax: 47.35999
 Geodetic CRS:  WGS 84</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2657,7 +2713,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <li>Ownership information is in a column named
 <code>Ownership</code>:</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2672,7 +2728,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <li>To see a list of all of the attributes, we can use the
 <code>names()</code> function:</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2704,7 +2760,7 @@ is similar to exploring values in a column. We did this with the
 earlier lesson</a>. For spatial objects, we can use the same syntax:
 <code>objectName$attributeName</code>.</p>
 <p>First, what do we have to work with?</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2723,7 +2779,7 @@ can use the <code>unique()</code> function for extracting the possible
 values of a character variable (R also is able to handle categorical
 variables called factors; we worked with factors a little bit in <a href="https://datacarpentry.org/r-intro-geospatial/03-data-structures-part1/index.html" class="external-link">an
 earlier lesson</a>.</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2745,7 +2801,7 @@ just like with data frames.</p>
 <code>Hectares</code> greater than 25. Once we subset out this data, we
 can use it as input to other code so that code only operates on the
 footpath lines.</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2762,7 +2818,7 @@ footpath lines.</p>
 <p>Our subsetting operation reduces the <code>features</code> count 4
 93. This means that 4 polygons in our spatial object are larger than 25
 Hectares. We can plot only these big beds</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2780,7 +2836,7 @@ plot each using a unique color by assigning a column name to the color
 aesthetic (<code>fill =</code>). We use the syntax
 <code>aes(fill = )</code> to do this. Let’s look at
 <code>Cover_Pct</code> to differentiate sparse from dense beds.</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2813,10 +2869,10 @@ showing the <code>townname</code>.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Answers</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>First we will save an object with only the roads in Cumberland:</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2824,7 +2880,7 @@ showing the <code>townname</code>.</p>
 <span>  <span class="fu">filter</span><span class="op">(</span><span class="va">cntyname</span> <span class="op">==</span> <span class="st">"Cumberland"</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Let’s check how many features there are in this subset:</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2836,7 +2892,7 @@ showing the <code>townname</code>.</p>
 <pre class="output" tabindex="0"><code>[1] 18246</code></pre>
 </div>
 <p>Now let’s plot that data:</p>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb32">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2886,13 +2942,13 @@ but also feel free to try some options from
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3">Answer</h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>First we will save an object with only the stone wall lines and
 check the number of features:</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb31">
+<div class="codewrapper sourceCode" id="cb33">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2910,7 +2966,7 @@ check the number of features:</li>
 <li>Is the distribution different than the size of all beds? Let’s
 see.</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb33">
+<div class="codewrapper sourceCode" id="cb35">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2923,7 +2979,7 @@ beds.</p>
 <ol start="3" style="list-style-type: decimal">
 <li>Last, we can plot the data:</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb34">
+<div class="codewrapper sourceCode" id="cb36">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2951,7 +3007,7 @@ colors for each line based on a default color order. If we don’t like
 those default colors, we can create a vector of colors - one for each
 feature.</p>
 <p>First we will check how many unique levels our factor has:</p>
-<div class="codewrapper sourceCode" id="cb35">
+<div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2964,7 +3020,7 @@ feature.</p>
 </div>
 <p>Then we can create a palette of four colors, one for each feature in
 our vector object.</p>
-<div class="codewrapper sourceCode" id="cb37">
+<div class="codewrapper sourceCode" id="cb39">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2972,7 +3028,7 @@ our vector object.</p>
 </div>
 <p>We can tell <code>ggplot</code> to use these colors when we plot the
 data.</p>
-<div class="codewrapper sourceCode" id="cb38">
+<div class="codewrapper sourceCode" id="cb40">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -2996,7 +3052,7 @@ legenend for <code>Cover_Pct</code> by default. Let’s start by making
 the title be readable using <code>labs()</code> to give it titles. Note,
 color and fill must have the same title, otherwise the legend
 splits.</p>
-<div class="codewrapper sourceCode" id="cb39">
+<div class="codewrapper sourceCode" id="cb41">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3027,7 +3083,7 @@ vector.</li>
 </ul>
 <p>Note, some of these will need an <code>element_*()</code> function.
 To dig deep deep into plot customization, see <code>?theme</code></p>
-<div class="codewrapper sourceCode" id="cb40">
+<div class="codewrapper sourceCode" id="cb42">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3072,10 +3128,10 @@ the <code>"</code>0%“` beds in order to use the identical color palette
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution4" aria-expanded="false" aria-controls="collapseSolution4">
   <h4 class="accordion-header" id="headingSolution4">Answers</h4>
 </button>
-<div id="collapseSolution4" class="accordion-collapse collapse" data-bs-parent="#accordionSolution4" aria-labelledby="headingSolution4">
+<div id="collapseSolution4" class="accordion-collapse collapse" aria-labelledby="headingSolution4" data-bs-parent="#accordionSolution4">
 <div class="accordion-body">
 <p>First we explore load and filter the data.</p>
-<div class="codewrapper sourceCode" id="cb41">
+<div class="codewrapper sourceCode" id="cb43">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3096,7 +3152,7 @@ Bounding box:  xmin: -70.2477 ymin: 43.5896 xmax: -69.84402 ymax: 43.93288
 Geodetic CRS:  WGS 84</code></pre>
 </div>
 <p>Then, honestly, we can re-use the same plotting code as above.</p>
-<div class="codewrapper sourceCode" id="cb43">
+<div class="codewrapper sourceCode" id="cb45">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3132,7 +3188,7 @@ like beds are less dense.</p>
 </h3>
 <div class="callout-content">
 <p>You can plot multiple plot panels next to each other using the <a href="https://patchwork.data-imaginist.com/" class="external-link">patchwork</a> library.</p>
-<div class="codewrapper sourceCode" id="cb44">
+<div class="codewrapper sourceCode" id="cb46">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3188,12 +3244,26 @@ functions and options in the <code>ggplot2</code> package.</li>
 </div>
 </section></section><section id="aio-08-vector-plot-shapefiles-custom-legend"><p>Content from <a href="08-vector-plot-shapefiles-custom-legend.html">Plot Multiple Vector Layers</a></p>
 <hr>
-<p>Last updated on 2024-01-09 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/08-vector-plot-shapefiles-custom-legend.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -3247,7 +3317,7 @@ the same plot.</p>
 <p>To work with vector data in R, we can use the <code>sf</code>
 library. We will also be using <code>ggplot2</code> and some
 <code>dplyr</code>. Let’s start by loading them.</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3259,7 +3329,7 @@ library. We will also be using <code>ggplot2</code> and some
 some coastline for context. We will also add layers of information along
 the way. To start with, let’s load up the seagrass beds, the AOI for
 Casco, and a shapefile of counties in Maine.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3281,7 +3351,7 @@ goal here is to plot seagrass beds with a coastline bordering them, so
 we can see how they line up around islands. However, we have a small
 problem. Let’s compare the extent of our objects using
 <code>st_bbox()</code>.</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3293,7 +3363,7 @@ problem. Let’s compare the extent of our objects using
 <pre class="output" tabindex="0"><code>    xmin     ymin     xmax     ymax 
 -70.2528  43.5834 -69.8387  43.9439 </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3305,7 +3375,7 @@ problem. Let’s compare the extent of our objects using
 <pre class="output" tabindex="0"><code>     xmin      ymin      xmax      ymax 
 -70.24464  43.57213 -69.84399  43.93221 </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3325,7 +3395,7 @@ called <code>st_crop()</code> which will crop a large vector file down
 to the size of the extent of a smaller vector file. So if we just want
 the Casco Coastline, we can crop <code>maine_borders</code> down to the
 size of the <code>aoi_boundary_casco</code> vector file.</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3341,7 +3411,7 @@ getting too deep into it, vector files (particularly polygons) can have
 a variety of issues in them which make them invalid. To fix this, we
 need to make them valid before cropping with
 <code>st_make_valid()</code>. Odd, but, this is incredibly common.</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3370,9 +3440,9 @@ need to make them valid before cropping with
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Show me the solution</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3390,7 +3460,7 @@ Dimension:     XY
 Bounding box:  xmin: -71.04662 ymin: 43.06728 xmax: -66.95202 ymax: 47.35999
 Geodetic CRS:  WGS 84</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3423,7 +3493,7 @@ with a tan fill and a black outline. We will add on top roads, but with
 alpha = 0.1 so they are faint. Last, we will layer seagrass beds on top
 with color and fill as percent cover and a linewidth of 1.3. We will
 save it as an object so we can make small changes from here on out.</p>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3450,7 +3520,7 @@ save it as an object so we can make small changes from here on out.</p>
 </ol>
 <p>We can start by making the plot cleaner and eliminating the gap (1
 &amp; 2)</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3461,7 +3531,7 @@ save it as an object so we can make small changes from here on out.</p>
 <span><span class="va">seagrass_map</span></span></code></pre>
 </div>
 <figure><img src="fig/08-vector-plot-shapefiles-custom-legend-rendered-plot-custom-shape-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Now lets adjust the legend titles by using <code>labs()</code>.</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3474,7 +3544,7 @@ save it as an object so we can make small changes from here on out.</p>
 <figure><img src="fig/08-vector-plot-shapefiles-custom-legend-rendered-create-custom-legend-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Last, we can use <code>theme()</code> to add a light blue background
 and rotate the X axis. We will save this as an object, so we don’t need
 to type more as we make further modifications.</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3496,7 +3566,7 @@ itself, or use something like <a href="https://maps.google.com" class="external-
 click to get point coordinates.</p>
 <p>Using the later method, here, for example, is the area around
 Mackworth Island.</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3510,7 +3580,7 @@ slightly more challenging to implement, but very similar to what we did
 with rasters before. We will start by making a color palette for the
 map. We can use <code>colorFactor()</code> as we have discrete classes
 here.</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3528,7 +3598,7 @@ creating polygon borders and the fill. We will set
 (too many more argument) and instead use our palette - which is now a
 function to be evaluated with <code>~</code> and set a
 <code>fillOpacity</code> to 1, for fully opaque.</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3543,7 +3613,7 @@ function to be evaluated with <code>~</code> and set a
 above just using the <code>sf objects</code>. We’ll need to invoke one
 trick from the <code>leaflet.extras</code> package to get that blue
 background.</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3603,13 +3673,13 @@ continuous, so to make it into distinct classes you will need
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Answers</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>First we need to load in the data. Let’ see how many years are
 here.</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3627,7 +3697,7 @@ Dimension:     XY
 Bounding box:  xmin: -70.82449 ymin: 43.05945 xmax: -66.98462 ymax: 45.11247
 Geodetic CRS:  WGS 84</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3641,7 +3711,7 @@ Geodetic CRS:  WGS 84</code></pre>
  [6] "HECTARES"   "Year97"     "GlobalID"   "Shape__Are" "Shape__Len"
 [11] "geometry"  </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3654,7 +3724,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <pre class="output" tabindex="0"><code>[1] 1993 1994 1997 1996 1992 1995</code></pre>
 </div>
 <p>Then, we can visualize.</p>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3668,7 +3738,7 @@ Geodetic CRS:  WGS 84</code></pre>
 <li>For the second piece, first, we need to crop to Casco Bay and check
 what years this data consists of.</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb32">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3685,7 +3755,7 @@ what years this data consists of.</li>
 <p>With the cropped polygons, we can make a map akin to what we did
 above for 2022. We can even re-use our code, but with a few small
 modifications for a different data set and a different cover type.</p>
-<div class="codewrapper sourceCode" id="cb32">
+<div class="codewrapper sourceCode" id="cb34">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3737,12 +3807,26 @@ small spatial features.</li>
 </div>
 </section></section><section id="aio-09-vector-when-data-dont-line-up-crs"><p>Content from <a href="09-vector-when-data-dont-line-up-crs.html">Handling Spatial Projection &amp; CRS</a></p>
 <hr>
-<p>Last updated on 2024-01-09 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/09-vector-when-data-dont-line-up-crs.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -3805,7 +3889,7 @@ sources that are in different CRSs and thus don’t line up on a map.</p>
 <hr class="half-width">
 <p>We will continue to use the <code>sf</code> and <code>terra</code>
 packages in this episode as well as others from previously.</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3818,7 +3902,7 @@ packages in this episode as well as others from previously.</p>
 <p>We will continue to work with the two ESRI <code>shapefiles</code>
 that we loaded in the <a href="08-vector-plot-shapefiles-custom-legend/">previously</a> as well
 as some Sea Surface Temperature data from <a href="01-raster-structure/">our raster lessons</a>.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3870,7 +3954,7 @@ results.</p>
 <hr class="half-width">
 <p>To begin, how different are these two data sources? We can inspect
 their respective Coordinate Reference Systems to see.</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3881,7 +3965,7 @@ their respective Coordinate Reference Systems to see.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] "+proj=utm +zone=19 +datum=WGS84 +units=m +no_defs"</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3892,7 +3976,7 @@ their respective Coordinate Reference Systems to see.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] "+proj=longlat +datum=WGS84 +no_defs"</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3961,7 +4045,7 @@ with datums in this episode series.</p>
 nice things about <code>tidyterra</code> and how <code>ggplot2</code>
 works with <code>sf</code> objects is that it projects them to the same
 CRS. So, if we try and plot these data sources together:</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3971,7 +4055,7 @@ CRS. So, if we try and plot these data sources together:</p>
 <span>  <span class="fu">scale_fill_viridis_c</span><span class="op">(</span><span class="op">)</span> </span></code></pre>
 </div>
 <figure><img src="fig/09-vector-when-data-dont-line-up-crs-rendered-try-plot-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>This looks pretty good. Leaflet looks good as well.</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3987,7 +4071,7 @@ CRS. So, if we try and plot these data sources together:</p>
 For example if we went old school and used <code>plot()</code> with
 <code>add=TRUE</code> to add a layer, this would have failed. Here we
 see if putting a different layer down as the base.</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -3999,7 +4083,7 @@ see if putting a different layer down as the base.</p>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">casco_coastline</span><span class="op">$</span><span class="va">geometry</span>, main <span class="op">=</span> <span class="st">"Coastline First"</span>, axes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">plot</span><span class="op">(</span><span class="va">b10_casco_2022</span>, add <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/09-vector-when-data-dont-line-up-crs-rendered-old-school-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb11">
+<figure><img src="fig/09-vector-when-data-dont-line-up-crs-rendered-old-school-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4023,7 +4107,7 @@ that weird hang-on piece of coast at the bottom of the maps.</p>
 <p>As we are cropping a <code>terra</code> <code>SpatRaster</code>
 object, we will use <code>crop()</code> which takes an input raster and
 then an object with an extent to crop it to.</p>
-<div class="codewrapper sourceCode" id="cb12">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4036,7 +4120,7 @@ then an object with an extent to crop it to.</p>
 <pre class="error" tabindex="0"><code>Error: [crop] extents do not overlap</code></pre>
 </div>
 <p>Well that’s odd. What are their extents?</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4047,7 +4131,7 @@ then an object with an extent to crop it to.</p>
 </h3>
 <pre class="output" tabindex="0"><code>SpatExtent : 398865, 432705, 4825935, 4866405 (xmin, xmax, ymin, ymax)</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4083,7 +4167,7 @@ points that are found in a raster data set.</p>
 from an object or specify what’s called an EPSG code from <a href="https://epsg.org/home.html" class="external-link">epsg.org</a>. We can see those codes
 using <code>crs()</code> from terra with
 <code>describe = TRUE</code></p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4097,7 +4181,7 @@ using <code>crs()</code> from terra with
 </div>
 <p>From this we can see the EPSG code is <a href="https://epsg.io/4326" class="external-link">4326</a>.</p>
 <p>For the SST data…</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4116,7 +4200,7 @@ using <code>crs()</code> from terra with
 <p>the EPSG code is <a href="https://epsg.io/32619" class="external-link">32619</a>.</p>
 <p>Regardless, we can reproject the raster to the same projection as the
 coastline.</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4170,7 +4254,7 @@ library.</li>
 <hr class="half-width">
 <p>Now we can crop. We will first crop the SST raster to the coastline
 in order to get rid of the NA area in the raster.</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4179,7 +4263,7 @@ in order to get rid of the NA area in the raster.</p>
 </div>
 <p>Then we will crop the coastline to the cropped raster in order to get
 rid of that little bit of coast on the southern end.</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4187,7 +4271,7 @@ rid of that little bit of coast on the southern end.</p>
 <span>                                   <span class="va">b10_casco_2022_4326_cropped</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Let’s plot it and see if all of the effort was worth it!</p>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4225,7 +4309,7 @@ seagrass beds<a class="anchor" aria-label="anchor" href="#challenge---show-us-th
 seagrasses are in warm places around Mackworth. Let’s start by making a
 Macworth Island AOI. We will do this by making a bounding box, and then
 turning it into an sf object.</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4256,12 +4340,12 @@ here, you can use the <code>na.value</code> argument to your
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>Reprojection</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4274,7 +4358,7 @@ here, you can use the <code>na.value</code> argument to your
 <ol start="2" style="list-style-type: decimal">
 <li>Cropping</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4287,7 +4371,7 @@ here, you can use the <code>na.value</code> argument to your
 <ol start="3" style="list-style-type: decimal">
 <li>Plot!</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb32">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4332,12 +4416,26 @@ vector data.</li>
 </div>
 </section></section><section id="aio-10-vector-csv-to-shapefile-in-r"><p>Content from <a href="10-vector-csv-to-shapefile-in-r.html">Convert from .csv to a Vector Layer</a></p>
 <hr>
-<p>Last updated on 2024-01-09 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/10-vector-csv-to-shapefile-in-r.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -4379,7 +4477,7 @@ Episode<a class="anchor" aria-label="anchor" href="#things-youll-need-to-complet
 about the software, data, and other prerequisites you will need to work
 through the examples in this episode.</p>
 <p>You’ll need to load the following libraries</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4425,7 +4523,7 @@ spatial object.</p>
 <p>To begin let’s import a <code>.csv</code> file that contains site
 coordinate locations from these subtidal locations and look at the
 structure of that new object:</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4465,7 +4563,7 @@ lucky, our <code>.csv</code> will contain columns labeled:</p>
 <li>easting and northing (UTM coordinates)</li>
 </ul>
 <p>Let’s check out the column names of our dataframe.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4486,7 +4584,7 @@ lucky, our <code>.csv</code> will contain columns labeled:</p>
 information. The <code>dmr$longitude</code> and
 <code>dmr$latitude</code> columns contain coordinate values. We can
 confirm this by looking at the first six rows of our data.</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4497,7 +4595,7 @@ confirm this by looking at the first six rows of our data.</p>
 </h3>
 <pre class="output" tabindex="0"><code>[1] -70.66749 -70.55645 -70.38046 -70.32038 -70.30401 -70.10721</code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4547,7 +4645,7 @@ this, we need to specify:</p>
 </ol>
 <p>We will use the <code>st_as_sf()</code> function to perform the
 conversion.</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4556,7 +4654,7 @@ conversion.</p>
 <span>                   crs <span class="op">=</span> <span class="fl">4326</span><span class="op">)</span></span></code></pre>
 </div>
 <p>We should double check the CRS to make sure it is correct.</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4600,7 +4698,7 @@ GEOGCRS["WGS 84",
 <hr class="half-width">
 <p>We now have a spatial R object, we can plot our newly created spatial
 object.</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4612,7 +4710,7 @@ object.</p>
 <figure><img src="fig/10-vector-csv-to-shapefile-in-r-rendered-plot-data-points-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Looks good! If we really want to check, we can either load up our
 state of Maine shapefile or plot it against a tiles with
 <code>leaflet</code>.</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4646,9 +4744,9 @@ together.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4700,7 +4798,7 @@ will create a buffer area using a distance specified in meters. So,
 <code>1e4</code> would be 10km.</p>
 <p>This technique can be a nice way to put a new vector file in context,
 as follows.</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4743,7 +4841,7 @@ directory.</li>
 </ul>
 <p>We can now export the spatial object as an ESRI
 <code>shapefile</code>. Note - this will make a few files.</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4772,12 +4870,26 @@ to a spatial object.</li>
 </div>
 </section></section><section id="aio-11-vector-raster-integration"><p>Content from <a href="11-vector-raster-integration.html">Extracting Data from Rasters using Vectors</a></p>
 <hr>
-<p>Last updated on 2024-01-09 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/11-vector-raster-integration.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -4828,7 +4940,7 @@ through the examples in this episode.</p>
 vector layer. We will also cover how to extract values from a raster
 that occur within a set of polygons, or in a buffer (surrounding) region
 around a set of points.</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4856,7 +4968,7 @@ layers that we have worked with in this workshop and one new one:</p>
 black</li>
 <li>Water turbidity in GeoTIFF format – green</li>
 </ul>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4896,7 +5008,7 @@ include the area of interest (AOI). Let’s start by plotting the full
 extent of the CHM data and overlay where the AOI falls within it. The
 boundaries of the AOI will be colored blue, and we use
 <code>fill = NA</code> to make the area transparent.</p>
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4911,7 +5023,7 @@ subset, we can perform the cropping operation. We are going to
 <code>crop()</code> function from the raster package to create a new
 object with only the portion of the MODIS data that falls within the
 boundaries of the AOI.</p>
-<div class="codewrapper sourceCode" id="cb4">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4925,7 +5037,7 @@ data, we need to convert to a data frame in order to plot using
 encompass all the features contained in this object. The
 <code>st_as_sfc()</code> converts these 4 coordinates into a polygon
 that we can plot:</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4940,7 +5052,7 @@ that we can plot:</p>
 much larger than the resulting cropped raster. Our new cropped MODS now
 has the same extent as the <code>aoi_boundary_casco</code> object that
 was used as a crop extent (blue border below).</p>
-<div class="codewrapper sourceCode" id="cb6">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4952,7 +5064,7 @@ was used as a crop extent (blue border below).</p>
 </div>
 <figure><img src="fig/11-vector-raster-integration-rendered-view-crop-extent-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We can look at the extent of all of our other objects for this field
 site.</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4964,7 +5076,7 @@ site.</p>
 <pre class="output" tabindex="0"><code>     xmin      ymin      xmax      ymax 
 -71.29166  42.66666 -66.62500  45.00000 </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4976,7 +5088,7 @@ site.</p>
 <pre class="output" tabindex="0"><code>     xmin      ymin      xmax      ymax 
 -70.25000  43.58333 -69.83333  43.95833 </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -4988,7 +5100,7 @@ site.</p>
 <pre class="output" tabindex="0"><code>    xmin     ymin     xmax     ymax 
 -70.2528  43.5834 -69.8387  43.9439 </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5000,7 +5112,7 @@ site.</p>
 <pre class="output" tabindex="0"><code>     xmin      ymin      xmax      ymax 
 -70.24464  43.57213 -69.84399  43.93221 </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5036,9 +5148,9 @@ locations.</li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1">Answers</h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5087,7 +5199,7 @@ boundary or boundaries,</li>
 <p>We will begin by extracting all canopy height pixel values located
 within our <code>aoi_boundary_casco</code> polygon which surrounds the
 tower located at the NEON Harvard Forest field site.</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5115,7 +5227,7 @@ function extracted values from 90 pixels.</p>
 better understand the structure or height distribution of turbidity at
 our site. We will use the column <code>turbidity</code> from our data
 frame as our x values.</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5138,7 +5250,7 @@ frame as our x values.</p>
 <figure><img src="fig/11-vector-raster-integration-rendered-view-extract-histogram-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>We can also use the <code>summary()</code> function to view
 descriptive statistics including min, max, and mean height values. These
 values help us better understand vegetation at our field site.</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5157,7 +5269,7 @@ values help us better understand vegetation at our field site.</p>
 the type of summary statistic we are interested in using the
 <code>fun =</code> argument. Let’s extract a mean height value for our
 AOI.</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5190,7 +5302,7 @@ region are included in the extract.</p>
 Image Source: National Ecological Observatory Network (NEON)</p>
 <p>Let’s put this into practice by figuring out the mean tree height in
 the 20m around the tower location (<code>point_HARV</code>).</p>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5230,12 +5342,12 @@ to <code>seagrass_casco_2022</code></p></li>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2">Answers</h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <ol style="list-style-type: decimal">
 <li>We can do this as a processing chain!</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5248,7 +5360,7 @@ to <code>seagrass_casco_2022</code></p></li>
 <ol start="2" style="list-style-type: decimal">
 <li>We can extract now. Note, some beds will throw an NaN, as</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb29">
+<div class="codewrapper sourceCode" id="cb31">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5264,7 +5376,7 @@ to <code>seagrass_casco_2022</code></p></li>
 <li>It’s just a <code>geom_point()</code>
 </li>
 </ol>
-<div class="codewrapper sourceCode" id="cb30">
+<div class="codewrapper sourceCode" id="cb32">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5300,12 +5412,26 @@ raster object that fall within a particular extent boundary.</li>
 </div>
 </section></section><section id="aio-05-raster-multi-band-in-r"><p>Content from <a href="05-raster-multi-band-in-r.html">Work with Multi-Band Rasters</a></p>
 <hr>
-<p>Last updated on 2024-01-09 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/05-raster-multi-band-in-r.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">WARNING<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="warning" tabindex="0"><code>Warning in
+download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip",
+: cannot open URL
+'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip':
+HTTP status was '500 Internal Server Error'</code></pre>
+</div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -5337,7 +5463,7 @@ package.</li>
 </div>
 </div>
 <p>First, some libraries you might not have loaded at the moment.</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5388,7 +5514,7 @@ the Landsat 8 OLI:</p>
 <p>So, 4, 3, and 2 are RGB. By using the <code>rast()</code> function we
 can read one raster bands (i.e. the first one) or many.</p>
 <p>Let’s start by looking at the red band.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5419,7 +5545,7 @@ resolution, min and max values, and band number?</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb5">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5455,7 +5581,7 @@ the<code>rast()</code> function.</p>
 with a typical sensor image. They are often listed as different files
 (although they can come in one big file.) Let’s see what a typical
 Landsat image has.</p>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5482,7 +5608,7 @@ Landsat image has.</p>
 single object, thought, we will want only those that are TIF files, and
 we will need the full path to each one. Fortunately,
 <code>list.files()</code> makes that easy for us.</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5509,7 +5635,7 @@ we will need the full path to each one. Fortunately,
 </div>
 <p>Great! We can now load those in smoothly with
 <code>rast()</code>.</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5536,7 +5662,7 @@ names       : LC08_~PIXEL, LC08_~ADSAT, LC08_~SR_B1, LC08_~SR_B2, LC08_~SR_B3, L
 <p><code>dimensions  : 7991, 7891, 10  (nrow, ncol, nlyr)</code></p>
 <p>10 bands! To see what is loaded, we can just use
 <code>names()</code></p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5573,7 +5699,7 @@ determined using the <code>describe()</code> function: syntax is
 <p>We just want red, green, blue, and near-infrared for now - bands 2
 through 5. Note how that corresponds to layers 4 through 7. So we can
 subset down.</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5581,7 +5707,7 @@ subset down.</p>
 <span>                              subset <span class="op">=</span> <span class="fl">4</span><span class="op">:</span><span class="fl">7</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Let’s preview the attributes of our stack object:</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5604,7 +5730,7 @@ names       : LC08_L2~1_SR_B2, LC08_L2~1_SR_B3, LC08_L2~1_SR_B4, LC08_L2~1_SR_B5
 <p>We can view the attributes of each band in the stack in a single
 output. For example, if we had hundreds of bands, we could specify which
 band we’d like to view attributes for using an index value:</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5623,7 +5749,7 @@ name        : LC08_L2SP_012030_20230903_20230912_02_T1_SR_B3 </code></pre>
 </div>
 <p>We can also use the <code>ggplot</code> functions to plota histogram
 of the first (blue) band:</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5637,7 +5763,7 @@ quantiles when we start to blend colors for an RGB plot.</p>
 <p>We can also plot <em>all</em> of the bands with either
 <code>plot()</code> or <code>ggplot()</code> adding a
 <code>facet_wrap(facets = vars(lyr))</code> call to facet by layer.</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5670,7 +5796,7 @@ infrared)?</p>
 </button>
 <div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb22">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5707,7 +5833,7 @@ decrease contrast.</p></li>
 <code>plotRGB()</code> function directly with our RasterStack object (we
 don’t need a dataframe as this function isn’t part of the
 <code>ggplot2</code> package).</p>
-<div class="codewrapper sourceCode" id="cb21">
+<div class="codewrapper sourceCode" id="cb23">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5720,7 +5846,7 @@ between 0 and 255, so, we just need to rescale our values between 0 and
 255. We can do that by multiplying the raster values by 255/(max of the
 raster values). Note, you can either do this so EACH channel is
 rescalled to 0-255, or, they are all rescaled by one grand value.</p>
-<div class="codewrapper sourceCode" id="cb22">
+<div class="codewrapper sourceCode" id="cb24">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5747,7 +5873,7 @@ full 0-255 range of potential values to increase the visual contrast of
 the image.</p>
 <figure><img src="fig/dc-spatial-raster/imageStretch_light.jpg" alt="Image Stretch light" class="figure mx-auto d-block"></figure><p>We can implement this easily in R where we not only make a linear
 stretch, but chop off some of the highest and lowest values.</p>
-<div class="codewrapper sourceCode" id="cb23">
+<div class="codewrapper sourceCode" id="cb25">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5758,7 +5884,7 @@ stretch, but chop off some of the highest and lowest values.</p>
 <figure><img src="fig/05-raster-multi-band-in-r-rendered-plot-rgb-lin-stretch-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>If the problem is that we want an even distribution of values for
 each channel, rather than clumps and clusters, we use <code>hist</code>
 as our stretch.</p>
-<div class="codewrapper sourceCode" id="cb24">
+<div class="codewrapper sourceCode" id="cb26">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5774,7 +5900,7 @@ upper quantile of values. We can then use
 <code>geom_spatraster_rgb()</code>. Note, to use <code>stretch()</code>
 and get the RGB right, we need to reference the layer numbers of the
 raster as indices.</p>
-<div class="codewrapper sourceCode" id="cb25">
+<div class="codewrapper sourceCode" id="cb27">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5813,7 +5939,7 @@ in red’ map, which can be useful for vegetation.</li>
 <ol style="list-style-type: decimal">
 <li>Note how we use r, g, and b as channel 1, 2, and 3.</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb26">
+<div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5825,7 +5951,7 @@ in red’ map, which can be useful for vegetation.</li>
 <li>Here if you stretch with hist,you can get a better split between
 very vegetated and urbanized areas.</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb27">
+<div class="codewrapper sourceCode" id="cb29">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5857,7 +5983,7 @@ old school <code>raster</code> stack with <code>raster::stack()</code>
 names). Note, for big rasters, you can up <code>maxbytes</code> in the
 <code>addRasterRGB</code> from it’s default of <code>4*1024*1024</code>,
 but, this can cause plotting to take a very very very long time.</p>
-<div class="codewrapper sourceCode" id="cb28">
+<div class="codewrapper sourceCode" id="cb30">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -5900,12 +6026,17 @@ holds.</li>
 </div>
 </section></section><section id="aio-04-raster-calculations-in-r"><p>Content from <a href="04-raster-calculations-in-r.html">Raster Calculations</a></p>
 <hr>
-<p>Last updated on 2024-01-10 |
+<p>Last updated on 2024-03-12 |
         
         <a href="https://github.com/cobalt-casco/r-raster-vector-geospatial/edit/main/episodes/04-raster-calculations-in-r.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 <div class="text-end">
           <button role="button" aria-pressed="false" tabindex="0" id="expand-code" class="pull-right" data-expand="Expand All Solutions " data-collapse="Collapse All Solutions "> Expand All Solutions <i aria-hidden="true" data-feather="plus"></i></button>
         </div>
+<div class="codewrapper">
+<h3 class="code-label">ERROR<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="error" tabindex="0"><code>Error in download.file("https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip", : cannot open URL 'https://www.naturalearthdata.com/http//www.naturalearthdata.com/download/110m/physical/ne_110m_graticules_all.zip'</code></pre>
+</div>
 <div class="overview card">
 <h2 class="card-header">Overview</h2>
 <div class="row g-0">
@@ -6022,7 +6153,7 @@ algorithms for ocean color sensors-OC4, OC5 &amp; OC6. <a href="https://doi.org/
 seagrass beds from Casco Bay in 2022 (we’ll assume they’re close enough
 to 2023). Let’s start by loading <code>terra</code>, <code>sf</code>,
 and <code>ggplot2</code>.</p>
-<div class="codewrapper sourceCode" id="cb1">
+<div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6035,7 +6166,7 @@ and <code>ggplot2</code>.</p>
 rasters into one stack for ease of use. We will also load the Casco AOI
 and Maine State borders for use in cropping and masking down to just
 water.</p>
-<div class="codewrapper sourceCode" id="cb2">
+<div class="codewrapper sourceCode" id="cb3">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6087,7 +6218,7 @@ this work?</p></li>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<div class="codewrapper sourceCode" id="cb3">
+<div class="codewrapper sourceCode" id="cb4">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6592,7 +6723,7 @@ this work?</p></li>
 [494] "    wave_name=443"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 [495] "    wave_nm=442.9822110780657"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </code></pre>
 </div>
-<div class="codewrapper sourceCode" id="cb5">
+<div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6661,7 +6792,7 @@ First 10 features:
 will then have to crop it down to the Casco region. This is actually one
 of those cases where it will be faster to reproject the vectors than the
 raster for the cropping.</p>
-<div class="codewrapper sourceCode" id="cb7">
+<div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6679,7 +6810,7 @@ raster for the cropping.</p>
 </h2>
 <hr class="half-width">
 <p>Let’s see what we have after the cropping.</p>
-<div class="codewrapper sourceCode" id="cb8">
+<div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6697,7 +6828,7 @@ polygons. So we will need to use the argument
 extent as our raster, so, we’ll need to crop it first.</p>
 <p>We will also recrop to the AOI again, as our previous crop leaves
 some cruft around the edges.</p>
-<div class="codewrapper sourceCode" id="cb9">
+<div class="codewrapper sourceCode" id="cb10">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6711,7 +6842,7 @@ some cruft around the edges.</p>
 <span>  <span class="fu">crop</span><span class="op">(</span><span class="va">aoi_boundary_casco</span><span class="op">)</span></span></code></pre>
 </div>
 <p>Did it blend?</p>
-<div class="codewrapper sourceCode" id="cb10">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6725,14 +6856,14 @@ values. We might want to figure out a threshold for clamping. Looking at
 the histogram below, something like 0.02 for the upper seems reasonable.
 We will use <code>values=FALSE</code> to just remove very high values
 and make them NA.</p>
-<div class="codewrapper sourceCode" id="cb11">
+<div class="codewrapper sourceCode" id="cb12">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># what do things look like?</span></span>
 <span><span class="fu">hist</span><span class="op">(</span><span class="va">landsat_layers_casco_bay</span>, breaks <span class="op">=</span> <span class="fl">100</span>, xlim <span class="op">=</span> <span class="fu">c</span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.02</span><span class="op">)</span><span class="op">)</span></span></code></pre>
 </div>
-<figure><img src="fig/04-raster-calculations-in-r-rendered-clamp-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb12">
+<figure><img src="fig/04-raster-calculations-in-r-rendered-clamp-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6762,7 +6893,7 @@ multiplying, etc) two rasters. In the geospatial world, we call this
 “raster math”.</p>
 <p>Let’s calculate (green - blue)/(green + blue) to get our CARI score.
 After doing this, let’s plot with <code>ggplot</code>.</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6778,7 +6909,7 @@ After doing this, let’s plot with <code>ggplot</code>.</p>
 </div>
 <figure><img src="fig/04-raster-calculations-in-r-rendered-raster-math-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><p>Let’s have a look at the distribution of values in our newly created
 CARI Model (CHM).</p>
-<div class="codewrapper sourceCode" id="cb14">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6819,7 +6950,7 @@ spatial distribution look like? Use <code>ggplot2</code> or
 <ol style="list-style-type: decimal">
 <li>Zooming in, some of the highest values are close to shorelines.</li>
 </ol>
-<div class="codewrapper sourceCode" id="cb15">
+<div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6831,7 +6962,7 @@ spatial distribution look like? Use <code>ggplot2</code> or
 </div>
 <figure><img src="fig/04-raster-calculations-in-r-rendered-unnamed-chunk-4-1.png" style="display: block; margin: auto;" class="figure mx-auto d-block"></figure><ol start="2" style="list-style-type: decimal"><li>
 </li></ol>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb17">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6905,7 +7036,7 @@ writing a custom function in R is:
 </div>
 </div>
 </div>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb18">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6924,7 +7055,7 @@ writing a custom function in R is:
 <span><span class="fu">names</span><span class="op">(</span><span class="va">casco_chla</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"chla"</span></span></code></pre>
 </div>
 <p>Now we can plot the CHLa:</p>
-<div class="codewrapper sourceCode" id="cb18">
+<div class="codewrapper sourceCode" id="cb19">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6956,7 +7087,7 @@ writing a custom function in R is:
 <div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <p>Qualitatively, they look about the same!</p>
-<div class="codewrapper sourceCode" id="cb19">
+<div class="codewrapper sourceCode" id="cb20">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -6992,7 +7123,7 @@ your working directory unless you specify a full file path.</p>
 <p>We will specify the output format (“GTiff”), the no data value
 <code>NAflag = -9999</code>. We will also tell R to overwrite any data
 that is already in a file of the same name.</p>
-<div class="codewrapper sourceCode" id="cb20">
+<div class="codewrapper sourceCode" id="cb21">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
@@ -7062,7 +7193,7 @@ data to a file.</li>
         <p>Materials licensed under <a href="LICENSE.html">CC-BY 4.0</a> by the authors</p>
         
         <p>Template licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" class="external-link">CC-BY 4.0</a> by <a href="https://carpentries.org/" class="external-link">The Carpentries</a></p>
-        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.3" class="external-link">pegboard (0.7.3)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
+        <p>Built with <a href="https://github.com/carpentries/sandpaper/tree/0.16.2" class="external-link">sandpaper (0.16.2)</a>, <a href="https://github.com/carpentries/pegboard/tree/0.7.4" class="external-link">pegboard (0.7.4)</a>, and <a href="https://github.com/carpentries/varnish/tree/1.0.1" class="external-link">varnish (1.0.1)</a></p>
 			</div>
 		</footer>
 </div> <!-- / div.container -->
@@ -7085,8 +7216,8 @@ data to a file.</li>
   "url": "https://cobalt-casco.github.io/r-raster-vector-geospatial/aio.html",
   "identifier": "https://cobalt-casco.github.io/r-raster-vector-geospatial/aio.html",
   "dateCreated": "2023-11-05",
-  "dateModified": "2024-03-05",
-  "datePublished": "2024-03-05"
+  "dateModified": "2024-03-12",
+  "datePublished": "2024-03-12"
 }
 
   </script><script>
